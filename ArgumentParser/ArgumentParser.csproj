@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{23449844-B055-481B-A085-D09391434DF3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ArgumentParser</RootNamespace>
+    <AssemblyName>ArgumentParser</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Arguments\IArgument`1.cs" />
+    <Compile Include="Helpers\ValueConverter.cs" />
+    <Compile Include="Arguments\WindowsFlag.cs" />
+    <Compile Include="Arguments\WindowsFlag`1.cs" />
+    <Compile Include="BindingPair.cs" />
+    <Compile Include="Factory\BindingPolicy.cs" />
+    <Compile Include="Factory\BindingPolicyAttribute.cs" />
+    <Compile Include="Arguments\FlagOptions.cs" />
+    <Compile Include="Arguments\POSIXFlag`1.cs" />
+    <Compile Include="Arguments\POSIXLongFlag.cs" />
+    <Compile Include="Arguments\POSIXLongFlag`1.cs" />
+    <Compile Include="Factory\BindingEventArgs.cs" />
+    <Compile Include="Factory\IOptionAttribute.cs" />
+    <Compile Include="Factory\POSIXCompositeListOptionAttribute.cs" />
+    <Compile Include="Factory\POSIXFlagAttribute.cs" />
+    <Compile Include="Factory\POSIXListOptionAttribute.cs" />
+    <Compile Include="Factory\WindowsFlagAttribute.cs" />
+    <Compile Include="Factory\WindowsOptionAttribute.cs" />
+    <Compile Include="IParserContext.cs" />
+    <Compile Include="IVerbContext.cs" />
+    <Compile Include="ParserConstants.cs" />
+    <Compile Include="RawParameter.cs" />
+    <Compile Include="FlagPair.cs" />
+    <Compile Include="IPairable.cs" />
+    <Compile Include="Factory\POSIXOptionAttribute.cs" />
+    <Compile Include="Key.cs" />
+    <Compile Include="ParameterPair.cs" />
+    <Compile Include="Helpers\ProjectionEqualityComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\StringArrayConverter.cs" />
+    <Compile Include="ParserExtension.cs" />
+    <Compile Include="ParsingException.cs" />
+    <Compile Include="Factory\ArgumentFactory.cs" />
+    <Compile Include="Arguments\IFlag.cs" />
+    <Compile Include="Arguments\IArgument.cs" />
+    <Compile Include="ParameterTokenStyle.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="ParserOptions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Arguments\POSIXFlag.cs" />
+    <Compile Include="Arguments\POSIXLongArgument.cs" />
+    <Compile Include="Arguments\POSIXLongArgument`1.cs" />
+    <Compile Include="Arguments\POSIXShortArgument.cs" />
+    <Compile Include="Arguments\POSIXShortArgument`1.cs" />
+    <Compile Include="Arguments\ShortArgument.cs" />
+    <Compile Include="Arguments\ShortArgument`1.cs" />
+    <Compile Include="Arguments\Argument.cs" />
+    <Compile Include="Arguments\Argument`1.cs" />
+    <Compile Include="Arguments\WindowsArgument`1.cs" />
+    <Compile Include="Arguments\WindowsArgument.cs" />
+    <Compile Include="Factory\VerbAttribute.cs" />
+    <Compile Include="ValueParsingException.cs" />
+    <Compile Include="Verb.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
