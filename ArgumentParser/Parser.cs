@@ -41,12 +41,12 @@ namespace ArgumentParser
         /// </summary>
         public static readonly Func<String, CultureInfo, String> DefaultDetokenizer = (x, c) =>
         {
-            if (x.Length == 1)
+            if (x.Length < 2)
                 return x;
 
-            char firstChar = x.First(), lastChar = x.Last();
-            var value = (firstChar == '\'' && lastChar == '\'') || (firstChar == '"' || lastChar == '"')
-                ? x.Substring(1, x.Length - 1)
+            String firstChar = x.Substring(0, 1), lastChar = x.Substring(x.Length - 1, 1);
+            var value = (firstChar == "\'" && lastChar == "\'") || (firstChar == "\"" || lastChar == "\"")
+                ? x.Substring(1, x.Length - 2)
                 : x;
 
             return Regex.Unescape(value);

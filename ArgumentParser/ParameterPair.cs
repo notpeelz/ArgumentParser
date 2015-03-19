@@ -57,7 +57,7 @@ namespace ArgumentParser
         /// <summary>
         /// Gets a boolean value indicating whether the argument was matched.
         /// </summary>
-        public virtual Boolean Matched { get { return this.Values.Any(); } }
+        public virtual Boolean Matched { get { return this.Values != null && this.Values.Any(); } }
 
         /// <summary>
         /// Compares the current object with another object of the same type.

@@ -29,12 +29,12 @@ namespace ArgumentParser
     public static class ParserExtension
     {
         /// <summary>
-        /// Gets the values from the parameters matching the provided arguments.
+        /// Gets the values from the parameters matching the provided argument.
         /// </summary>
-        /// <typeparam name="T">The type of the returned</typeparam>
-        /// <param name="source"></param>
-        /// <param name="argument"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">The type of the returned values.</typeparam>
+        /// <param name="source">A sequence to extract match results from.</param>
+        /// <param name="argument">The argument to match.</param>
+        /// <returns>The values matching the supplied argument.</returns>
         public static IEnumerable<T> GetValues<T>(this IEnumerable<IPairable> source, IArgument argument)
         {
             if (source == null)
@@ -56,6 +56,13 @@ namespace ArgumentParser
             return group.Values.Cast<T>();
         }
 
+        /// <summary>
+        /// Gets the values from the parameters matching the provided arguments.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned values.</typeparam>
+        /// <param name="source">A sequence to extract match results from.</param>
+        /// <param name="arguments">The arguments to match.</param>
+        /// <returns>The values matching one of the supplied arguments.</returns>
         public static IEnumerable<T> GetValues<T>(this IEnumerable<IPairable> source, params IArgument[] arguments)
         {
             if (source == null)
@@ -67,6 +74,13 @@ namespace ArgumentParser
             return arguments.SelectMany(argument => GetValues<T>(source, argument));
         }
 
+        /// <summary>
+        /// Gets a single value from the parameters matching the provided arguments.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned value.</typeparam>
+        /// <param name="source">A sequence to extract match results from.</param>
+        /// <param name="arguments">The arguments to match.</param>
+        /// <returns>The value matching one of the supplied arguments.</returns>
         public static T GetValue<T>(this IEnumerable<IPairable> source, params IArgument[] arguments)
         {
             if (source == null)
@@ -85,11 +99,24 @@ namespace ArgumentParser
             }
         }
 
-        public static T GetValue<T>(this IEnumerable<ParameterPair> source, IArgument verb)
+        /// <summary>
+        /// Gets a single value from the parameters matching the provided argument.
+        /// </summary>
+        /// <typeparam name="T">The type of the returned value.</typeparam>
+        /// <param name="source">A sequence to extract match results from.</param>
+        /// <param name="argument">The argument to match.</param>
+        /// <returns>The value matching the supplied argument.</returns>
+        public static T GetValue<T>(this IEnumerable<ParameterPair> source, IArgument argument)
         {
-            return GetValues<T>(source, verb).SingleOrDefault();
+            return GetValues<T>(source, argument).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Gets the <see cref="T:ArgumentParser.RawParameter"/> objects from a sequence matching the provided key.
+        /// </summary>
+        /// <param name="source">A sequence to extract match results from.</param>
+        /// <param name="key">The key to match parameters to.</param>
+        /// <returns>The entries matching the supplied key.</returns>
         public static IEnumerable<RawParameter> GetArguments(this IEnumerable<IPairable> source, Key key)
         {
             if (source == null)
@@ -98,19 +125,37 @@ namespace ArgumentParser
             return source.OfType<RawParameter>().Where(x => x.Key.CompareTo(key) == 0);
         }
 
+        /// <summary>
+        /// Gets a <see cref="T:ArgumentParser.RawParameter"/> object from a sequence matching the provided key.
+        /// </summary>
+        /// <param name="source">A sequence to extract match results from.</param>
+        /// <param name="key">The key to match parameters to.</param>
+        /// <returns>The entries matching the supplied key.</returns>
         public static RawParameter GetUnboundParameter(this IEnumerable<IPairable> source, Key key)
         {
             return GetArguments(source, key).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Determines whether a supplied flag is present within a sequence.
+        /// </summary>
+        /// <param name="pairs">A sequence to extract match results from.</param>
+        /// <param name="flag">The flag to match parameters to.</param>
+        /// <returns>A boolean value indicating whether the flag was matched.</returns>
         public static Boolean HasFlag(this IEnumerable<IPairable> pairs, IFlag flag)
         {
             return GetValue<UInt32>(pairs, flag) > 0;
         }
 
+        /// <summary>
+        /// Gets the flag level of the supplied flag from a sequence.
+        /// </summary>
+        /// <param name="pairs">A sequence to extract match results from.</param>
+        /// <param name="flag">The flag to match parameters to.</param>
+        /// <returns>The flag level value.</returns>
         public static UInt64 GetFlagLevel(this IEnumerable<IPairable> pairs, IFlag flag)
         {
-            return GetValue<UInt32>(pairs, flag);
+            return GetValue<UInt64>(pairs, flag);
         }
     }
 }
