@@ -67,7 +67,6 @@ namespace ArgumentParser
                 (?<tag>\w)+
             )(?=\s|$)";
 
-        #region Windows variant patterns
         private const String WINDOWS_PARAMETERS_PATTERN = @"
             (?<=^|\s)(?<prefix>/)
             (
@@ -103,10 +102,16 @@ namespace ArgumentParser
                 )|
                 (?<tag>[\w\-\=]+)
             )(?=$|\s)";
-        #endregion
-
         #else
-        // TODO: populate
+        private const String VERB_PATTERN = @"(?<=\s|^)(?:(?<args>[\-/]+\b.*)|((?:""(?>\\.|[^""])*"")|(?:'(?>\\.|[^'])*')|(?>\\.|[^\s""'])+)(?=\s|$))";
+
+        private const String UNIX_PARAMETERS_PATTERN = @"(?<=^|\s)((?<prefix>--)((?<tag>(?!-)[\w\-\:]+)\s+(?!-)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(?>\\.|[^\-""'])*))|(?<tag>(?!-)[\w\-]+))|(?<prefix>-)(?<tag>\w)\s+(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(?>\\.|[^\-""'])+))|(?<prefix>-)(?<tag>\w)+)(?=\s|$)";
+
+        private const String WINDOWS_PARAMETERS_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-]+)\s+(?=[^/])(?<value>(?:""(?>\\.|[^""])*"")|(?:'(?>\\.|[^'])*')|(?>\\.|[^\s""'])+)|(?<tag>[\w\-]+))(?=$|\s)";
+
+        private const String WINDOWS_EQUAL_PARAMETERS_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-\:]+)=(?<value>(?:""(?>\\.|[^""])*"")|(?:'(?>\\.|[^'])*')|(?>\\.|[^\s""'])+)|(?<tag>[\w\-\:]+))(?=$|\s)";
+
+        private const String WINDOWS_COLON_PARAMETERS_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-\=]+):(?<value>(?:""(?>\\.|[^""])*"")|(?:'(?>\\.|[^'])*')|(?>\\.|[^\s""'])+)|(?<tag>[\w\-\=]+))(?=$|\s)";
         #endif
     }
 }
