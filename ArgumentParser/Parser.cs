@@ -563,6 +563,8 @@ namespace ArgumentParser
                     return bindingMap
                         .Where(x => x.Attribute is POSIXOptionAttribute)
                         .ToDictionary(x => GetPOSIXArgument((POSIXOptionAttribute) x.Attribute, x.Member));
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.WindowsEqual:
                 case ParameterTokenStyle.Windows:
                     return bindingMap
                         .Where(x => x.Attribute is WindowsOptionAttribute)
