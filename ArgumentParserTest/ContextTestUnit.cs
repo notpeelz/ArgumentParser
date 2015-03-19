@@ -33,7 +33,7 @@ namespace ArgumentParserTest
         public void Init()
         {
             //Main.Instance.Parse("install global - test-app atom \"test --test --blah \" --test -f -b");
-            Main.Instance.Parse("-u Test1,Test2 --test -t -a short --ambiguous long -vvvv -eeee -hhhh -hhh -hh -h");
+            Main.Instance.Parse("-u Test1,Test2 --test -t -a 'short' --ambiguous \"long\" -vvvv -eeee -hhhh -hhh -hh -h");
         }
 
         [TestMethod]

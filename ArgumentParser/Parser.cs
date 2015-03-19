@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -40,7 +39,18 @@ namespace ArgumentParser
         /// <summary>
         /// Represents the default value detokenizer predicate.
         /// </summary>
-        public static readonly Func<String, String> DefaultDetokenizer = x => Regex.Unescape(x ?? String.Empty);
+        public static readonly Func<String, CultureInfo, String> DefaultDetokenizer = (x, c) =>
+        {
+            if (x.Length == 1)
+                return x;
+
+            char firstChar = x.First(), lastChar = x.Last();
+            var value = (firstChar == '\'' && lastChar == '\'') || (firstChar == '"' || lastChar == '"')
+                ? x.Substring(1, x.Length - 1)
+                : x;
+
+            return Regex.Unescape(value);
+        };
         
         /// <summary>
         /// Represents the default <see cref="T:ArgumentParser.IPairable"/> equality comparer.
@@ -53,13 +63,14 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string array to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
+        /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flags aren't decoupled; they are passed verbatim, as a single tag.
         /// </remarks>
-        public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle)
+        public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle, CultureInfo culture = null)
         {
-            return GetRawParameters(String.Join("\x20", input), tokenStyle);
+            return GetRawParameters(String.Join("\x20", input), tokenStyle, culture);
         }
 
         /// <summary>
@@ -67,14 +78,15 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string array to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
+        /// <param name="culture">The culture to use for detokenization.</param>
         /// <param name="detokenizer">The predicate to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flags aren't decoupled; they are passed verbatim, as a single tag.
         /// </remarks>
-        public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle, Func<String, String> detokenizer)
+        public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle, Func<String, CultureInfo, String> detokenizer, CultureInfo culture = null)
         {
-            return GetRawParameters(String.Join("\x20", input), tokenStyle, detokenizer);
+            return GetRawParameters(String.Join("\x20", input), tokenStyle, culture, detokenizer);
         }
         
         /// <summary>
@@ -82,13 +94,14 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
+        /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flags aren't decoupled; they are passed verbatim, as a single tag.
         /// </remarks>
-        public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle)
+        public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, CultureInfo culture = null)
         {
-            return GetRawParameters(input, tokenStyle, DefaultDetokenizer);
+            return GetRawParameters(input, tokenStyle, culture, DefaultDetokenizer);
         }
 
         /// <summary>
@@ -96,12 +109,13 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
+        /// <param name="culture">The culture to use for detokenization.</param>
         /// <param name="detokenizer">The predicate to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flags aren't decoupled; they are passed verbatim, as a single tag.
         /// </remarks>
-        public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, Func<String, String> detokenizer)
+        public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, CultureInfo culture, Func<String, CultureInfo, String> detokenizer)
         {
             MatchCollection matches = Regex.Matches(
                 input: input,
@@ -115,7 +129,7 @@ namespace ArgumentParser
                 new RawParameter(
                     x.Groups["prefix"].Value,
                     x.Groups["tag"].Value,
-                    detokenizer == null ? x.Groups["value"].Value : detokenizer(x.Groups["value"].Value)));
+                    detokenizer == null ? x.Groups["value"].Value : detokenizer(x.Groups["value"].Value, culture)));
         }
 
         /// <summary>
@@ -501,20 +515,13 @@ namespace ArgumentParser
             try
             {
                 return options.Detokenizer == null
-                    ? DefaultDetokenizer(value)
-                    : options.Detokenizer(value);
+                    ? DefaultDetokenizer(value, options.Culture)
+                    : options.Detokenizer(value, options.Culture);
             }
             catch (Exception ex)
             {
-                var parsingException = ex as ValueParsingException ?? new ValueParsingException(ex);
-                parsingException.Data["options"] = options;
-                parsingException.Data["value"] = value;
-
-                if (options.ExceptionHandler == null || !options.ExceptionHandler.Invoke(parsingException))
-                    throw;
+                throw new ValueParsingException(ex);
             }
-
-            return null;
         }
 
         private static Object ParseValue(ParserOptions options, IArgument argument, RawParameter parameter)
@@ -528,12 +535,9 @@ namespace ArgumentParser
             catch (Exception ex)
             {
                 var parsingException = ex as ValueParsingException ?? new ValueParsingException(ex);
-                parsingException.Data["options"] = options;
-                parsingException.Data["argument"] = argument;
-                parsingException.Data["parameter"] = parameter;
 
                 if (options.ExceptionHandler == null || !options.ExceptionHandler.Invoke(parsingException))
-                    throw;
+                    throw parsingException;
             }
 
             return null;
@@ -680,16 +684,10 @@ namespace ArgumentParser
                     }
                     catch (Exception ex)
                     {
-                        var parsingException = ex as ParsingException ?? new ParsingException(ex);
-                        parsingException.Data["options"] = options;
-                        parsingException.Data["instance"] = instance;
-                        parsingException.Data["attribute"] = attribute;
-                        parsingException.Data["member"] = member;
-                        parsingException.Data["pair"] = flagPair;
-                        parsingException.Data["bindingPolicy"] = bindingPolicy;
+                        var parsingException = new ParsingException(ex, member: member, context: instance, pair: pair);
 
                         if (options.ExceptionHandler == null || !options.ExceptionHandler.Invoke(parsingException))
-                            throw;
+                            throw parsingException;
                     }
 
                     if (bindOnce && !isBound && shouldBlock)

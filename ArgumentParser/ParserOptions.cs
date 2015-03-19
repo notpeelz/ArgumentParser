@@ -25,6 +25,7 @@ namespace ArgumentParser
     /// <summary>
     /// Represents the configuration to use by the parser.
     /// </summary>
+    [Serializable]
     public sealed class ParserOptions
     {
         /// <summary>
@@ -73,7 +74,7 @@ namespace ArgumentParser
         /// <summary>
         /// Gets or sets the detokenizer predicate to use upon parsing values.
         /// </summary>
-        public Func<String, String> Detokenizer { get; set; }
+        public Func<String, CultureInfo, String> Detokenizer { get; set; }
 
         /// <summary>
         /// Gets or sets the exception handler predicate to use upon throwing an exception.
