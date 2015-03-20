@@ -61,7 +61,11 @@
     <Compile Include="Factory\WindowsOptionAttribute.cs" />
     <Compile Include="IParserContext.cs" />
     <Compile Include="IVerbContext.cs" />
-    <Compile Include="ParserConstants.cs" />
+    <Compile Include="Patterns\POSIXParameterPattern.cs" />
+    <Compile Include="Patterns\VerbPattern.cs" />
+    <Compile Include="Patterns\WindowsColonParameterPattern.cs" />
+    <Compile Include="Patterns\WindowsEqualParameterPattern.cs" />
+    <Compile Include="Patterns\WindowsParameterPattern.cs" />
     <Compile Include="RawParameter.cs" />
     <Compile Include="FlagPair.cs" />
     <Compile Include="IPairable.cs" />

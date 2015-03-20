@@ -36,6 +36,10 @@ namespace ArgumentParser
     [ReflectionPermission(SecurityAction.Assert, MemberAccess = true)]
     public static partial class Parser
     {
+        internal const String PREFIX_UNIX_LONG = "--";
+        internal const String PREFIX_UNIX_SHORT = "-";
+        internal const String PREFIX_WINDOWS = "/";
+
         /// <summary>
         /// Represents the default value detokenizer predicate.
         /// </summary>
