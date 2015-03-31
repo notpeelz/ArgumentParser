@@ -33,12 +33,12 @@ namespace ArgumentParser.Helpers
         private readonly StringSplitOptions splitOptions = StringSplitOptions.None;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ExtensionLib.StringArrayConverter"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Helpers.StringArrayConverter"/> class.
         /// </summary>
         public StringArrayConverter() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ExtensionLib.StringArrayConverter"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Helpers.StringArrayConverter"/> class.
         /// </summary>
         /// <param name="separator">The separator <see cref="T:System.String"/> used to override the one provided by the culture.</param>
         /// <param name="options">The <see cref="T:System.StringSplitOptions"/> policy to use for splitting strings.</param>
@@ -49,7 +49,7 @@ namespace ArgumentParser.Helpers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ExtensionLib.StringArrayConverter"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Helpers.StringArrayConverter"/> class.
         /// </summary>
         /// <param name="separator">The separator <see cref="T:System.Char"/> used to override the one provided by the culture.</param>
         /// <param name="options">The <see cref="T:System.StringSplitOptions"/> policy to use for splitting strings.</param>
