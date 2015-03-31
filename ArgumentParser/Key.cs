@@ -62,10 +62,10 @@ namespace ArgumentParser
         /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
+        /// <param name="key">An object to compare with this object.</param>
         /// <returns>
         /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="key"/> parameter.Zero This object is equal to <paramref name="key"/>. Greater than zero This object is greater than <paramref name="key"/>.
         /// </returns>
-        /// <param name="key">An object to compare with this object.</param>
         public Int32 CompareTo(Key key)
         {
             return String.Compare(this.Value, key.Value, StringComparison.Ordinal);

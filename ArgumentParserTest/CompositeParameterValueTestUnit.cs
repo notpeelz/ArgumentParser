@@ -27,7 +27,10 @@ namespace ArgumentParserTest
     [TestClass]
     public class CompositeParameterValueTestUnit
     {
-        private static readonly IArgument<String[]> pushShortArgument = new POSIXShortArgument<String[]>('p', String.Empty, new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries), allowComposite: true);
+        private static readonly IArgument<String[]> pushShortArgument = new POSIXShortArgument<String[]>(
+            tag: 'p',
+            typeConverter: new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries),
+            allowComposite: true);
 
         private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX);
 

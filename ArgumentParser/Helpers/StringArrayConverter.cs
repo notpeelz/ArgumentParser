@@ -33,12 +33,12 @@ namespace ArgumentParser.Helpers
         private readonly StringSplitOptions splitOptions = StringSplitOptions.None;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Helpers.StringArrayConverter"/> class.
+        /// Initializes a new instance of the <see cref="T:ExtensionLib.StringArrayConverter"/> class.
         /// </summary>
         public StringArrayConverter() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Helpers.StringArrayConverter"/> class.
+        /// Initializes a new instance of the <see cref="T:ExtensionLib.StringArrayConverter"/> class.
         /// </summary>
         /// <param name="separator">The separator <see cref="T:System.String"/> used to override the one provided by the culture.</param>
         /// <param name="options">The <see cref="T:System.StringSplitOptions"/> policy to use for splitting strings.</param>
@@ -49,7 +49,7 @@ namespace ArgumentParser.Helpers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Helpers.StringArrayConverter"/> class.
+        /// Initializes a new instance of the <see cref="T:ExtensionLib.StringArrayConverter"/> class.
         /// </summary>
         /// <param name="separator">The separator <see cref="T:System.Char"/> used to override the one provided by the culture.</param>
         /// <param name="options">The <see cref="T:System.StringSplitOptions"/> policy to use for splitting strings.</param>
@@ -71,12 +71,11 @@ namespace ArgumentParser.Helpers
         }
 
         /// <summary>
-        /// Returns whether this converter can convert the object to the specified type, using the specified context.
+        /// Determines whether this converter can convert a given destination type from the native type of the converter.
         /// </summary>
-        /// <returns>
-        /// true if this converter can perform the conversion; otherwise, false.
-        /// </returns>
-        /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that provides a format context. </param><param name="destinationType">A <see cref="T:System.Type"/> that represents the type you want to convert to. </param>
+        /// <returns>A boolean value indicating whether a <see cref="T:System.String"/> can be converted to this type.</returns>
+        /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> object that provides a format context.</param>
+        /// <param name="destinationType">The destination <see cref="T:System.Type"/> to test.</param>
         public override Boolean CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
             return destinationType == typeof (String[]);

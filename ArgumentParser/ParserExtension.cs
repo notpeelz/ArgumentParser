@@ -32,9 +32,9 @@ namespace ArgumentParser
         /// Gets the values from the parameters matching the provided argument.
         /// </summary>
         /// <typeparam name="T">The type of the returned values.</typeparam>
+        /// <returns>The values matching the supplied argument.</returns>
         /// <param name="source">A sequence to extract match results from.</param>
         /// <param name="argument">The argument to match.</param>
-        /// <returns>The values matching the supplied argument.</returns>
         public static IEnumerable<T> GetValues<T>(this IEnumerable<IPairable> source, IArgument argument)
         {
             if (source == null)
@@ -48,12 +48,12 @@ namespace ArgumentParser
             if (!groups.Any())
                 return new T[0];
 
-            var group = groups.SingleOrDefault(x => x.CompareTo(argument) == 0);
+            var group = groups.Where(x => x.CompareTo(argument) == 0);
 
             if (group == null)
                 throw new ParsingException("The supplied argument did not match any of the results.");
 
-            return group.Values.Cast<T>();
+            return group.SelectMany(x => x.Values.Select(v => (T) v));
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace ArgumentParser
 
             try
             {
-                return arguments.SelectMany(verb => GetValues<T>(source, verb)).SingleOrDefault();
+                return GetValues<T>(source, arguments).SingleOrDefault();
             }
             catch (InvalidOperationException ex)
             {
@@ -100,29 +100,19 @@ namespace ArgumentParser
         }
 
         /// <summary>
-        /// Gets a single value from the parameters matching the provided argument.
-        /// </summary>
-        /// <typeparam name="T">The type of the returned value.</typeparam>
-        /// <param name="source">A sequence to extract match results from.</param>
-        /// <param name="argument">The argument to match.</param>
-        /// <returns>The value matching the supplied argument.</returns>
-        public static T GetValue<T>(this IEnumerable<ParameterPair> source, IArgument argument)
-        {
-            return GetValues<T>(source, argument).SingleOrDefault();
-        }
-
-        /// <summary>
         /// Gets the <see cref="T:ArgumentParser.RawParameter"/> objects from a sequence matching the provided key.
         /// </summary>
         /// <param name="source">A sequence to extract match results from.</param>
         /// <param name="key">The key to match parameters to.</param>
         /// <returns>The entries matching the supplied key.</returns>
-        public static IEnumerable<RawParameter> GetArguments(this IEnumerable<IPairable> source, Key key)
+        public static IEnumerable<RawParameter> GetUnboundParameters(this IEnumerable<IPairable> source, Key key)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
 
-            return source.OfType<RawParameter>().Where(x => x.Key.CompareTo(key) == 0);
+            return source
+                .OfType<RawParameter>()
+                .Where(x => x.Key != null && x.Key.CompareTo(key) == 0);
         }
 
         /// <summary>
@@ -131,9 +121,39 @@ namespace ArgumentParser
         /// <param name="source">A sequence to extract match results from.</param>
         /// <param name="key">The key to match parameters to.</param>
         /// <returns>The entries matching the supplied key.</returns>
+        /// <exception cref="T:ArgumentParser.ParsingException">Could not disambiguate the match results; several matches were found for the supplied key.</exception>
         public static RawParameter GetUnboundParameter(this IEnumerable<IPairable> source, Key key)
         {
-            return GetArguments(source, key).SingleOrDefault();
+            if (source == null)
+                throw new ArgumentNullException("source");
+
+            try
+            {
+                return GetUnboundParameters(source, key).SingleOrDefault();
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new ParsingException("Could not disambiguate the match results; several matches were found for the supplied key.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="T:ArgumentParser.UnboundValue"/> objects from a sequence matching the provided key, if supplied.
+        /// </summary>
+        /// <param name="source">A sequence to extract match results from.</param>
+        /// <param name="key">The key to match parameters to.</param>
+        /// <returns>The entries matching the supplied key.</returns>
+        public static IEnumerable<UnboundValue> GetUnboundValues(this IEnumerable<IPairable> source, Key key = null)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
+            if (key == null)
+                return source.OfType<UnboundValue>();
+
+            return source
+                .OfType<UnboundValue>()
+                .Where(x => x.Key != null && x.Key.CompareTo(key) == 0);
         }
 
         /// <summary>

@@ -421,10 +421,6 @@ namespace ArgumentParser
                             .Select(x => new UnboundValue(pair, x)));
 
                         return pair;
-
-                        /*return flag != null
-                            ? GetFlagPair(options, flag, parameters)
-                            : new ParameterPair(a, parameters.Select(x => x.Value == null ? null : ParseValue(options, a, x)));*/
                     },
                     options.PairEqualityComparer);
 
