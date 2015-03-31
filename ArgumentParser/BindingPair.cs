@@ -43,12 +43,12 @@ namespace ArgumentParser
         /// Gets the adorned member.
         /// </summary>
         public Object Member { get; private set; }
-        
+
         /// <summary>
         /// Gets the attribute adorning the member.
         /// </summary>
         public IOptionAttribute Attribute { get; private set; }
-        
+
         /// <summary>
         /// Gets the binding policy.
         /// </summary>

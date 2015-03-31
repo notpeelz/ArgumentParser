@@ -30,7 +30,7 @@ namespace ArgumentParser.Arguments
         /// Gets the default value of the argument.
         /// </summary>
         Object DefaultValue { get; }
-        
+
         /// <summary>
         /// Gets the value type of the argument.
         /// </summary>
@@ -40,6 +40,11 @@ namespace ArgumentParser.Arguments
         /// Gets the description of the argument.
         /// </summary>
         String Description { get; }
+
+        /// <summary>
+        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// </summary>
+        Boolean AllowCompositeValues { get; }
 
         /// <summary>
         /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.

@@ -36,12 +36,13 @@ namespace ArgumentParser.Factory
         /// <param name="returnType">The value type of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IArgument CreateArgument(String tag, String description, Type returnType, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IArgument CreateArgument(String tag, String description, Type returnType, TypeConverter typeConverter = null, Object defaultValue = null, Boolean allowComposite = false)
         {
             var type = typeof (POSIXLongArgument<>).MakeGenericType(returnType);
             var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
-            return (IArgument) Activator.CreateInstance(type, tag, description, typeConverter, value);
+            return (IArgument) Activator.CreateInstance(type, tag, description, typeConverter, value, allowComposite);
         }
 
         /// <summary>
@@ -51,10 +52,11 @@ namespace ArgumentParser.Factory
         /// <param name="description">The description of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument<T>(String tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IArgument CreateArgument<T>(String tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
         {
-            return new POSIXLongArgument<T>(tag, description, typeConverter, defaultValue);
+            return new POSIXLongArgument<T>(tag, description, typeConverter, defaultValue, allowComposite);
         }
 
         /// <summary>
@@ -63,10 +65,11 @@ namespace ArgumentParser.Factory
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument(String tag, String description, String defaultValue = null)
+        public static IArgument CreateArgument(String tag, String description, String defaultValue = null, Boolean allowComposite = false)
         {
-            return new POSIXLongArgument(tag, description, defaultValue);
+            return new POSIXLongArgument(tag, description, defaultValue, allowComposite);
         }
         #endregion
 
@@ -79,13 +82,14 @@ namespace ArgumentParser.Factory
         /// <param name="returnType">The value type of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IArgument CreateArgument(Char tag, String description, Type returnType, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IArgument CreateArgument(Char tag, String description, Type returnType, TypeConverter typeConverter = null, Object defaultValue = null, Boolean allowComposite = false)
         {
             var type = typeof (POSIXShortArgument<>).MakeGenericType(returnType);
             var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
 
-            return (IArgument) Activator.CreateInstance(type, tag, description, typeConverter, value);
+            return (IArgument) Activator.CreateInstance(type, tag, description, typeConverter, value, allowComposite);
         }
 
         /// <summary>
@@ -96,10 +100,11 @@ namespace ArgumentParser.Factory
         /// <param name="description">The description of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument<T>(Char tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IArgument CreateArgument<T>(Char tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
         {
-            return new POSIXShortArgument<T>(tag, description, typeConverter, defaultValue);
+            return new POSIXShortArgument<T>(tag, description, typeConverter, defaultValue, allowComposite);
         }
 
         /// <summary>
@@ -108,10 +113,11 @@ namespace ArgumentParser.Factory
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument(Char tag, String description, String defaultValue = null)
+        public static IArgument CreateArgument(Char tag, String description, String defaultValue = null, Boolean allowComposite = false)
         {
-            return new POSIXShortArgument(tag, description, defaultValue);
+            return new POSIXShortArgument(tag, description, defaultValue, allowComposite);
         }
         #endregion
 
@@ -125,13 +131,14 @@ namespace ArgumentParser.Factory
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IFlag CreateFlag(String tag, String description, Type returnType, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IFlag CreateFlag(String tag, String description, Type returnType, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null, Boolean allowComposite = false)
         {
             var type = typeof (POSIXLongFlag<>).MakeGenericType(returnType);
             var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
 
-            return (IFlag) Activator.CreateInstance(type, tag, description, options, typeConverter, value);
+            return (IFlag) Activator.CreateInstance(type, tag, description, options, typeConverter, value, allowComposite);
         }
 
         /// <summary>
@@ -143,13 +150,14 @@ namespace ArgumentParser.Factory
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IFlag CreateFlag(Char tag, String description, Type returnType, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IFlag CreateFlag(Char tag, String description, Type returnType, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null, Boolean allowComposite = false)
         {
             var type = typeof (POSIXFlag<>).MakeGenericType(returnType);
             var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
-            
-            return (IFlag) Activator.CreateInstance(type, tag, description, options, typeConverter, value);
+
+            return (IFlag) Activator.CreateInstance(type, tag, description, options, typeConverter, value, allowComposite);
         }
 
         /// <summary>
@@ -161,10 +169,11 @@ namespace ArgumentParser.Factory
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag<T>(String tag, String description, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IFlag CreateFlag<T>(String tag, String description, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
         {
-            return new POSIXLongFlag<T>(tag, description, options, typeConverter, defaultValue);
+            return new POSIXLongFlag<T>(tag, description, options, typeConverter, defaultValue, allowComposite);
         }
 
         /// <summary>
@@ -174,10 +183,11 @@ namespace ArgumentParser.Factory
         /// <param name="description">The description of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag(String tag, String description, FlagOptions options = FlagOptions.None, String defaultValue = null)
+        public static IFlag CreateFlag(String tag, String description, FlagOptions options = FlagOptions.None, String defaultValue = null, Boolean allowComposite = false)
         {
-            return new POSIXLongFlag(tag, description, options, defaultValue);
+            return new POSIXLongFlag(tag, description, options, defaultValue, allowComposite);
         }
 
         /// <summary>
@@ -189,10 +199,11 @@ namespace ArgumentParser.Factory
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag<T>(Char tag, String description, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IFlag CreateFlag<T>(Char tag, String description, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
         {
-            return new POSIXFlag<T>(tag, description, options, typeConverter, defaultValue);
+            return new POSIXFlag<T>(tag, description, options, typeConverter, defaultValue, allowComposite);
         }
 
         /// <summary>
@@ -202,10 +213,11 @@ namespace ArgumentParser.Factory
         /// <param name="description">The description of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag(Char tag, String description, FlagOptions options = FlagOptions.None, String defaultValue = null)
+        public static IFlag CreateFlag(Char tag, String description, FlagOptions options = FlagOptions.None, String defaultValue = null, Boolean allowComposite = false)
         {
-            return new POSIXFlag(tag, description, options, defaultValue);
+            return new POSIXFlag(tag, description, options, defaultValue, allowComposite);
         }
         #endregion
     }
@@ -224,12 +236,13 @@ namespace ArgumentParser.Factory
         /// <param name="returnType">The value type of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IArgument CreateArgument(String tag, String description, Type returnType, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IArgument CreateArgument(String tag, String description, Type returnType, TypeConverter typeConverter = null, Object defaultValue = null, Boolean allowComposite = false)
         {
             var type = typeof (WindowsArgument<>).MakeGenericType(returnType);
             var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
-            return (IArgument) Activator.CreateInstance(type, tag, description, typeConverter, value);
+            return (IArgument) Activator.CreateInstance(type, tag, description, typeConverter, value, allowComposite);
         }
 
         /// <summary>
@@ -239,10 +252,11 @@ namespace ArgumentParser.Factory
         /// <param name="description">The description of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument<T>(String tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IArgument CreateArgument<T>(String tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
         {
-            return new WindowsArgument<T>(tag, description, typeConverter, defaultValue);
+            return new WindowsArgument<T>(tag, description, typeConverter, defaultValue, allowComposite);
         }
 
         /// <summary>
@@ -251,10 +265,11 @@ namespace ArgumentParser.Factory
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument(String tag, String description, String defaultValue = null)
+        public static IArgument CreateArgument(String tag, String description, String defaultValue = null, Boolean allowComposite = false)
         {
-            return new WindowsArgument(tag, description, defaultValue);
+            return new WindowsArgument(tag, description, defaultValue, allowComposite);
         }
         #endregion
 
@@ -268,13 +283,14 @@ namespace ArgumentParser.Factory
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IFlag CreateFlag(String tag, String description, Type returnType, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IFlag CreateFlag(String tag, String description, Type returnType, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null, Boolean allowComposite = false)
         {
             var type = typeof (WindowsFlag<>).MakeGenericType(returnType);
             var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
-            
-            return (IFlag) Activator.CreateInstance(type, tag, description, options, typeConverter, value);
+
+            return (IFlag) Activator.CreateInstance(type, tag, description, options, typeConverter, value, allowComposite);
         }
 
         /// <summary>
@@ -286,10 +302,11 @@ namespace ArgumentParser.Factory
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag<T>(String tag, String description, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IFlag CreateFlag<T>(String tag, String description, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
         {
-            return new WindowsFlag<T>(tag, description, options, typeConverter, defaultValue);
+            return new WindowsFlag<T>(tag, description, options, typeConverter, defaultValue, allowComposite);
         }
 
         /// <summary>
@@ -299,10 +316,11 @@ namespace ArgumentParser.Factory
         /// <param name="description">The description of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag(String tag, String description, FlagOptions options = FlagOptions.None, String defaultValue = null)
+        public static IFlag CreateFlag(String tag, String description, FlagOptions options = FlagOptions.None, String defaultValue = null, Boolean allowComposite = false)
         {
-            return new WindowsFlag(tag, description, options, defaultValue);
+            return new WindowsFlag(tag, description, options, defaultValue, allowComposite);
         }
         #endregion
     }

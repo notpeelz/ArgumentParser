@@ -64,8 +64,14 @@ namespace ArgumentParserTest
 
             public void HandleParameter(RawParameter parameter)
             {
-                
+
             }
+
+            public void HandleValue(UnboundValue value)
+            {
+                throw new NotImplementedException();
+            }
+
             #endregion
 
             [WindowsFlag("test", DefaultValue = true)]

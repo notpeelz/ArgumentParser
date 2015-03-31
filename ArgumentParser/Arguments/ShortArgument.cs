@@ -26,9 +26,10 @@ namespace ArgumentParser.Arguments
     /// </summary>
     public abstract class ShortArgument : IArgument<String>
     {
-        private ShortArgument(String defaultValue)
+        private ShortArgument(String defaultValue, Boolean allowComposite)
         {
             this.DefaultValue = defaultValue;
+            this.AllowCompositeValues = allowComposite;
         }
 
         /// <summary>
@@ -37,8 +38,9 @@ namespace ArgumentParser.Arguments
         /// <param name="prefix">The prefix to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected ShortArgument(String prefix, Char tag, String defaultValue)
-            : this(defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected ShortArgument(String prefix, Char tag, String defaultValue, Boolean allowComposite)
+            : this(defaultValue, allowComposite)
         {
             this.Key = new Key(prefix, tag.ToString());
         }
@@ -50,8 +52,9 @@ namespace ArgumentParser.Arguments
         /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected ShortArgument(String prefix, Char tag, String description, String defaultValue)
-            : this(prefix, tag, defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected ShortArgument(String prefix, Char tag, String description, String defaultValue, Boolean allowComposite)
+            : this(prefix, tag, defaultValue, allowComposite)
         {
             this.Description = description;
         }
@@ -65,6 +68,11 @@ namespace ArgumentParser.Arguments
         /// Gets the description of the argument.
         /// </summary>
         public String Description { get; private set; }
+
+        /// <summary>
+        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// </summary>
+        public Boolean AllowCompositeValues { get; private set; }
 
         /// <summary>
         /// Gets the default value of the argument.

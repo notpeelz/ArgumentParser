@@ -57,7 +57,7 @@ namespace ArgumentParser.Helpers
     }
 
     /// <summary>
-    /// Class generic in the source only to produce instances of the 
+    /// Class generic in the source only to produce instances of the
     /// doubly generic class, optionally using type inference.
     /// </summary>
     internal static class ProjectionEqualityComparer<TSource>
@@ -67,7 +67,7 @@ namespace ArgumentParser.Helpers
         /// </summary>
         /// <typeparam name="TKey">Type parameter for the keys to be compared, after being projected from the elements</typeparam>
         /// <param name="projection">Projection to use when determining the key of an element</param>
-        /// <returns>A comparer which will compare elements by projecting each element to its key, and comparing keys</returns>        
+        /// <returns>A comparer which will compare elements by projecting each element to its key, and comparing keys</returns>
         public static ProjectionEqualityComparer<TSource, TKey> Create<TKey>(Func<TSource, TKey> projection)
         {
             return new ProjectionEqualityComparer<TSource, TKey>(projection);

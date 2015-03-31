@@ -52,7 +52,7 @@ namespace ArgumentParser.Helpers
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Helpers.StringArrayConverter"/> class.
         /// </summary>
         /// <param name="separator">The separator <see cref="T:System.Char"/> used to override the one provided by the culture.</param>
-        /// <param name="options">The <see cref="T:System.StringSplitOptions"/> policy to use for splitting strings.</param>        
+        /// <param name="options">The <see cref="T:System.StringSplitOptions"/> policy to use for splitting strings.</param>
         public StringArrayConverter(Char separator, StringSplitOptions options = StringSplitOptions.None)
         {
             this.separator = separator.ToString();

@@ -34,8 +34,9 @@ namespace ArgumentParser.Arguments
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXLongFlag(String tag, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : base(tag, typeConverter, defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        public POSIXLongFlag(String tag, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
+            : base(tag, typeConverter, defaultValue, allowComposite)
         {
             this.Options = options;
         }
@@ -48,8 +49,9 @@ namespace ArgumentParser.Arguments
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXLongFlag(String tag, String description, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : base(tag, description, typeConverter, defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        public POSIXLongFlag(String tag, String description, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
+            : base(tag, description, typeConverter, defaultValue, allowComposite)
         {
             this.Options = options;
         }

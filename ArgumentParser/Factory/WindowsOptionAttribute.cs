@@ -52,10 +52,15 @@ namespace ArgumentParser.Factory
         public Boolean ManualBinding { get; set; }
 
         /// <summary>
+        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// </summary>
+        public Boolean AllowCompositeValue { get; private set; }
+
+        /// <summary>
         /// Gets the default value of the argument.
         /// </summary>
         public Object DefaultValue { get; set; }
-        
+
         /// <summary>
         /// Gets the type converter used for value conversion.
         /// </summary>

@@ -95,6 +95,7 @@
     <Compile Include="Arguments\WindowsArgument`1.cs" />
     <Compile Include="Arguments\WindowsArgument.cs" />
     <Compile Include="Factory\VerbAttribute.cs" />
+    <Compile Include="UnboundValue.cs" />
     <Compile Include="ValueParsingException.cs" />
     <Compile Include="Verb.cs" />
   </ItemGroup>

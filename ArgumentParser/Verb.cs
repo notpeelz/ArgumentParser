@@ -40,7 +40,7 @@ namespace ArgumentParser
         /// Gets the name of the verb.
         /// </summary>
         public String Name { get; private set; }
-        
+
         /// <summary>
         /// Gets the description of the verb.
         /// </summary>
@@ -50,7 +50,7 @@ namespace ArgumentParser
         /// Compares the current object with another object of the same type.
         /// </summary>
         /// <returns>
-        /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>. 
+        /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>.
         /// </returns>
         /// <param name="other">An object to compare with this object.</param>
         public Int32 CompareTo(Verb other)

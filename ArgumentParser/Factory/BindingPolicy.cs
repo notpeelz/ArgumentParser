@@ -32,7 +32,7 @@ namespace ArgumentParser.Factory
         /// Disable filtering upon binding, thus binding all matches.
         /// </summary>
         None = 1,
-        
+
         /// <summary>
         /// Restrict binding to once, resulting in other matches being discarded.
         /// </summary>

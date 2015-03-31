@@ -31,8 +31,9 @@ namespace ArgumentParser.Arguments
         /// <param name="tag">The tag that defines the flag.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public WindowsFlag(String tag, FlagOptions options = FlagOptions.None, String defaultValue = null)
-            : base(tag, defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        public WindowsFlag(String tag, FlagOptions options = FlagOptions.None, String defaultValue = null, Boolean allowComposite = false)
+            : base(tag, defaultValue, allowComposite)
         {
             this.Options = options;
         }
@@ -44,8 +45,9 @@ namespace ArgumentParser.Arguments
         /// <param name="description">The description of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public WindowsFlag(String tag, String description, FlagOptions options = FlagOptions.None, String defaultValue = null)
-            : base(tag, description, defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        public WindowsFlag(String tag, String description, FlagOptions options = FlagOptions.None, String defaultValue = null, Boolean allowComposite = false)
+            : base(tag, description, defaultValue, allowComposite)
         {
             this.Options = options;
         }

@@ -31,6 +31,7 @@ namespace ArgumentParserTest
         [TestMethod]
         public void TestFlag()
         {
+            var a = Parser.GetRawParameters("--test t es t 123 456", ParameterTokenStyle.POSIX);
             //Main.Instance.Parse(@"--foobar 20 --foobar 19 --foobar 20 -bbbb -b -b 2");
             Main.Instance.Parse(@"-ttt -t 39 -tt -t");
             //Assert.AreEqual("blahssetest", Main.Instance.Test);
@@ -67,6 +68,11 @@ namespace ArgumentParserTest
             public void HandleParameter(RawParameter parameter)
             {
                 this.Test += String.Join(String.Empty, Enumerable.Repeat(parameter.Key.Tag, parameter.Count));
+            }
+
+            public void HandleValue(UnboundValue value)
+            {
+                throw new NotImplementedException();
             }
 
             [POSIXFlag('t', Options = FlagOptions.AggregateExplicit | FlagOptions.AggregateImplicit)]

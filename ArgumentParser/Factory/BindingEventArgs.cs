@@ -45,7 +45,7 @@ namespace ArgumentParser.Factory
         /// Gets the corresponding <see cref="T:ArgumentParser.ParameterPair"/>.
         /// </summary>
         public ParameterPair Pair { get; private set; }
-        
+
         /// <summary>
         /// Gets the attribute adorning the bound member.
         /// </summary>

@@ -65,7 +65,7 @@ namespace ArgumentParserTest
         [TestMethod]
         public void TestValuedFlagAggregation()
         {
-            Assert.AreEqual(4, Main.Instance.VerbosityLevel);    
+            Assert.AreEqual(4, Main.Instance.VerbosityLevel);
         }
 
         [TestMethod]
@@ -113,6 +113,11 @@ namespace ArgumentParserTest
                 Debug.WriteLine("{0} #{1}: \"{2}\"", parameter.Key, parameter.Count, parameter.Value);
             }
 
+            public void HandleValue(UnboundValue value)
+            {
+                throw new NotImplementedException();
+            }
+
             private static Boolean ExceptionHandler(ParsingException exception)
             {
                 //, IArgument argument, RawParameter parameter
@@ -135,7 +140,7 @@ namespace ArgumentParserTest
             {
                 this.Usernames = (String[]) (usernames ?? eventArgs.Pair.Values.First());
             }
-            
+
             public String[] Usernames { get; private set; }
 
             [POSIXOption('a')]
@@ -185,6 +190,11 @@ namespace ArgumentParserTest
                     throw new NotImplementedException();
                 }
 
+                public void HandleValue(UnboundValue value)
+                {
+                    throw new NotImplementedException();
+                }
+
                 #region Verbs
                 [Verb("local")]
                 public Local InstallLocal { get; set; }
@@ -210,6 +220,11 @@ namespace ArgumentParserTest
                         throw new NotImplementedException();
                     }
 
+                    public void HandleValue(UnboundValue value)
+                    {
+                        throw new NotImplementedException();
+                    }
+
                     [POSIXFlag('f')]
                     public Boolean ForceInstall { get; set; }
 
@@ -227,6 +242,11 @@ namespace ArgumentParserTest
                     }
 
                     public void HandleParameter(RawParameter parameter)
+                    {
+                        throw new NotImplementedException();
+                    }
+
+                    public void HandleValue(UnboundValue value)
                     {
                         throw new NotImplementedException();
                     }

@@ -34,7 +34,13 @@ namespace ArgumentParser
         /// <summary>
         /// Handles undefined parameter entries upon parsing.
         /// </summary>
-        /// <param name="parameter">The raw parameter representing the unmatched input.</param>
+        /// <param name="parameter">A raw parameter representing an unmatched input.</param>
         void HandleParameter(RawParameter parameter);
+
+        /// <summary>
+        /// Handles trailing values upon parsing.
+        /// </summary>
+        /// <param name="value">An object representing an unbound, trailing value.</param>
+        void HandleValue(UnboundValue value);
     }
 }

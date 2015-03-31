@@ -30,13 +30,13 @@ namespace ArgumentParserTest
     [TestClass]
     public class ParameterDisambiguationTestUnit
     {
-        private static readonly IArgument interfaceLongVerb = new POSIXLongArgument("interface", "The network interface(s) to use.");
+        private static readonly IArgument interfaceLongVerb = new POSIXLongArgument("interface", description: "The network interface(s) to use.");
         private static readonly IArgument interfaceShortVerb = new POSIXShortArgument<String[]>('i', "The network interface(s) to use.", new StringArrayConverter());
         private static readonly IArgument posixPortShortVerb = new POSIXShortArgument<UInt16>('p', "The port to listen to.");
         private static readonly IArgument posixPortLongVerb = new POSIXLongArgument<UInt16>("port", "The port to listen to.");
         private static readonly IArgument windowsPortShortVerb = new WindowsArgument<UInt16>("p");
         private static readonly IArgument windowsPortLongVerb = new WindowsArgument<UInt16>("port");
-        private static readonly IArgument posixCADirVerb = new POSIXLongArgument("CAdir", "The directory to retrieve the certificates authorities from.");
+        private static readonly IArgument posixCADirVerb = new POSIXLongArgument("CAdir", description: "The directory to retrieve the certificates authorities from.");
         private static readonly IArgument posixVerboseShortVerb = new POSIXFlag('v', "The verbosity level.");
         private static readonly IArgument posixVerboseLongVerb = new POSIXLongArgument<Byte>("verbose", "The verbosity level.");
 

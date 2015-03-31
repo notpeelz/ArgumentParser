@@ -45,7 +45,7 @@ namespace ArgumentParser
         /// Gets the prefix of the key.
         /// </summary>
         public String Prefix { get; private set; }
-        
+
         /// <summary>
         /// Gets the tag of the key.
         /// </summary>
@@ -63,7 +63,7 @@ namespace ArgumentParser
         /// Compares the current object with another object of the same type.
         /// </summary>
         /// <returns>
-        /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="key"/> parameter.Zero This object is equal to <paramref name="key"/>. Greater than zero This object is greater than <paramref name="key"/>. 
+        /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="key"/> parameter.Zero This object is equal to <paramref name="key"/>. Greater than zero This object is greater than <paramref name="key"/>.
         /// </returns>
         /// <param name="key">An object to compare with this object.</param>
         public Int32 CompareTo(Key key)

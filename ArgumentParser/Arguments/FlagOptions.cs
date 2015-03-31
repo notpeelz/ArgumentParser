@@ -35,7 +35,7 @@ namespace ArgumentParser.Arguments
         /// Convert implicit values to bit-field entries.
         /// </summary>
         BitFieldImplicit = 1 << 0,
-        
+
         /// <summary>
         /// Convert explicit values to bit-field entries.
         /// </summary>
@@ -45,7 +45,7 @@ namespace ArgumentParser.Arguments
         /// Combine implicit values from multiple <see cref="T:ArgumentParser.RawParameter"/> entries of the same <see cref="T:ArgumentParser.Arguments.IFlag"/> type as a single value.
         /// </summary>
         AggregateImplicit = 1 << 2,
-        
+
         /// <summary>
         /// Combine explicit values from multiple <see cref="T:ArgumentParser.RawParameter"/> entries of the same <see cref="T:ArgumentParser.Arguments.IFlag"/> type as a single value.
         /// </summary>

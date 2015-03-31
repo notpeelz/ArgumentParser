@@ -55,7 +55,7 @@ namespace ArgumentParser
 
             return Regex.Unescape(value);
         };
-        
+
         /// <summary>
         /// Represents the default <see cref="T:ArgumentParser.IPairable"/> equality comparer.
         /// </summary>
@@ -92,7 +92,7 @@ namespace ArgumentParser
         {
             return GetRawParameters(String.Join("\x20", input), tokenStyle, culture, detokenizer);
         }
-        
+
         /// <summary>
         /// Parses and extracts parameters with little to no transformation.
         /// </summary>
@@ -306,9 +306,13 @@ namespace ArgumentParser
                     context.HandleParameter(parameter);
             }
 
+            var values = pairs.OfType<UnboundValue>();
+            foreach (var value in values)
+                context.HandleValue(value);
+
             BindValues(options, context, matches);
         }
-        
+
         /// <summary>
         /// Parses and returns parameters using a given configuration and argument definitions.
         /// </summary>
@@ -385,6 +389,8 @@ namespace ArgumentParser
                         count: e.Count())))
                     .ToArray();
 
+            List<UnboundValue> unboundValues = new List<UnboundValue>();
+
             var pairs = arguments
                 .GroupJoin(
                     matchElements,
@@ -395,17 +401,42 @@ namespace ArgumentParser
                         var parameters = p.ToArray();
                         var flag = a as IFlag;
 
-                        return flag != null
+                        if (flag != null)
+                            return GetFlagPair(options, flag, parameters);
+
+                        if (a.AllowCompositeValues)
+                            return new ParameterPair(a, parameters.Select(x => x.Value == null ? null : ParseValue(options, a, x.Value)));
+
+                        var values = parameters
+                            .Select(x => x.Value == null
+                                ? null
+                                : x.Value.Split(new[] { '\x20' }, StringSplitOptions.RemoveEmptyEntries))
+                            .ToArray();
+
+                        var pair = new ParameterPair(a, values.Select(x => ParseValue(options, a, x.First())));
+
+                        unboundValues.AddRange(values
+                            .Where(x => x.Any())
+                            .SelectMany(x => x.Skip(1))
+                            .Select(x => new UnboundValue(pair, x)));
+
+                        return pair;
+
+                        /*return flag != null
                             ? GetFlagPair(options, flag, parameters)
-                            : new ParameterPair(a, parameters.Select(x => x.Value == null ? null : ParseValue(options, a, x)));
+                            : new ParameterPair(a, parameters.Select(x => x.Value == null ? null : ParseValue(options, a, x)));*/
                     },
                     options.PairEqualityComparer);
 
             if (options.IgnoreUnmatchedParameters)
-                return pairs;
+                return pairs.Concat<IPairable>(unboundValues);
+
+            pairs = pairs.ToArray();
 
             // Caveat: Except() conflates duplicate (unrecognized) parameters.
-            return pairs.Concat(matchElements.Except(pairs, options.PairEqualityComparer));
+            return pairs
+                .Concat(matchElements.Except(pairs, options.PairEqualityComparer))
+                .Concat(unboundValues);
         }
         #endregion
 
@@ -503,7 +534,7 @@ namespace ArgumentParser
                         : 0;
             }
 
-            return new FlagPair(flag, parameters.Select(x => x.Value == null ? null : ParseValue(options, flag, x)), implicitCount + explicitCount);
+            return new FlagPair(flag, parameters.Select(x => x.Value == null ? null : ParseValue(options, flag, x.Value)), implicitCount + explicitCount);
         }
 
         private static Int32 GetFlagValue(Int32 value)
@@ -528,13 +559,13 @@ namespace ArgumentParser
             }
         }
 
-        private static Object ParseValue(ParserOptions options, IArgument argument, RawParameter parameter)
+        private static Object ParseValue(ParserOptions options, IArgument argument, String value)
         {
             try
             {
                 return options.Detokenize
-                    ? argument.GetValue(options.Culture, DetokenizeValue(options, (String) parameter.Value))
-                    : argument.GetValue(options.Culture, (String) parameter.Value);
+                    ? argument.GetValue(options.Culture, DetokenizeValue(options, value))
+                    : argument.GetValue(options.Culture, value);
             }
             catch (Exception ex)
             {
@@ -560,7 +591,7 @@ namespace ArgumentParser
                         select new MemberBinding(member, (IOptionAttribute) attribute, bpAttribute != null
                             ? bpAttribute.BindingPolicy
                             : BindingPolicy.Default);
-            
+
             switch (options.TokenStyle)
             {
                 case ParameterTokenStyle.POSIX:
@@ -653,7 +684,7 @@ namespace ArgumentParser
         private static void BindValues(ParserOptions options, Object instance, ILookup<MemberBinding, ParameterPair> matches)
         {
             List<Object> boundMembers = new List<Object>();
-            
+
             foreach (var binding in matches)
             {
                 var attribute = binding.Key.Attribute;

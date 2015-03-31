@@ -29,10 +29,11 @@ namespace ArgumentParser.Arguments
     /// <typeparam name="T">The type of the value.</typeparam>
     public abstract class ShortArgument<T> : IArgument<T>
     {
-        private ShortArgument(TypeConverter typeConverter, T defaultValue)
+        private ShortArgument(TypeConverter typeConverter, T defaultValue, Boolean allowComposite)
         {
             this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof (T), true);
             this.DefaultValue = defaultValue;
+            this.AllowCompositeValues = allowComposite;
         }
 
         /// <summary>
@@ -42,8 +43,9 @@ namespace ArgumentParser.Arguments
         /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected ShortArgument(String prefix, Char tag, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : this(typeConverter, defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected ShortArgument(String prefix, Char tag, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
+            : this(typeConverter, defaultValue, allowComposite)
         {
             this.Key = new Key(prefix, tag.ToString());
         }
@@ -53,11 +55,12 @@ namespace ArgumentParser.Arguments
         /// </summary>
         /// <param name="prefix">The prefix to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
-        /// <param name="description">The description of the argument.</param>        
+        /// <param name="description">The description of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected ShortArgument(String prefix, Char tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : this(prefix, tag, typeConverter, defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected ShortArgument(String prefix, Char tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
+            : this(prefix, tag, typeConverter, defaultValue, allowComposite)
         {
             this.Description = description;
         }
@@ -71,6 +74,11 @@ namespace ArgumentParser.Arguments
         /// Gets the description of the argument.
         /// </summary>
         public String Description { get; private set; }
+
+        /// <summary>
+        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// </summary>
+        public Boolean AllowCompositeValues { get; private set; }
 
         /// <summary>
         /// Gets the default value of the argument.

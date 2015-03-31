@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ParameterPair.cs" company="LouisTakePILLz">
+// <copyright file="UnboundValue.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -17,47 +17,48 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using ArgumentParser.Arguments;
 
 namespace ArgumentParser
 {
     /// <summary>
-    /// Represents an argument-parameter match.
+    /// Represents an unbound, trailing value.
     /// </summary>
-    public class ParameterPair : IPairable
+    public class UnboundValue : IPairable
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.ParameterPair"/>.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.UnboundValue"/> class.
         /// </summary>
-        /// <param name="argument">The matched argument.</param>
-        /// <param name="values">The values that were passed to the parameter.</param>
-        internal ParameterPair(IArgument argument, IEnumerable<Object> values)
+        /// <param name="value">The raw unbound value.</param>
+        public UnboundValue(String value)
         {
-            this.Argument = argument;
-            this.Values = values;
+            this.Value = value;
         }
 
         /// <summary>
-        /// Gets the key that defines the argument.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.UnboundValue"/> class.
         /// </summary>
-        public Key Key { get { return this.Argument.Key; } }
+        /// <param name="parent">The parameter preceding the trailing value.</param>
+        /// <param name="value">The raw unbound value.</param>
+        public UnboundValue(ParameterPair parent, String value)
+        {
+            this.Parent = parent;
+            this.Value = value;
+        }
 
         /// <summary>
-        /// Gets the matched argument.
+        /// Gets the parameter preceding the value.
         /// </summary>
-        public IArgument Argument { get; private set; }
+        public ParameterPair Parent { get; private set; }
 
         /// <summary>
-        /// Gets the input values.
+        /// Gets the unbound, trailing value.
         /// </summary>
-        public IEnumerable<Object> Values { get; private set; }
+        public String Value { get; private set; }
 
         /// <summary>
-        /// Gets a boolean value indicating whether the argument was matched.
+        /// Gets the <see cref="T:ArgumentParser.Key"/> representing this object.
         /// </summary>
-        public virtual Boolean Matched { get { return this.Values != null && this.Values.Any(); } }
+        public Key Key { get { return this.Parent == null ? null : this.Parent.Key; } }
 
         /// <summary>
         /// Compares the current object with another object of the same type.
@@ -68,6 +69,10 @@ namespace ArgumentParser
         /// <param name="other">An object to compare with this object.</param>
         public Int32 CompareTo(IPairable other)
         {
+            var value = other as UnboundValue;
+            if (value != null)
+                return String.Compare(this.Value, value.Value, StringComparison.Ordinal);
+
             return this.Key.CompareTo(other.Key);
         }
 
@@ -79,7 +84,11 @@ namespace ArgumentParser
         /// <param name="comparisonType">The comparison rule to use.</param>
         public Int32 CompareTo(IPairable other, StringComparison comparisonType)
         {
-            return this.Key.CompareTo(other.Key, comparisonType);
+            var value = other as UnboundValue;
+            if (value != null)
+                return String.Compare(this.Value, value.Value, comparisonType);
+
+            return this.Key.CompareTo(other.Key);
         }
     }
 }

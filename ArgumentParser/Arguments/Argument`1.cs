@@ -35,11 +35,13 @@ namespace ArgumentParser.Arguments
         /// <param name="key">The unique identifier to use to represent the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, TypeConverter typeConverter = null, T defaultValue = default (T))
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected Argument(Key key, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
         {
             this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof (T), true);
             this.Key = key;
             this.DefaultValue = defaultValue;
+            this.AllowCompositeValues = allowComposite;
         }
 
         /// <summary>
@@ -49,8 +51,9 @@ namespace ArgumentParser.Arguments
         /// <param name="description">The description of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String description, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : this(key, typeConverter, defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected Argument(Key key, String description, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
+            : this(key, typeConverter, defaultValue, allowComposite)
         {
             this.Description = description;
         }
@@ -62,8 +65,9 @@ namespace ArgumentParser.Arguments
         /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(String prefix, String tag, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : this(new Key(prefix, tag), typeConverter, defaultValue) { }
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected Argument(String prefix, String tag, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
+            : this(new Key(prefix, tag), typeConverter, defaultValue, allowComposite) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument`1"/> class.
@@ -73,8 +77,9 @@ namespace ArgumentParser.Arguments
         /// <param name="description">The description of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(String prefix, String tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : this(new Key(prefix, tag), description, typeConverter, defaultValue) { }
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected Argument(String prefix, String tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
+            : this(new Key(prefix, tag), description, typeConverter, defaultValue, allowComposite) { }
 
         /// <summary>
         /// Gets the <see cref="T:ArgumentParser.Key"/> representing the argument.
@@ -87,10 +92,15 @@ namespace ArgumentParser.Arguments
         public String Description { get; private set; }
 
         /// <summary>
+        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// </summary>
+        public Boolean AllowCompositeValues { get; private set; }
+
+        /// <summary>
         /// Gets the default value of the argument.
         /// </summary>
         public T DefaultValue { get; private set; }
-        
+
         /// <summary>
         /// Gets the value type of the argument.
         /// </summary>

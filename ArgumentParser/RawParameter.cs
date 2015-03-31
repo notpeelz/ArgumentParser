@@ -31,7 +31,7 @@ namespace ArgumentParser
         /// <param name="prefix">The prefix of the parameter.</param>
         /// <param name="tag">The tag that defines the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
-        public RawParameter(String prefix, String tag, Object value)
+        public RawParameter(String prefix, String tag, String value)
         {
             this.Value = value;
             this.Key = new Key(prefix, tag);
@@ -44,7 +44,7 @@ namespace ArgumentParser
         /// <param name="tag">The tag that defines the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
         /// <param name="count">The tag couple count.</param>
-        public RawParameter(String prefix, String tag, Object value, Int32 count)
+        public RawParameter(String prefix, String tag, String value, Int32 count)
             : this(prefix, tag, value)
         {
             this.Count = count;
@@ -54,7 +54,7 @@ namespace ArgumentParser
         /// Gets the <see cref="T:ArgumentParser.Key"/> representing the argument.
         /// </summary>
         public Key Key { get; private set; }
-        
+
         /// <summary>
         /// Gets the tag couple count.
         /// </summary>
@@ -63,13 +63,13 @@ namespace ArgumentParser
         /// <summary>
         /// Gets the value of the parameter.
         /// </summary>
-        public Object Value { get; private set; }
+        public String Value { get; private set; }
 
         /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
         /// <returns>
-        /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>. 
+        /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>.
         /// </returns>
         /// <param name="other">An object to compare with this object.</param>
         public Int32 CompareTo(IPairable other)

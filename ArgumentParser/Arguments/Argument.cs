@@ -31,10 +31,12 @@ namespace ArgumentParser.Arguments
         /// </summary>
         /// <param name="key">The unique identifier to use to represent the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected Argument(Key key, String defaultValue, Boolean allowComposite)
         {
             this.Key = key;
             this.DefaultValue = defaultValue;
+            this.AllowCompositeValues = allowComposite;
         }
 
         /// <summary>
@@ -43,8 +45,9 @@ namespace ArgumentParser.Arguments
         /// <param name="key">The unique identifier to use to represent the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String description, String defaultValue)
-            : this(key, defaultValue)
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected Argument(Key key, String description, String defaultValue, Boolean allowComposite)
+            : this(key, defaultValue, allowComposite)
         {
             this.Description = description;
         }
@@ -55,8 +58,9 @@ namespace ArgumentParser.Arguments
         /// <param name="prefix">The prefix to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(String prefix, String tag, String defaultValue)
-            : this(new Key(prefix, tag), defaultValue) { }
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected Argument(String prefix, String tag, String defaultValue, Boolean allowComposite)
+            : this(new Key(prefix, tag), defaultValue, allowComposite) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument"/> class.
@@ -65,8 +69,9 @@ namespace ArgumentParser.Arguments
         /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(String prefix, String tag, String description, String defaultValue)
-            : this(new Key(prefix, tag), description, defaultValue) { }
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        protected Argument(String prefix, String tag, String description, String defaultValue, Boolean allowComposite)
+            : this(new Key(prefix, tag), description, defaultValue, allowComposite) { }
 
         /// <summary>
         /// Gets the <see cref="T:ArgumentParser.Key"/> representing the argument.
@@ -77,6 +82,11 @@ namespace ArgumentParser.Arguments
         /// Gets the description of the argument.
         /// </summary>
         public String Description { get; private set; }
+
+        /// <summary>
+        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// </summary>
+        public Boolean AllowCompositeValues { get; private set; }
 
         /// <summary>
         /// Gets the default value of the argument.

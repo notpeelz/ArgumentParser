@@ -30,8 +30,9 @@ namespace ArgumentParser.Arguments
         /// </summary>
         /// <param name="tag">The character that defines the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXShortArgument(Char tag, String defaultValue = null)
-            : base(Prefix, tag, defaultValue) { }
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        public POSIXShortArgument(Char tag, String defaultValue = null, Boolean allowComposite = false)
+            : base(Prefix, tag, defaultValue, allowComposite) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument"/> class.
@@ -39,8 +40,9 @@ namespace ArgumentParser.Arguments
         /// <param name="tag">The character that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXShortArgument(Char tag, String description, String defaultValue = null)
-            : base(Prefix, tag, description, defaultValue) { }
+        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
+        public POSIXShortArgument(Char tag, String description, String defaultValue = null, Boolean allowComposite = false)
+            : base(Prefix, tag, description, defaultValue, allowComposite) { }
 
         /// <summary>
         /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument"/> type.

@@ -41,6 +41,11 @@ namespace ArgumentParser.Factory
         Boolean ManualBinding { get; }
 
         /// <summary>
+        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// </summary>
+        Boolean AllowCompositeValue { get; }
+
+        /// <summary>
         /// Gets the default value of the argument.
         /// </summary>
         Object DefaultValue { get; }

@@ -26,7 +26,7 @@ namespace ArgumentParser
     public interface IPairable : IComparable<IPairable>
     {
         /// <summary>
-        /// Gets the <see cref="T:ArgumentParser.Key"/> representing the object.
+        /// Gets the <see cref="T:ArgumentParser.Key"/> representing this object.
         /// </summary>
         Key Key { get; }
 
