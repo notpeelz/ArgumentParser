@@ -38,7 +38,7 @@ namespace ArgumentParser.Arguments
         /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
         protected Argument(Key key, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
         {
-            this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof (T), true);
+            this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof (T));
             this.Key = key;
             this.DefaultValue = defaultValue;
             this.AllowCompositeValues = allowComposite;
