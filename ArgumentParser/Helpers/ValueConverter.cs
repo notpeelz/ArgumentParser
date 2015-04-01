@@ -54,6 +54,26 @@ namespace ArgumentParser.Helpers
         }
 
         /// <summary>
+        /// Converts a value using flag conversion rules.
+        /// </summary>
+        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
+        /// <param name="convertBoolean">A boolean value indicating whether implicit boolean equivalents should be converted.</param>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static Int32 GetFlagValue(CultureInfo culture, Boolean convertBoolean, String value)
+        {
+            int intValue;
+            bool booleanValue;
+
+            if (convertBoolean && Boolean.TryParse(value ?? String.Empty, out booleanValue))
+                return booleanValue ? 1 : 0;
+
+            Int32.TryParse(value ?? String.Empty, NumberStyles.Integer, culture, out intValue);
+
+            return intValue;
+        }
+
+        /// <summary>
         /// Converts a value to a native equivalent.
         /// </summary>
         /// <param name="value">The value to convert.</param>

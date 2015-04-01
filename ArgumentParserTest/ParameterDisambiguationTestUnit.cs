@@ -48,7 +48,9 @@ namespace ArgumentParserTest
             posixPortLongVerb,
             posixCADirVerb,
             posixVerboseShortVerb,
-            posixVerboseLongVerb
+            posixVerboseLongVerb,
+            windowsPortLongVerb,
+            windowsPortShortVerb
         };
 
         private static readonly ParserOptions posixOptions = new ParserOptions(ParameterTokenStyle.POSIX)
@@ -87,7 +89,7 @@ namespace ArgumentParserTest
         public void TestWindowsParameters()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            var args = Parser.GetParameters(@"/test /h /q /foo bar\ baz\ blah /t ""e\""s\""t\"" /1 234 /p 5", windowsOptions, arguments).ToArray();
+            var args = Parser.GetParameters(@"/test /h /q /foo bar\ baz\ blah /t ""e\""s\""t\"" /1 234 /p 5 /port 32", windowsOptions, arguments).ToArray();
             var matchedParameters = args.OfType<ParameterPair>();
             var unmatchedParameters = args.OfType<RawParameter>();
 

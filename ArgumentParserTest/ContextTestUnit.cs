@@ -33,7 +33,7 @@ namespace ArgumentParserTest
         public void Init()
         {
             //Main.Instance.Parse("install global - test-app atom \"test --test --blah \" --test -f -b");
-            Main.Instance.Parse("-u Test1,Test2 --test -t -a 'short' --ambiguous \"long\" -vvvv -eeee -hhhh -hhh -hh -h");
+            Main.Instance.Parse("-u Test1,Test2 --test -t -a 'short' --ambiguous \"long\" -vvvv -eeee -hhhh -hhh -hh -h -i 15 -i 1 -i 0 -i");
         }
 
         [TestMethod]
@@ -60,6 +60,12 @@ namespace ArgumentParserTest
         public void TestFlagInversion()
         {
             Assert.AreEqual(1, Main.Instance.InvertedValue);
+        }
+
+        [TestMethod]
+        public void TestImplicitConversion()
+        {
+            Assert.IsTrue(!Main.Instance.ImplicitlyConvertedValue);
         }
 
         [TestMethod]
@@ -115,12 +121,11 @@ namespace ArgumentParserTest
 
             public void HandleValue(UnboundValue value)
             {
-                throw new NotImplementedException();
+                Debug.WriteLine("Parent: {0}, Value: {1}", value.Key, value.Value);
             }
 
             private static Boolean ExceptionHandler(ParsingException exception)
             {
-                //, IArgument argument, RawParameter parameter
                 if (exception.InnerException is FormatException)
                     return true;
 
@@ -131,6 +136,9 @@ namespace ArgumentParserTest
             #region Main options
             [POSIXFlag('f', DefaultValue = true)]
             public Boolean UnaffectedDefault { get; set; }
+
+            [POSIXFlag('i', DefaultValue = true)]
+            public Boolean ImplicitlyConvertedValue { get; set; }
 
             [POSIXFlag('t', DefaultValue = 1)]
             public Int32 InvertedValue { get; set; }

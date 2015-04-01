@@ -328,18 +328,6 @@ namespace ArgumentParser
         /// <summary>
         /// Parses and returns parameters using a given configuration and argument definitions.
         /// </summary>
-        /// <param name="input">The input string array to parse.</param>
-        /// <param name="options">The configuration to use for parsing.</param>
-        /// <param name="arguments">The known argument definitions to match.</param>
-        /// <returns>The paired results of the parsing operation.</returns>
-        public static IEnumerable<IPairable> GetParameters(String[] input, ParserOptions options, IEnumerable<IArgument> arguments)
-        {
-            return GetParameters(String.Join("\x20", input), options, arguments);
-        }
-
-        /// <summary>
-        /// Parses and returns parameters using a given configuration and argument definitions.
-        /// </summary>
         /// <param name="input">The input string to parse.</param>
         /// <param name="options">The configuration to use for parsing.</param>
         /// <param name="arguments">The known argument definitions to match.</param>
@@ -476,13 +464,23 @@ namespace ArgumentParser
 
         private static FlagPair GetFlagPair(ParserOptions options, IFlag flag, RawParameter[] parameters)
         {
-            var values = parameters
-                .Select(x =>
-                {
-                    int value;
-                    Int32.TryParse(x.Value as String ?? String.Empty, NumberStyles.Integer, options.Culture, out value);
-                    return new { Parameter = x, Value = value };
-                }).ToArray();
+            if (!parameters.Any())
+                return new FlagPair(flag, new Object[0], 0);
+
+            bool isBoolean = flag.Type == typeof (Boolean);
+
+            var values = parameters.Select(x => new
+            {
+                Parameter = x,
+                Value = x.Value == null ? 1 : ValueConverter.GetFlagValue(options.Culture, isBoolean, x.Value)
+            }).ToArray();
+
+            if (isBoolean)
+            {
+                bool? defaultValue = flag.DefaultValue as Boolean?;
+                bool invertDefault = defaultValue.HasValue && defaultValue.Value;
+                return new FlagPair(flag, values.Select(x => (Object) x.Value), values.Last().Value == 0 ^ invertDefault ? 1 : 0);
+            }
 
             bool aggregateImplicit = (flag.Options & FlagOptions.AggregateImplicit) != 0,
                  aggregateExplicit = (flag.Options & FlagOptions.AggregateExplicit) != 0,
@@ -524,13 +522,11 @@ namespace ArgumentParser
                     ? (bitFieldImplicit ? GetFlagValue(implicitParameter.Parameter.Count) : implicitParameter.Parameter.Count)
                     : 0;
 
-                if (aggregateCombine || explicitParameter == null)
-                    explicitCount = explicitParameter != null
-                        ? (bitFieldExplicit ? GetFlagValue(explicitParameter.Parameter.Count) : explicitParameter.Parameter.Count)
-                        : 0;
+                if (aggregateCombine && explicitParameter != null)
+                    explicitCount = bitFieldExplicit ? GetFlagValue(explicitParameter.Parameter.Count) : explicitParameter.Parameter.Count;
             }
 
-            return new FlagPair(flag, parameters.Select(x => x.Value == null ? null : ParseValue(options, flag, x.Value)), implicitCount + explicitCount);
+            return new FlagPair(flag, values.Select(x => (Object) x.Value), implicitCount + explicitCount);
         }
 
         private static Int32 GetFlagValue(Int32 value)
