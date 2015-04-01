@@ -737,7 +737,7 @@ namespace ArgumentParser
             if (property != null)
                 BindValue(instance, property, pair, pair.Argument.DefaultValue, options.Culture);
             else if (methodInfo != null)
-                BindValue(instance, methodInfo, pair, attribute, false, pair.Argument.DefaultValue, options.Culture);
+                BindValue(instance, methodInfo, pair, attribute, attribute.ManualBinding, pair.Argument.DefaultValue, options.Culture);
             else throw new ArgumentException("The provided object is neither a PropertyInfo nor a MethodInfo.", "member");
         }
 
