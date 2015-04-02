@@ -45,7 +45,7 @@
     <Compile Include="Helpers\ValueConverter.cs" />
     <Compile Include="Arguments\WindowsFlag.cs" />
     <Compile Include="Arguments\WindowsFlag`1.cs" />
-    <Compile Include="BindingPair.cs" />
+    <Compile Include="MemberBinding.cs" />
     <Compile Include="Factory\BindingPolicy.cs" />
     <Compile Include="Factory\BindingPolicyAttribute.cs" />
     <Compile Include="Arguments\FlagOptions.cs" />
