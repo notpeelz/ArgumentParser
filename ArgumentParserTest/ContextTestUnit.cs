@@ -116,7 +116,7 @@ namespace ArgumentParserTest
 
             public void HandleParameter(RawParameter parameter)
             {
-                Debug.WriteLine("{0} #{1}: \"{2}\"", parameter.Key, parameter.Count, parameter.Value);
+                Debug.WriteLine("{0} #{1}: \"{2}\" (Compound: {3})", parameter.Key, parameter.Count, parameter.Value, parameter.TotalCount > 1);
             }
 
             public void HandleValue(UnboundValue value)

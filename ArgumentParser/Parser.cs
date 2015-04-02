@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -364,18 +365,22 @@ namespace ArgumentParser
                          RegexOptions.Singleline);
 
             var matchElements =
-                matches.OfType<Match>().SelectMany(x => x.Groups["tag"].Captures
-                    .OfType<Capture>()
-                    .GroupBy(c => c.Value, (c, e) => new RawParameter(
-                        prefix: x.Groups["prefix"].Value,
-                        tag: c,
-                        value: x.Groups["value"].Success
-                            ? (options.Detokenize
-                                ? DetokenizeValue(options, x.Groups["value"].Value)
-                                : x.Groups["value"].Value)
-                            : null,
-                        count: e.Count())))
-                    .ToArray();
+                matches.OfType<Match>().SelectMany(x =>
+                {
+                    var captures = x.Groups["tag"].Captures.OfType<Capture>().ToArray();
+
+                    return captures
+                        .GroupBy(c => c.Value, (c, e) => new RawParameter(
+                            prefix: x.Groups["prefix"].Value,
+                            tag: c,
+                            value: x.Groups["value"].Success
+                                ? (options.Detokenize
+                                    ? DetokenizeValue(options, x.Groups["value"].Value)
+                                    : x.Groups["value"].Value)
+                                : null,
+                            count: e.Count(),
+                            totalCount: captures.Length));
+                }).ToArray();
 
             List<UnboundValue> unboundValues = new List<UnboundValue>();
 
@@ -388,23 +393,14 @@ namespace ArgumentParser
                     {
                         var parameters = p.ToArray();
                         var flag = a as IFlag;
+                        String[][] trailingValues;
 
-                        if (flag != null)
-                            return GetFlagPair(options, flag, parameters);
+                        var pair = flag != null
+                            ? GetFlagPair(options, flag, parameters, out trailingValues)
+                            : GetParameterPair(options, a, parameters, out trailingValues);
 
-                        if (a.AllowCompositeValues)
-                            return new ParameterPair(a, parameters.Select(x => x.Value == null ? null : ParseValue(options, a, x.Value)));
-
-                        var values = parameters
-                            .Select(x => x.Value == null
-                                ? null
-                                : x.Value.Split(new[] { '\x20' }, StringSplitOptions.RemoveEmptyEntries))
-                            .ToArray();
-
-                        var pair = new ParameterPair(a, values.Select(x => ParseValue(options, a, x.First())));
-
-                        unboundValues.AddRange(values
-                            .Where(x => x.Any())
+                        unboundValues.AddRange(trailingValues
+                            .Where(x => x != null && x.Any())
                             .SelectMany(x => x.Skip(1))
                             .Select(x => new UnboundValue(pair, x)));
 
@@ -462,24 +458,59 @@ namespace ArgumentParser
             }
         }
 
-        private static FlagPair GetFlagPair(ParserOptions options, IFlag flag, RawParameter[] parameters)
+        private static ParameterPair GetParameterPair(ParserOptions options, IArgument argument, RawParameter[] parameters, out String[][] trailingValues)
+        {
+            if (argument.AllowCompositeValues)
+            {
+                trailingValues = new String[0][];
+                return new ParameterPair(
+                    argument: argument,
+                    values: parameters
+                        .Where(x => x != null)
+                        .Select(x => x.Value == null || x.TotalCount > 1
+                            ? null
+                            : ParseValue(options, argument, x.Value)));
+            }
+
+            trailingValues = GetCompositeValueParts(parameters);
+
+            return new ParameterPair(
+                argument: argument,
+                values: trailingValues.Select(x => x == null ? null : ParseValue(options, argument, x.First())));
+        }
+
+        private static FlagPair GetFlagPair(ParserOptions options, IFlag flag, RawParameter[] parameters, out String[][] trailingValues)
         {
             if (!parameters.Any())
+            {
+                trailingValues = new String[0][];
                 return new FlagPair(flag, new Object[0], 0);
+            }
 
             bool isBoolean = flag.Type == typeof (Boolean);
 
-            var values = parameters.Select(x => new
-            {
-                Parameter = x,
-                Value = x.Value == null ? 1 : ValueConverter.GetFlagValue(options.Culture, isBoolean, x.Value)
-            }).ToArray();
+            var values = parameters.Where(x => x != null).Select(x => new
+                {
+                    Parameter = x,
+                    Value = x.Value == null || x.TotalCount > 1
+                        ? 1
+                        : ValueConverter.GetFlagValue(options.Culture, isBoolean, x.Value)
+                }).ToArray();
 
+            // Skip special flag logic for booleans, as such operations can not be done on single bits.
             if (isBoolean)
             {
                 bool? defaultValue = flag.DefaultValue as Boolean?;
                 bool invertDefault = defaultValue.HasValue && defaultValue.Value;
-                return new FlagPair(flag, values.Select(x => (Object) x.Value), values.Last().Value == 0 ^ invertDefault ? 1 : 0);
+
+                var flagPair = new FlagPair(
+                    argument: flag,
+                    values: values.Select(x => (Object) x.Value),
+                    count: values.Last().Value == 0 ^ invertDefault ? 1 : 0);
+
+                trailingValues = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(parameters);
+
+                return flagPair;
             }
 
             bool aggregateImplicit = (flag.Options & FlagOptions.AggregateImplicit) != 0,
@@ -526,7 +557,13 @@ namespace ArgumentParser
                     explicitCount = bitFieldExplicit ? GetFlagValue(explicitParameter.Parameter.Count) : explicitParameter.Parameter.Count;
             }
 
-            return new FlagPair(flag, values.Select(x => (Object) x.Value), implicitCount + explicitCount);
+            {
+                var flagPair = new FlagPair(flag, values.Select(x => (Object) x.Value), implicitCount + explicitCount);
+
+                trailingValues = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(parameters);
+
+                return flagPair;
+            }
         }
 
         private static Int32 GetFlagValue(Int32 value)
@@ -535,6 +572,17 @@ namespace ArgumentParser
                 return 0;
 
             return 1 << (value - 1);
+        }
+
+        private static String[][] GetCompositeValueParts(RawParameter[] parameters)
+        {
+            var values = parameters
+                .Where(x => x != null)
+                .Select(x => x.Value == null || x.TotalCount > 1
+                    ? null
+                    : x.Value.Split(new[] { '\x20' }, StringSplitOptions.RemoveEmptyEntries))
+                .ToArray();
+            return values;
         }
 
         private static String DetokenizeValue(ParserOptions options, String value)
