@@ -30,13 +30,13 @@ namespace ArgumentParser.Factory
         private static readonly StringArrayConverter typeConverter = new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParserTests.POSIXCompositeListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXCompositeListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXCompositeListOptionAttribute(String tag) : base(tag) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParserTests.POSIXCompositeListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXCompositeListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXCompositeListOptionAttribute(Char tag) : base(tag) { }

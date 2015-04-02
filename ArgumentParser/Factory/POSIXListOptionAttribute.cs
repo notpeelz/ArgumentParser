@@ -30,13 +30,13 @@ namespace ArgumentParser.Factory
         private static readonly StringArrayConverter typeConverter = new StringArrayConverter();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParserTests.POSIXListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXListOptionAttribute(String tag) : base(tag) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParserTests.POSIXListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXListOptionAttribute(Char tag) : base(tag) { }

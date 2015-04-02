@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ParserException.cs" company="LouisTakePILLz">
+// <copyright file="ParsingException.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -31,6 +31,9 @@ namespace ArgumentParser
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.ParsingException"/> class.
         /// </summary>
+        /// <param name="member">The member used upon failing.</param>
+        /// <param name="context">The context throwing the exception (if applicable).</param>
+        /// <param name="pair">The parameter pair being parsed upon failing.</param>
         public ParsingException(Object member = null, Object context = null, ParameterPair pair = null)
             : base(EXCEPTION_MESSAGE)
         {

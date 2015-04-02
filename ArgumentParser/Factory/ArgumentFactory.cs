@@ -48,6 +48,7 @@ namespace ArgumentParser.Factory
         /// <summary>
         /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXLongArgument`1"/> of a generic type.
         /// </summary>
+        /// <typeparam name="T">The value type of the argument.</typeparam>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
@@ -248,6 +249,7 @@ namespace ArgumentParser.Factory
         /// <summary>
         /// Creates a <see cref="T:ArgumentParser.Arguments.WindowsArgument`1"/> of a generic type.
         /// </summary>
+        /// <typeparam name="T">The value type of the argument.</typeparam>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>

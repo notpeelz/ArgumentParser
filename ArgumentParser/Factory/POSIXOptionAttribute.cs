@@ -47,27 +47,27 @@ namespace ArgumentParser.Factory
         }
 
         /// <summary>
-        /// Gets the tag that defines the argument.
+        /// Gets or sets the tag that defines the argument.
         /// </summary>
         public String Tag { get; set; }
 
         /// <summary>
-        /// Gets the description of the argument.
+        /// Gets or sets the description of the argument.
         /// </summary>
         public String Description { get; set; }
 
         /// <summary>
-        /// Gets a boolean value indicating whether the member is meant to be manually bound or not. (Only applies to methods)
+        /// Gets or sets a boolean value indicating whether the member is meant to be manually bound or not. (Only applies to methods)
         /// </summary>
         public Boolean ManualBinding { get; set; }
 
         /// <summary>
-        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// Gets or sets a boolean value indicating whether trailing values should be interpreted.
         /// </summary>
-        public Boolean AllowCompositeValue { get; private set; }
+        public Boolean AllowCompositeValue { get; set; }
 
         /// <summary>
-        /// Gets the default value of the argument.
+        /// Gets or sets the default value of the argument.
         /// </summary>
         public Object DefaultValue { get; set; }
 

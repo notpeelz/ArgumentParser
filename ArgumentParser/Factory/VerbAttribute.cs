@@ -36,12 +36,12 @@ namespace ArgumentParser.Factory
         }
 
         /// <summary>
-        /// Gets the tag that defines the verb.
+        /// Gets or sets the tag that defines the verb.
         /// </summary>
         public String Tag { get; set; }
 
         /// <summary>
-        /// Gets the description of the verb.
+        /// Gets or sets the description of the verb.
         /// </summary>
         public String Description { get; set; }
 

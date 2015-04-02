@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -83,8 +82,8 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string array to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
-        /// <param name="culture">The culture to use for detokenization.</param>
         /// <param name="detokenizer">The predicate to use for detokenization.</param>
+        /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flags aren't decoupled; they are passed verbatim, as a single tag.

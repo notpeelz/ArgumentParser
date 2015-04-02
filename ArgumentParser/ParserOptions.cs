@@ -41,6 +41,7 @@ namespace ArgumentParser
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.ParserOptions"/> class.
         /// </summary>
+        /// <param name="tokenStyle">The parser syntax to use.</param>
         public ParserOptions(ParameterTokenStyle tokenStyle) : this()
         {
             this.TokenStyle = tokenStyle;

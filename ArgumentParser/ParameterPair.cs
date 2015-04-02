@@ -29,7 +29,7 @@ namespace ArgumentParser
     public class ParameterPair : IPairable
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.ParameterPair"/>.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.ParameterPair"/> class.
         /// </summary>
         /// <param name="argument">The matched argument.</param>
         /// <param name="values">The values that were passed to the parameter.</param>
