@@ -24,7 +24,7 @@ namespace ArgumentParser.Factory
     /// <summary>
     /// Represents a POSIX-flavored flag option attribute.
     /// </summary>
-    public class POSIXFlagAttribute : POSIXOptionAttribute
+    public class POSIXFlagAttribute : POSIXOptionAttribute, IFlagOptionAttribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXFlagAttribute"/> class.

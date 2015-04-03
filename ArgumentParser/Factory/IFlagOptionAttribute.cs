@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="WindowsFlagAttribute.cs" company="LouisTakePILLz">
+// <copyright file="IFlagOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -16,25 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using ArgumentParser.Arguments;
 
 namespace ArgumentParser.Factory
 {
     /// <summary>
-    /// Represents a Windows-flavored flag option attribute.
+    /// Represents a flag definition attribute.
     /// </summary>
-    public class WindowsFlagAttribute : WindowsOptionAttribute, IFlagOptionAttribute
+    public interface IFlagOptionAttribute : IOptionAttribute
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.WindowsFlagAttribute"/> class.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        public WindowsFlagAttribute(String tag) : base(tag) { }
-
         /// <summary>
         /// Gets or sets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
         /// </summary>
-        public FlagOptions Options { get; set; }
+        FlagOptions Options { get; }
     }
 }

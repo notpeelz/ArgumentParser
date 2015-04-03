@@ -487,25 +487,25 @@ namespace ArgumentParser
             }
 
             bool isBoolean = flag.Type == typeof (Boolean);
+            bool invertImplicit = (flag.Options & FlagOptions.InvertBooleanImplicit) != 0;
+            bool invertExplicit = (flag.Options & FlagOptions.InvertBooleanExplicit) != 0;
 
-            var values = parameters.Where(x => x != null).Select(x => new
-                {
-                    Parameter = x,
-                    Value = x.Value == null || x.TotalCount > 1
-                        ? 1
-                        : ValueConverter.GetFlagValue(options.Culture, isBoolean, x.Value)
-                }).ToArray();
+            var values = parameters.Where(x => x != null).Select(x =>
+            {
+                if (x.Value == null || x.TotalCount > 1)
+                    return new { Parameter = x, Value = (invertImplicit ? 0 : 1) };
+
+                var value = ValueConverter.GetFlagValue(options.Culture, isBoolean, x.Value);
+                return new { Parameter = x, Value = (value == 0 ^ invertExplicit ? 0 : 1) };
+            }).ToArray();
 
             // Skip special flag logic for booleans, as such operations can not be done on single bits.
             if (isBoolean)
             {
-                bool? defaultValue = flag.DefaultValue as Boolean?;
-                bool invertDefault = defaultValue.HasValue && defaultValue.Value;
-
                 var flagPair = new FlagPair(
                     argument: flag,
                     values: values.Select(x => (Object) x.Value),
-                    count: values.Last().Value == 1 ^ invertDefault ? 1 : 0);
+                    count: values.Last().Value);
 
                 trailingValues = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(parameters);
 
@@ -748,7 +748,7 @@ namespace ArgumentParser
                     {
                         if (pair.Matched)
                         {
-                            if (flagPair != null) BindFlag(options, instance, flagPair, member, attribute);
+                            if (flagPair != null) BindFlag(options, instance, flagPair, member, (IFlagOptionAttribute) attribute);
                             else BindArgument(options, instance, pair, member, attribute);
 
                             shouldBlock = true;
@@ -804,17 +804,16 @@ namespace ArgumentParser
             else throw new ArgumentException("The provided object is neither a PropertyInfo nor a MethodInfo.", "member");
         }
 
-        private static void BindFlag(ParserOptions options, Object instance, FlagPair flagPair, Object member, IOptionAttribute attribute)
+        private static void BindFlag(ParserOptions options, Object instance, FlagPair flagPair, Object member, IFlagOptionAttribute attribute)
         {
             var property = member as PropertyInfo;
             var methodInfo = member as MethodInfo;
-            bool defaultValue = flagPair.Argument.DefaultValue as Boolean? ?? false;
 
             // We're binding a property
             if (property != null)
             {
                 if (property.PropertyType == typeof (Boolean))
-                    BindValue(instance, property, flagPair, flagPair.Count > 0 ^ defaultValue, options.Culture);
+                    BindValue(instance, property, flagPair, flagPair.Count > 0, options.Culture);
                 else if (flagPair.Count > 0)
                     BindValue(instance, property, flagPair, flagPair.Count, options.Culture);
                 else foreach (var value in flagPair.Values)
@@ -823,7 +822,7 @@ namespace ArgumentParser
             else if (methodInfo != null) // ...or invoking a method
             {
                 if (flagPair.Argument.Type == typeof (Boolean))
-                    BindValue(instance, methodInfo, flagPair, attribute, attribute.ManualBinding, flagPair.Count > 0 ^ defaultValue, options.Culture);
+                    BindValue(instance, methodInfo, flagPair, attribute, attribute.ManualBinding, flagPair.Count > 0, options.Culture);
                 else if (attribute.ManualBinding || flagPair.Count > 0)
                     BindValue(instance, methodInfo, flagPair, attribute, attribute.ManualBinding, flagPair.Count, options.Culture);
                 else foreach (var value in flagPair.Values)

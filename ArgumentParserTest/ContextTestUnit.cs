@@ -137,7 +137,7 @@ namespace ArgumentParserTest
             [POSIXFlag('f', DefaultValue = true)]
             public Boolean UnaffectedDefault { get; set; }
 
-            [POSIXFlag('i', DefaultValue = true)]
+            [POSIXFlag('i', DefaultValue = true, Options = FlagOptions.InvertBoolean)]
             public Boolean ImplicitlyConvertedValue { get; set; }
 
             [POSIXFlag('t', DefaultValue = 1)]
