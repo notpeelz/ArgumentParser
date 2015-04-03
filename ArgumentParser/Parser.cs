@@ -505,7 +505,7 @@ namespace ArgumentParser
                 var flagPair = new FlagPair(
                     argument: flag,
                     values: values.Select(x => (Object) x.Value),
-                    count: values.Last().Value == 0 ^ invertDefault ? 1 : 0);
+                    count: values.Last().Value == 1 ^ invertDefault ? 1 : 0);
 
                 trailingValues = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(parameters);
 
