@@ -724,7 +724,7 @@ namespace ArgumentParser
         {
             List<Object> boundMembers = new List<Object>();
 
-            foreach (var binding in matches)
+            foreach (var binding in matches.OrderByDescending(x => x.Any(p => p.Matched)))
             {
                 var attribute = binding.Key.Attribute;
                 var member = binding.Key.Member;
