@@ -3,6 +3,14 @@ This library was made in an attempt to simplify the handling and parsing of para
 
 Please see our [contributing guidelines](./CONTRIBUTING.md) before reporting an issue.
 
+![License](https://img.shields.io/badge/license-GPLv3-blue.svg)
+![Release](https://img.shields.io/github/release/louistakepillz/argumentparser.svg)
+![Tag](https://img.shields.io/github/tag/louistakepillz/argumentparser.svg)
+
+![Issues](https://img.shields.io/github/issues/louistakepillz/argumentparser.svg)
+![Forks](https://img.shields.io/github/forks/louistakepillz/argumentparser.svg)
+
+
 ## Operative modes
 
 ### Plain ("raw") mode
