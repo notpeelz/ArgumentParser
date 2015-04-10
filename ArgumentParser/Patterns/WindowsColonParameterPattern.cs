@@ -26,16 +26,20 @@ namespace ArgumentParser
         private const String WINDOWS_COLON_PARAMETERS_PATTERN = @"
             (?<=^|\s)(?<prefix>/)
             (
-                (?<tag>[\w\-\=]+):
-                (?<value>
-                    (?:""  (?> \\.  | [^""])* "")|
-                    (?: '  (?> \\.  | [^'])*   ')|
-                    (?>        \\.  | [^\s""']  )+
-                )|
-                (?<tag>[\w\-\=]+)
+                (?<tag>[\w\-]+)
+                (
+                    (\s+|:)
+                    (?<value>
+                        (
+                            ("" (?> \\.  | [^""])* "")|
+                            ('  (?> \\.  | [^'])* ')|
+                            ( \\./?  | [^/""'] | (?<!\s) /+ )+
+                        )+
+                    )
+                )?
             )(?=$|\s)";
         #else
-        private const String WINDOWS_COLON_PARAMETERS_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-\=]+):(?<value>(?:""(?>\\.|[^""])*"")|(?:'(?>\\.|[^'])*')|(?>\\.|[^\s""'])+)|(?<tag>[\w\-\=]+))(?=$|\s)";
+        private const String WINDOWS_COLON_PARAMETERS_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-]+)((\s+|:)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\./?|[^/""']|(?<!\s)/+)+)+))?)(?=$|\s)";
         #endif
     }
 }

@@ -63,6 +63,7 @@
     <Compile Include="IParserContext.cs" />
     <Compile Include="IVerbContext.cs" />
     <Compile Include="Patterns\POSIXParameterPattern.cs" />
+    <Compile Include="Patterns\ValuePattern.cs" />
     <Compile Include="Patterns\VerbPattern.cs" />
     <Compile Include="Patterns\WindowsColonParameterPattern.cs" />
     <Compile Include="Patterns\WindowsEqualParameterPattern.cs" />
