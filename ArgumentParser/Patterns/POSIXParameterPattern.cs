@@ -23,36 +23,27 @@ namespace ArgumentParser
     public static partial class Parser
     {
         #if DEBUG
-        private const String UNIX_PARAMETERS_PATTERN = @"
+        private const String POSIX_PARAMETERS_PATTERN = @"
             (?<=^|\s)
             (
                 (?<prefix>--)
-                (
-                    (?<tag>(?!-)\w+)
-                    (
-                        \s+
-                        (?<value>
-                            ("" (?> \\.  | [^""])* "")|
-                            ('  (?> \\.  | [^'])* ')|
-                            (?>     \\.  | [^\-""'] | (?<!\s) \d+ )*|
-                            (?> \-\d [\,\.\w]* )
-                        )
-                    )?
-                )|
+                (?<tag>(?!-)\w+)|
                 (?<prefix>-)
-                (?<tag>\w)+
-                (
-                    \s+
-                    (?<value>
+                (?<tag>[\w-[\d]])+
+            )
+            (
+                \s+
+                (?<value>
+                    (
                         ("" (?> \\.  | [^""])* "")|
                         ('  (?> \\.  | [^'])* ')|
-                        (?>     \\.  | [^\-""'] | (?<!\s) \d+ )*|
-                        (?> \-\d [\,\.\w]* )
-                    )
-                )?
-            )(?=\s|$)";
+                        (       \\.-?| [^\-""'] | (?<!\s) \-+ | \-+ (?=\d|[^\-\w\""]|$) )+
+                    )+
+                )
+            )?
+			(?=\s|$)";
         #else
-        private const String UNIX_PARAMETERS_PATTERN = @"(?<=^|\s)((?<prefix>--)((?<tag>(?!-)\w+)(\s+(?<value>(""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(?>\\.|[^\-""']|(?<!\s)\d+)*|(?>\-\d[\,\.\w]*)))?)|(?<prefix>-)(?<tag>\w)+(\s+(?<value>(""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(?>\\.|[^\-""']|(?<!\s)\d+)*|(?>\-\d[\,\.\w]*)))?)(?=\s|$)";
+        private const String POSIX_PARAMETERS_PATTERN = @"(?<=^|\s)((?<prefix>--)(?<tag>(?!-)\w+)|(?<prefix>-)(?<tag>[\w-[\d]])+)(\s+(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\.-?|[^\-""']|(?<!\s)\-+|\-+(?=\d|[^\-\w\""]|$))+)+))?(?=\s|$)";
         #endif
     }
 }

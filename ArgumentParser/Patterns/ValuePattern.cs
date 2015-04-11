@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="WindowsParameterPattern.cs" company="LouisTakePILLz">
+// <copyright file="ValuePattern.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -23,23 +23,17 @@ namespace ArgumentParser
     public static partial class Parser
     {
         #if DEBUG
-        private const String WINDOWS_PARAMETERS_PATTERN = @"
-            (?<=^|\s)(?<prefix>/)
-            (
-                (?<tag>[\w\-\:]+)
-                (
-                    \s+
-                    (?<value>
-                        (
-                            ("" (?> \\.  | [^""])* "")|
-                            ('  (?> \\.  | [^'])* ')|
-                            ( \\./?  | [^/""'] | (?<!\s) /+ )+
-                        )+
-                    )
-                )?
-            )(?=$|\s)";
+        private const String VALUE_PATTERN = @"
+            (?<=^|\s)
+            (?<!\\\s)
+			(
+                "" (?<value> (?> \\.  | [^""] )*) ""|
+                '  (?<value> (?> \\.  | [^'] )*) '|
+                   (?<value> (?> \\.  | [^\s""']  )*)
+            )
+            (?=$|\s)";
         #else
-        private const String WINDOWS_PARAMETERS_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-\:]+)(\s+(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\./?|[^/""']|(?<!\s)/+)+)+))?)(?=$|\s)";
+        private const String VALUE_PATTERN = @"(?<=^|\s)(?<!\\\s)(""(?<value>(?>\\.|[^""])*)""|'(?<value>(?>\\.|[^'])*)'|(?<value>(?>\\.|[^\s""'])*))(?=$|\s)";
         #endif
     }
 }

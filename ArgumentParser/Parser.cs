@@ -43,18 +43,7 @@ namespace ArgumentParser
         /// <summary>
         /// Represents the default value detokenizer predicate.
         /// </summary>
-        public static readonly Func<String, CultureInfo, String> DefaultDetokenizer = (x, c) =>
-        {
-            if (x.Length < 2)
-                return x;
-
-            String firstChar = x.Substring(0, 1), lastChar = x.Substring(x.Length - 1, 1);
-            var value = (firstChar == "\'" && lastChar == "\'") || (firstChar == "\"" || lastChar == "\"")
-                ? x.Substring(1, x.Length - 2)
-                : x;
-
-            return Regex.Unescape(value);
-        };
+        public static readonly Func<String, CultureInfo, String> DefaultDetokenizer = (x, c) => Regex.Unescape(x);
 
         /// <summary>
         /// Represents the default <see cref="T:ArgumentParser.IPairable"/> equality comparer.
@@ -160,7 +149,8 @@ namespace ArgumentParser
             var matches = Regex.Matches(
                 input: input,
                 pattern: VERB_PATTERN,
-                options: RegexOptions.IgnorePatternWhitespace |
+                options: RegexOptions.ExplicitCapture |
+                         RegexOptions.IgnorePatternWhitespace |
                          RegexOptions.CultureInvariant |
                          RegexOptions.Singleline).OfType<Match>().ToArray();
 
@@ -234,28 +224,26 @@ namespace ArgumentParser
             else
             {
                 List<String> unmatchedVerbs = verbNames.ToList();
-                KeyValuePair<PropertyInfo, Verb>? verb = null;
+                KeyValuePair<PropertyInfo, Verb>? pair = null;
                 Object parent = context;
                 var enumerator = verbNames.GetEnumerator();
 
                 Object value = parent;
 
                 while (enumerator.MoveNext()
-                    && (verb = GetVerb(parent = value, (String) enumerator.Current)).HasValue
+                    && (pair = GetVerb(parent = value, (String) enumerator.Current)).HasValue
                     && unmatchedVerbs.Remove((String) enumerator.Current))
                 {
-                    value = verb.Value.Key.GetValue(parent);
+                    value = pair.Value.Key.GetValue(parent);
                     if (value == null)
-                        verb.Value.Key.SetValue(parent, value = Activator.CreateInstance(verb.Value.Key.PropertyType));
+                        pair.Value.Key.SetValue(parent, value = Activator.CreateInstance(pair.Value.Key.PropertyType));
                 }
 
-                if (!verb.HasValue)
-                {
-                    ((IVerbContext) parent).Init(unmatchedVerbs.ToArray());
-                    return;
-                }
+                var verb = pair ?? parent;
 
-                ParseArguments((IVerbContext) verb.Value.Key.GetValue(parent), input, options);
+                ((IVerbContext) verb).Init(unmatchedVerbs.ToArray());
+
+                ParseArguments((IVerbContext) verb, input, options);
             }
         }
 
@@ -373,9 +361,7 @@ namespace ArgumentParser
                             prefix: x.Groups["prefix"].Value,
                             tag: c,
                             value: x.Groups["value"].Success
-                                ? (options.Detokenize
-                                    ? DetokenizeValue(options, x.Groups["value"].Value)
-                                    : x.Groups["value"].Value)
+                                ? x.Groups["value"].Value
                                 : null,
                             count: e.Count(),
                             totalCount: captures.Length));
@@ -392,13 +378,13 @@ namespace ArgumentParser
                     {
                         var parameters = p.ToArray();
                         var flag = a as IFlag;
-                        String[][] trailingValues;
+                        IEnumerable<IEnumerable<String>> values;
 
                         var pair = flag != null
-                            ? GetFlagPair(options, flag, parameters, out trailingValues)
-                            : GetParameterPair(options, a, parameters, out trailingValues);
+                            ? GetFlagPair(options, flag, parameters, out values)
+                            : GetParameterPair(options, a, parameters, out values);
 
-                        unboundValues.AddRange(trailingValues
+                        unboundValues.AddRange(values
                             .Where(x => x != null && x.Any())
                             .SelectMany(x => x.Skip(1))
                             .Select(x => new UnboundValue(pair, x)));
@@ -451,17 +437,17 @@ namespace ArgumentParser
                 case ParameterTokenStyle.WindowsEqual:
                     return WINDOWS_EQUAL_PARAMETERS_PATTERN;
                 case ParameterTokenStyle.POSIX:
-                    return UNIX_PARAMETERS_PATTERN;
+                    return POSIX_PARAMETERS_PATTERN;
                 default:
                     throw new InvalidEnumArgumentException("The token style is not within the valid range of values.");
             }
         }
 
-        private static ParameterPair GetParameterPair(ParserOptions options, IArgument argument, RawParameter[] parameters, out String[][] trailingValues)
+        private static ParameterPair GetParameterPair(ParserOptions options, IArgument argument, RawParameter[] parameters, out IEnumerable<IEnumerable<String>> values)
         {
             if (argument.AllowCompositeValues)
             {
-                trailingValues = new String[0][];
+                values = new String[0][];
                 return new ParameterPair(
                     argument: argument,
                     values: parameters
@@ -471,18 +457,22 @@ namespace ArgumentParser
                             : ParseValue(options, argument, x.Value)));
             }
 
-            trailingValues = GetCompositeValueParts(parameters);
+            values = GetCompositeValueParts(options, parameters);
 
             return new ParameterPair(
                 argument: argument,
-                values: trailingValues.Select(x => x == null ? null : ParseValue(options, argument, x.First())));
+                values: values.Select(x =>
+                {
+                    var value = x == null ? null : x.FirstOrDefault();
+                    return value == null ? null : ParseValue(options, argument, value);
+                }));
         }
 
-        private static FlagPair GetFlagPair(ParserOptions options, IFlag flag, RawParameter[] parameters, out String[][] trailingValues)
+        private static FlagPair GetFlagPair(ParserOptions options, IFlag flag, RawParameter[] parameters, out IEnumerable<IEnumerable<String>> values)
         {
             if (!parameters.Any())
             {
-                trailingValues = new String[0][];
+                values = new String[0][];
                 return new FlagPair(flag, new Object[0], 0);
             }
 
@@ -490,7 +480,7 @@ namespace ArgumentParser
             bool invertImplicit = (flag.Options & FlagOptions.InvertBooleanImplicit) != 0;
             bool invertExplicit = (flag.Options & FlagOptions.InvertBooleanExplicit) != 0;
 
-            var values = parameters.Where(x => x != null).Select(x =>
+            var flagValues = parameters.Where(x => x != null).Select(x =>
             {
                 if (x.Value == null || x.TotalCount > 1)
                     return new { Parameter = x, Value = (invertImplicit ? 0 : 1) };
@@ -504,10 +494,10 @@ namespace ArgumentParser
             {
                 var flagPair = new FlagPair(
                     argument: flag,
-                    values: values.Select(x => (Object) x.Value),
-                    count: values.Last().Value);
+                    values: flagValues.Select(x => (Object) x.Value),
+                    count: flagValues.Last().Value);
 
-                trailingValues = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(parameters);
+                values = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(options, parameters);
 
                 return flagPair;
             }
@@ -530,8 +520,8 @@ namespace ArgumentParser
             else if (aggregateExplicit && !aggregateImplicit) // Explicit not implicit
             {
                 explicitCount = bitFieldExplicit
-                    ? values.Aggregate(0, (c, x) => c + GetFlagValue(x.Value))
-                    : values.Aggregate(0, (c, x) => c + x.Value);
+                    ? flagValues.Aggregate(0, (c, x) => c + GetFlagValue(x.Value))
+                    : flagValues.Aggregate(0, (c, x) => c + x.Value);
             }
             else if (aggregateImplicit) // Explicit and implicit (both)
             {
@@ -541,13 +531,13 @@ namespace ArgumentParser
 
                 if (aggregateCombine || implicitCount == 0)
                     explicitCount = bitFieldExplicit
-                        ? values.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : GetFlagValue(x.Value)))
-                        : values.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : x.Value));
+                        ? flagValues.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : GetFlagValue(x.Value)))
+                        : flagValues.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : x.Value));
             }
             else // None
             {
-                var implicitParameter = values.FirstOrDefault(x => x.Parameter.Value == null);
-                var explicitParameter = values.FirstOrDefault(x => x.Parameter.Value != null);
+                var implicitParameter = flagValues.FirstOrDefault(x => x.Parameter.Value == null);
+                var explicitParameter = flagValues.FirstOrDefault(x => x.Parameter.Value != null);
                 implicitCount = implicitParameter != null
                     ? (bitFieldImplicit ? GetFlagValue(implicitParameter.Parameter.Count) : implicitParameter.Parameter.Count)
                     : 0;
@@ -557,9 +547,9 @@ namespace ArgumentParser
             }
 
             {
-                var flagPair = new FlagPair(flag, values.Select(x => (Object) x.Value), implicitCount + explicitCount);
+                var flagPair = new FlagPair(flag, flagValues.Select(x => (Object) x.Value), implicitCount + explicitCount);
 
-                trailingValues = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(parameters);
+                values = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(options, parameters);
 
                 return flagPair;
             }
@@ -573,14 +563,24 @@ namespace ArgumentParser
             return 1 << (value - 1);
         }
 
-        private static String[][] GetCompositeValueParts(RawParameter[] parameters)
+        private static IEnumerable<IEnumerable<String>> GetCompositeValueParts(ParserOptions options, RawParameter[] parameters)
         {
             var values = parameters
                 .Where(x => x != null)
                 .Select(x => x.Value == null || x.TotalCount > 1
                     ? null
-                    : x.Value.Split(new[] { '\x20' }, StringSplitOptions.RemoveEmptyEntries))
-                .ToArray();
+                    : Regex.Matches(
+                        input: x.Value,
+                        pattern: VALUE_PATTERN,
+                        options: RegexOptions.ExplicitCapture |
+                                 RegexOptions.IgnorePatternWhitespace |
+                                 RegexOptions.CultureInvariant |
+                                 RegexOptions.Singleline)
+                        .OfType<Match>()
+                        .Select(m => (options.Detokenize
+                            ? DetokenizeValue(options, m.Groups["value"].Value)
+                            : m.Groups["value"].Value)));
+
             return values;
         }
 
