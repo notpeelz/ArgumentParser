@@ -154,9 +154,18 @@ namespace ArgumentParser
                          RegexOptions.CultureInvariant |
                          RegexOptions.Singleline).OfType<Match>().ToArray();
 
-            verbs = matches
-                .Where(x => !x.Groups["args"].Success)
-                .Select(x => x.Value).ToArray();
+            if (options.Detokenize)
+            {
+                verbs = matches
+                    .Where(x => x.Groups["verb"].Success)
+                    .Select(x => x.Groups["verb"].Value).ToArray();
+            }
+            else
+            {
+                verbs = matches
+                    .Where(x => x.Groups["verb"].Success)
+                    .Select(x => DetokenizeValue(options, x.Groups["verb"].Value)).ToArray();
+            }
 
             parameters = matches
                 .Where(x => x.Groups["args"].Success)
@@ -219,32 +228,25 @@ namespace ArgumentParser
             String args;
             GetParts(options, input, out verbNames, out args);
 
-            if (!verbNames.Any())
-                ParseArguments(context, input, options);
-            else
+            List<String> unmatchedVerbs = verbNames.ToList();
+            KeyValuePair<PropertyInfo, Verb>? pair;
+            Object parent = context;
+            var enumerator = verbNames.GetEnumerator();
+
+            Object value = parent;
+
+            while (enumerator.MoveNext()
+                && (pair = GetVerb(parent = value, (String) enumerator.Current)).HasValue
+                && unmatchedVerbs.Remove((String) enumerator.Current))
             {
-                List<String> unmatchedVerbs = verbNames.ToList();
-                KeyValuePair<PropertyInfo, Verb>? pair = null;
-                Object parent = context;
-                var enumerator = verbNames.GetEnumerator();
-
-                Object value = parent;
-
-                while (enumerator.MoveNext()
-                    && (pair = GetVerb(parent = value, (String) enumerator.Current)).HasValue
-                    && unmatchedVerbs.Remove((String) enumerator.Current))
-                {
-                    value = pair.Value.Key.GetValue(parent);
-                    if (value == null)
-                        pair.Value.Key.SetValue(parent, value = Activator.CreateInstance(pair.Value.Key.PropertyType));
-                }
-
-                var verb = pair ?? parent;
-
-                ((IVerbContext) verb).Init(unmatchedVerbs.ToArray());
-
-                ParseArguments((IVerbContext) verb, input, options);
+                value = pair.Value.Key.GetValue(parent);
+                if (value == null)
+                    pair.Value.Key.SetValue(parent, value = Activator.CreateInstance(pair.Value.Key.PropertyType));
             }
+
+            ((IVerbContext) value).Init(unmatchedVerbs.ToArray());
+
+            ParseArguments((IVerbContext) value, input, options);
         }
 
         /// <summary>
