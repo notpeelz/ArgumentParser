@@ -1,4 +1,5 @@
-# ArgumentParser
+![Logo](./img/logo.png)
+
 This library was made in an attempt to simplify the handling and parsing of parameters, be it in the \*nix, Windows style or any of their variants.
 
 Please see our [contributing guidelines](./CONTRIBUTING.md) before reporting an issue.
