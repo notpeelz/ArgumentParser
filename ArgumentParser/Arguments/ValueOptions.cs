@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IFlagOptionAttribute.cs" company="LouisTakePILLz">
+// <copyright file="ValueOptions.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -16,18 +16,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-using ArgumentParser.Arguments;
-
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Arguments
 {
     /// <summary>
-    /// Represents a flag definition attribute.
+    /// Specifies which and how values should be interpreted upon parsing a parameter entry.
     /// </summary>
-    public interface IFlagOptionAttribute : IOptionAttribute
+    public enum ValueOptions
     {
         /// <summary>
-        /// Gets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
+        /// Interpret the first value following the parameter and leave every other as trailing.
         /// </summary>
-        FlagOptions Options { get; }
+        Single,
+
+        /// <summary>
+        /// Interpret all values following the parameter.
+        /// </summary>
+        Composite,
+
+        /// <summary>
+        /// Interpret all values following the parameter as trailing.
+        /// </summary>
+        None
     }
 }

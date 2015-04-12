@@ -43,12 +43,12 @@ namespace ArgumentParser
         /// <param name="prefix">The prefix of the parameter.</param>
         /// <param name="tag">The tag that defines the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
-        /// <param name="totalCount">The total tag couple count.</param>
+        /// <param name="coupleCount">The total tag couple count.</param>
         /// <param name="count">The count of identical tags.</param>
-        public RawParameter(String prefix, String tag, String value, Int32 totalCount, Int32 count)
+        public RawParameter(String prefix, String tag, String value, Int32 coupleCount, Int32 count)
             : this(prefix, tag, value)
         {
-            this.TotalCount = totalCount;
+            this.CoupleCount = coupleCount;
             this.Count = count;
         }
 
@@ -65,7 +65,7 @@ namespace ArgumentParser
         /// <summary>
         /// Gets the total tag couple count.
         /// </summary>
-        public Int32 TotalCount { get; private set; }
+        public Int32 CoupleCount { get; private set; }
 
         /// <summary>
         /// Gets the value of the parameter.

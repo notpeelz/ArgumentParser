@@ -42,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments\IArgument`1.cs" />
+    <Compile Include="Arguments\ValueOptions.cs" />
     <Compile Include="Factory\IFlagOptionAttribute.cs" />
+    <Compile Include="Factory\ICoupleableOptionAttribute.cs" />
     <Compile Include="Helpers\ValueConverter.cs" />
     <Compile Include="Arguments\WindowsFlag.cs" />
     <Compile Include="Arguments\WindowsFlag`1.cs" />

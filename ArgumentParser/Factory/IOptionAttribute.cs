@@ -17,11 +17,13 @@
  */
 
 using System;
+using System.ComponentModel;
+using ArgumentParser.Arguments;
 
 namespace ArgumentParser.Factory
 {
     /// <summary>
-    /// Represents an argument definition (or option) attribute.
+    /// Represents an argument definition attribute.
     /// </summary>
     public interface IOptionAttribute
     {
@@ -41,13 +43,18 @@ namespace ArgumentParser.Factory
         Boolean ManualBinding { get; }
 
         /// <summary>
-        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// Gets the <see cref="T:ArgumentParser.Arguments.ValueOptions"/> value(s) that define how values should be interpreted.
         /// </summary>
-        Boolean AllowCompositeValue { get; }
+        ValueOptions ValueOptions { get; }
 
         /// <summary>
         /// Gets the default value of the argument.
         /// </summary>
         Object DefaultValue { get; }
+
+        /// <summary>
+        /// Gets the type converter used for value conversion.
+        /// </summary>
+        TypeConverter TypeConverter { get; }
     }
 }

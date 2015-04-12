@@ -45,6 +45,7 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string to detokenize.</param>
         /// <param name="culture">The culture to use for detokenization.</param>
+        /// <returns>The detokenized input string.</returns>
         public delegate String DetokenizerDelegate(String input, CultureInfo culture);
 
         /// <summary>
@@ -386,7 +387,7 @@ namespace ArgumentParser
                                 ? x.Groups["value"].Value
                                 : null,
                             count: e.Count(),
-                            totalCount: captures.Length));
+                            coupleCount: captures.Length));
                 }).ToArray();
 
             List<UnboundValue> unboundValues = new List<UnboundValue>();
@@ -408,8 +409,7 @@ namespace ArgumentParser
 
                         unboundValues.AddRange(values
                             .Where(x => x != null && x.Any())
-                            .SelectMany(x => x.Skip(1))
-                            .Select(x => new UnboundValue(pair, x)));
+                            .SelectMany(x => x.Select(v => new UnboundValue(pair, v))));
 
                         return pair;
                     },
@@ -467,27 +467,31 @@ namespace ArgumentParser
 
         private static ParameterPair GetParameterPair(ParserOptions options, IArgument argument, RawParameter[] parameters, out IEnumerable<IEnumerable<String>> values)
         {
-            if (argument.AllowCompositeValues)
+            switch (argument.ValueOptions)
             {
-                values = new String[0][];
-                return new ParameterPair(
-                    argument: argument,
-                    values: parameters
-                        .Where(x => x != null)
-                        .Select(x => x.Value == null || x.TotalCount > 1
-                            ? null
-                            : ParseValue(options, argument, x.Value)));
+                case ValueOptions.Composite:
+                    values = new String[0][];
+                    return new ParameterPair(
+                        argument: argument,
+                        values: parameters
+                            .Where(x => x != null)
+                            .Select(x => x.Value == null || x.CoupleCount > 1
+                                ? null
+                                : ParseValue(options, argument, x.Value)));
+                case ValueOptions.None:
+                    values = GetCompositeValueParts(options, parameters).Select(x => x.Value);
+                    return new ParameterPair(argument, new Object[0]);
+                default:
+                    var canonicalValues = GetCompositeValueParts(options, parameters);
+                    values = canonicalValues.Select(x => x.Value.Any() ? x.Value.Skip(1) : x.Value);
+                    return new ParameterPair(
+                        argument: argument,
+                        values: canonicalValues.Select(x =>
+                        {
+                            var value = x.Value == null ? null : x.Value.FirstOrDefault();
+                            return value == null ? null : ParseValue(options, argument, value);
+                        }));
             }
-
-            values = GetCompositeValueParts(options, parameters);
-
-            return new ParameterPair(
-                argument: argument,
-                values: values.Select(x =>
-                {
-                    var value = x == null ? null : x.FirstOrDefault();
-                    return value == null ? null : ParseValue(options, argument, value);
-                }));
         }
 
         private static FlagPair GetFlagPair(ParserOptions options, IFlag flag, RawParameter[] parameters, out IEnumerable<IEnumerable<String>> values)
@@ -502,14 +506,37 @@ namespace ArgumentParser
             bool invertImplicit = (flag.Options & FlagOptions.InvertBooleanImplicit) != 0;
             bool invertExplicit = (flag.Options & FlagOptions.InvertBooleanExplicit) != 0;
 
-            var flagValues = parameters.Where(x => x != null).Select(x =>
-            {
-                if (x.Value == null || x.TotalCount > 1)
-                    return new { Parameter = x, Value = (invertImplicit ? 0 : 1) };
+            var canonicalValues = GetCompositeValueParts(options, parameters);
 
-                var value = ValueConverter.GetFlagValue(options.Culture, isBoolean, x.Value);
-                return new { Parameter = x, Value = (value == 0 ^ invertExplicit ? 0 : 1) };
+            var flagValues = canonicalValues.Select(x =>
+            {
+                int value;
+                var trailingValues = default (IEnumerable<String>);
+
+                // Determine whether the flag level should be implicitly computed (doesn't access values, has no value or is coupled)
+                if (flag.ValueOptions == ValueOptions.None || x.Key.Value == null || x.Key.CoupleCount > 1)
+                {
+                    value = invertImplicit ? 0 : 1;
+                    trailingValues = x.Value;
+                }
+                else if (flag.ValueOptions == ValueOptions.Composite)
+                    value = ValueConverter.GetFlagValue(options.Culture, isBoolean, String.Join("\x20", x.Value)) == 0 ^ invertExplicit ? 0 : 1;
+                else // flag.ValueOptions == ValueOptions.Single
+                {
+                    var rawValue = ValueConverter.GetFlagValue(options.Culture, isBoolean, x.Value.FirstOrDefault());
+                    value = rawValue == 0 ^ invertExplicit ? 0 : 1;
+                    trailingValues = x.Value.Skip(1);
+                }
+
+                return new
+                {
+                    Parameter = x.Key,
+                    Value = value,
+                    TrailingValues = trailingValues
+                };
             }).ToArray();
+
+            values = flagValues.Select(x => x.TrailingValues);
 
             // Skip special flag logic for booleans, as such operations can not be done on single bits.
             if (isBoolean)
@@ -518,8 +545,6 @@ namespace ArgumentParser
                     argument: flag,
                     values: flagValues.Select(x => (Object) x.Value),
                     count: flagValues.Last().Value);
-
-                values = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(options, parameters);
 
                 return flagPair;
             }
@@ -570,9 +595,6 @@ namespace ArgumentParser
 
             {
                 var flagPair = new FlagPair(flag, flagValues.Select(x => (Object) x.Value), implicitCount + explicitCount);
-
-                values = flag.AllowCompositeValues ? new String[0][] : GetCompositeValueParts(options, parameters);
-
                 return flagPair;
             }
         }
@@ -585,23 +607,25 @@ namespace ArgumentParser
             return 1 << (value - 1);
         }
 
-        private static IEnumerable<IEnumerable<String>> GetCompositeValueParts(ParserOptions options, RawParameter[] parameters)
+        private static Dictionary<RawParameter, IEnumerable<String>> GetCompositeValueParts(ParserOptions options, RawParameter[] parameters)
         {
             var values = parameters
                 .Where(x => x != null)
-                .Select(x => x.Value == null || x.TotalCount > 1
-                    ? null
-                    : Regex.Matches(
-                        input: x.Value,
-                        pattern: VALUE_PATTERN,
-                        options: RegexOptions.ExplicitCapture |
-                                 RegexOptions.IgnorePatternWhitespace |
-                                 RegexOptions.CultureInvariant |
-                                 RegexOptions.Singleline)
-                        .OfType<Match>()
-                        .Select(m => (options.Detokenize
-                            ? DetokenizeValue(m.Groups["value"].Value, options.Detokenizer, options.Culture)
-                            : m.Groups["value"].Value)));
+                .ToDictionary(
+                    keySelector: x => x,
+                    elementSelector: x => x.Value == null || x.CoupleCount > 1
+                        ? null
+                        : Regex.Matches(
+                            input: x.Value,
+                            pattern: VALUE_PATTERN,
+                            options: RegexOptions.ExplicitCapture |
+                                     RegexOptions.IgnorePatternWhitespace |
+                                     RegexOptions.CultureInvariant |
+                                     RegexOptions.Singleline)
+                            .OfType<Match>()
+                            .Select(m => (options.Detokenize
+                                ? DetokenizeValue(m.Groups["value"].Value, options.Detokenizer, options.Culture)
+                                : m.Groups["value"].Value)));
 
             return values;
         }
@@ -647,8 +671,7 @@ namespace ArgumentParser
                     let attributes = (isProperty ? ((PropertyInfo) member).GetCustomAttributes() : ((MethodInfo) member).GetCustomAttributes())
                     let bpAttribute = attributes.OfType<BindingPolicyAttribute>().SingleOrDefault()
                     from attribute in attributes
-                        where attribute is POSIXOptionAttribute
-                           || attribute is WindowsOptionAttribute
+                        where attribute is IOptionAttribute
                         select new MemberBinding(member, (IOptionAttribute) attribute, bpAttribute != null
                             ? bpAttribute.BindingPolicy
                             : BindingPolicy.Default);
@@ -657,20 +680,20 @@ namespace ArgumentParser
             {
                 case ParameterTokenStyle.POSIX:
                     return bindingMap
-                        .Where(x => x.Attribute is POSIXOptionAttribute)
-                        .ToDictionary(x => GetPOSIXArgument((POSIXOptionAttribute) x.Attribute, x.Member));
+                        .Where(x => x.Attribute is ICoupleableOptionAttribute)
+                        .ToDictionary(x => GetCoupleableArgument((ICoupleableOptionAttribute) x.Attribute, x.Member));
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.WindowsEqual:
                 case ParameterTokenStyle.Windows:
                     return bindingMap
-                        .Where(x => x.Attribute is WindowsOptionAttribute)
-                        .ToDictionary(x => GetWindowsArgument((WindowsOptionAttribute) x.Attribute, x.Member));
+                        .Where(x => !(x.Attribute is ICoupleableOptionAttribute))
+                        .ToDictionary(x => GetStandardArgument((WindowsOptionAttribute) x.Attribute, x.Member));
                 default:
                     throw new InvalidOperationException("The logic for the provided token style is not defined.");
             }
         }
 
-        private static IArgument GetWindowsArgument(WindowsOptionAttribute attribute, Object member)
+        private static IArgument GetStandardArgument(WindowsOptionAttribute attribute, Object member)
         {
             var descriptor = member as PropertyInfo;
             var flagAttribute = attribute as WindowsFlagAttribute;
@@ -683,6 +706,7 @@ namespace ArgumentParser
                     tag: flagAttribute.Tag,
                     description: flagAttribute.Description,
                     returnType: returnType,
+                    valueOptions: flagAttribute.ValueOptions,
                     options: flagAttribute.Options,
                     typeConverter: flagAttribute.TypeConverter,
                     defaultValue: flagAttribute.DefaultValue);
@@ -691,26 +715,28 @@ namespace ArgumentParser
                 tag: attribute.Tag,
                 description: attribute.Description,
                 returnType: returnType,
+                valueOptions: attribute.ValueOptions,
                 typeConverter: attribute.TypeConverter,
                 defaultValue: attribute.DefaultValue);
         }
 
-        private static IArgument GetPOSIXArgument(POSIXOptionAttribute attribute, Object member)
+        private static IArgument GetCoupleableArgument(ICoupleableOptionAttribute attribute, Object member)
         {
             var descriptor = member as PropertyInfo;
             var returnType = descriptor != null
                 ? descriptor.PropertyType
                 : ((MethodInfo) member).GetParameters().First().ParameterType;
 
-            var flagAttribute = attribute as POSIXFlagAttribute;
+            var flagAttribute = attribute as IFlagOptionAttribute;
 
             if (flagAttribute != null)
             {
-                if (flagAttribute.IsShort)
+                if (attribute.IsShort)
                     return POSIXArgumentFactory.CreateFlag(
                         tag: flagAttribute.Tag.First(), // The "Tag" property should hold a single character.
                         description: flagAttribute.Description,
                         returnType: returnType,
+                        valueOptions: flagAttribute.ValueOptions,
                         options: flagAttribute.Options,
                         typeConverter: flagAttribute.TypeConverter,
                         defaultValue: flagAttribute.DefaultValue);
@@ -719,6 +745,7 @@ namespace ArgumentParser
                         tag: flagAttribute.Tag,
                         description: flagAttribute.Description,
                         returnType: returnType,
+                        valueOptions: flagAttribute.ValueOptions,
                         options: flagAttribute.Options,
                         typeConverter: flagAttribute.TypeConverter,
                         defaultValue: flagAttribute.DefaultValue);
@@ -729,6 +756,7 @@ namespace ArgumentParser
                     tag: attribute.Tag.First(),
                     description: attribute.Description,
                     returnType: returnType,
+                    valueOptions: attribute.ValueOptions,
                     typeConverter: attribute.TypeConverter,
                     defaultValue: attribute.DefaultValue);
 
@@ -736,6 +764,7 @@ namespace ArgumentParser
                 tag: attribute.Tag,
                 description: attribute.Description,
                 returnType: returnType,
+                valueOptions: attribute.ValueOptions,
                 typeConverter: attribute.TypeConverter,
                 defaultValue: attribute.DefaultValue);
         }

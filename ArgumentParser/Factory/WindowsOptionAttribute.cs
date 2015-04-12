@@ -18,6 +18,7 @@
 
 using System;
 using System.ComponentModel;
+using ArgumentParser.Arguments;
 
 namespace ArgumentParser.Factory
 {
@@ -52,9 +53,9 @@ namespace ArgumentParser.Factory
         public Boolean ManualBinding { get; set; }
 
         /// <summary>
-        /// Gets or sets a boolean value indicating whether trailing values should be interpreted.
+        /// Gets or sets the <see cref="T:ArgumentParser.Arguments.ValueOptions"/> value(s) that define how values should be interpreted.
         /// </summary>
-        public Boolean AllowCompositeValue { get; set; }
+        public ValueOptions ValueOptions { get; set; }
 
         /// <summary>
         /// Gets or sets the default value of the argument.

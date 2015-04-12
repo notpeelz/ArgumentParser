@@ -33,20 +33,20 @@ namespace ArgumentParser.Arguments
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
-        public POSIXLongArgument(String tag, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
-            : base(Prefix, tag, typeConverter, defaultValue, allowComposite) { }
+        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
+        public POSIXLongArgument(String tag, TypeConverter typeConverter = null, T defaultValue = default (T), ValueOptions valueOptions = ValueOptions.Single)
+            : base(Prefix, tag, valueOptions, typeConverter, defaultValue) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument`1"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
+        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
-        public POSIXLongArgument(String tag, String description, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
-            : base(Prefix, tag, description, typeConverter, defaultValue, allowComposite) { }
+        public POSIXLongArgument(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
+            : base(Prefix, tag, description, valueOptions, typeConverter, defaultValue) { }
 
         /// <summary>
         /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument`1"/> type.

@@ -59,7 +59,7 @@ namespace ArgumentParserTest
 
             public void Init(String[] verbs)
             {
-                throw new NotImplementedException();
+
             }
 
             public void HandleParameter(RawParameter parameter)
@@ -69,9 +69,8 @@ namespace ArgumentParserTest
 
             public void HandleValue(UnboundValue value)
             {
-                throw new NotImplementedException();
-            }
 
+            }
             #endregion
 
             [WindowsFlag("test", DefaultValue = true)]

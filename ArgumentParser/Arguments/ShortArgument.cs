@@ -26,10 +26,10 @@ namespace ArgumentParser.Arguments
     /// </summary>
     public abstract class ShortArgument : IArgument<String>
     {
-        private ShortArgument(String defaultValue, Boolean allowComposite)
+        private ShortArgument(ValueOptions valueOptions, String defaultValue)
         {
+            this.ValueOptions = valueOptions;
             this.DefaultValue = defaultValue;
-            this.AllowCompositeValues = allowComposite;
         }
 
         /// <summary>
@@ -37,10 +37,10 @@ namespace ArgumentParser.Arguments
         /// </summary>
         /// <param name="prefix">The prefix to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
+        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
-        protected ShortArgument(String prefix, Char tag, String defaultValue, Boolean allowComposite)
-            : this(defaultValue, allowComposite)
+        protected ShortArgument(String prefix, Char tag, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
+            : this(valueOptions, defaultValue)
         {
             this.Key = new Key(prefix, tag.ToString());
         }
@@ -51,10 +51,10 @@ namespace ArgumentParser.Arguments
         /// <param name="prefix">The prefix to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
         /// <param name="description">The description of the argument.</param>
+        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
-        protected ShortArgument(String prefix, Char tag, String description, String defaultValue, Boolean allowComposite)
-            : this(prefix, tag, defaultValue, allowComposite)
+        protected ShortArgument(String prefix, Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
+            : this(prefix, tag, valueOptions, defaultValue)
         {
             this.Description = description;
         }
@@ -70,9 +70,9 @@ namespace ArgumentParser.Arguments
         public String Description { get; private set; }
 
         /// <summary>
-        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// Gets the <see cref="T:ArgumentParser.Arguments.ValueOptions"/> value(s) that define how values should be interpreted.
         /// </summary>
-        public Boolean AllowCompositeValues { get; private set; }
+        public ValueOptions ValueOptions { get; private set; }
 
         /// <summary>
         /// Gets the default value of the argument.

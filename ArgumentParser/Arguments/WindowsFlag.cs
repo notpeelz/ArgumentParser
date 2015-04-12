@@ -29,11 +29,11 @@ namespace ArgumentParser.Arguments
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.WindowsFlag"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the flag.</param>
+        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
-        public WindowsFlag(String tag, FlagOptions options = FlagOptions.None, String defaultValue = null, Boolean allowComposite = false)
-            : base(tag, defaultValue, allowComposite)
+        public WindowsFlag(String tag, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, String defaultValue = null)
+            : base(tag, valueOptions, defaultValue)
         {
             this.Options = options;
         }
@@ -43,11 +43,11 @@ namespace ArgumentParser.Arguments
         /// </summary>
         /// <param name="tag">The tag that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
+        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
-        public WindowsFlag(String tag, String description, FlagOptions options = FlagOptions.None, String defaultValue = null, Boolean allowComposite = false)
-            : base(tag, description, defaultValue, allowComposite)
+        public WindowsFlag(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, String defaultValue = null)
+            : base(tag, description, valueOptions)
         {
             this.Options = options;
         }

@@ -18,6 +18,7 @@
 
 using System;
 using System.ComponentModel;
+using ArgumentParser.Arguments;
 
 namespace ArgumentParser.Factory
 {
@@ -25,7 +26,7 @@ namespace ArgumentParser.Factory
     /// Represents a POSIX-flavored option attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class POSIXOptionAttribute : Attribute, IOptionAttribute
+    public class POSIXOptionAttribute : Attribute, ICoupleableOptionAttribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXOptionAttribute"/> class.
@@ -62,9 +63,9 @@ namespace ArgumentParser.Factory
         public Boolean ManualBinding { get; set; }
 
         /// <summary>
-        /// Gets or sets a boolean value indicating whether trailing values should be interpreted.
+        /// Gets or sets the <see cref="T:ArgumentParser.Arguments.ValueOptions"/> value(s) that define how values should be interpreted.
         /// </summary>
-        public Boolean AllowCompositeValue { get; set; }
+        public ValueOptions ValueOptions { get; set; }
 
         /// <summary>
         /// Gets or sets the default value of the argument.
@@ -72,14 +73,14 @@ namespace ArgumentParser.Factory
         public Object DefaultValue { get; set; }
 
         /// <summary>
-        /// Gets the type converter used for value conversion.
-        /// </summary>
-        public virtual TypeConverter TypeConverter { get; private set; }
-
-        /// <summary>
         /// Gets a boolean value indicating whether the argument is represented by a single <see cref="T:System.Char"/>.
         /// </summary>
         public Boolean IsShort { get; private set; }
+
+        /// <summary>
+        /// Gets the type converter used for value conversion.
+        /// </summary>
+        public virtual TypeConverter TypeConverter { get; private set; }
 
         /// <summary>
         /// Gets the unique identifier for this <see cref="T:ArgumentParser.Factory.POSIXOptionAttribute"/>.

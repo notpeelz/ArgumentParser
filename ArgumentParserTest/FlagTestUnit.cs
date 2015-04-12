@@ -59,7 +59,7 @@ namespace ArgumentParserTest
 
             public void Init(String[] verbs)
             {
-                throw new NotImplementedException();
+
             }
             #endregion
 
@@ -72,7 +72,7 @@ namespace ArgumentParserTest
 
             public void HandleValue(UnboundValue value)
             {
-                throw new NotImplementedException();
+
             }
 
             [POSIXFlag('t', Options = FlagOptions.AggregateExplicit | FlagOptions.AggregateImplicit)]

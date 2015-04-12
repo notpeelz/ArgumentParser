@@ -42,9 +42,9 @@ namespace ArgumentParser.Arguments
         String Description { get; }
 
         /// <summary>
-        /// Gets a boolean value indicating whether trailing values should be interpreted.
+        /// Gets the <see cref="T:ArgumentParser.Arguments.ValueOptions"/> value(s) that define how values should be interpreted.
         /// </summary>
-        Boolean AllowCompositeValues { get; }
+        ValueOptions ValueOptions { get; }
 
         /// <summary>
         /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.

@@ -31,12 +31,12 @@ namespace ArgumentParser.Arguments
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXFlag`1"/> class.
         /// </summary>
         /// <param name="tag">The character that defines the flag.</param>
+        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
-        public POSIXFlag(Char tag, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
-            : base(tag, typeConverter, defaultValue, allowComposite)
+        public POSIXFlag(Char tag, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+            : base(tag, valueOptions, typeConverter, defaultValue)
         {
             this.Options = options;
         }
@@ -46,12 +46,12 @@ namespace ArgumentParser.Arguments
         /// </summary>
         /// <param name="tag">The character that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
+        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        /// <param name="allowComposite">A boolean value indicating whether trailing values should be interpreted.</param>
-        public POSIXFlag(Char tag, String description, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T), Boolean allowComposite = false)
-            : base(tag, description, typeConverter, defaultValue, allowComposite)
+        public POSIXFlag(Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+            : base(tag, description, valueOptions, typeConverter, defaultValue)
         {
             this.Options = options;
         }

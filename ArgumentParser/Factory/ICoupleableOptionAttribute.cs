@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IFlagOptionAttribute.cs" company="LouisTakePILLz">
+// <copyright file="ICoupleableOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -16,18 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-using ArgumentParser.Arguments;
+using System;
 
 namespace ArgumentParser.Factory
 {
     /// <summary>
-    /// Represents a flag definition attribute.
+    /// Represents a coupleable argument definition (or option) attribute.
     /// </summary>
-    public interface IFlagOptionAttribute : IOptionAttribute
+    public interface ICoupleableOptionAttribute : IOptionAttribute
     {
         /// <summary>
-        /// Gets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
+        /// Gets a boolean value indicating whether the argument is represented by a single <see cref="T:System.Char"/>.
         /// </summary>
-        FlagOptions Options { get; }
+        Boolean IsShort { get; }
     }
 }

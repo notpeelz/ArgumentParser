@@ -29,8 +29,8 @@ namespace ArgumentParserTest
     {
         private static readonly IArgument<String[]> pushShortArgument = new POSIXShortArgument<String[]>(
             tag: 'p',
-            typeConverter: new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries),
-            allowComposite: true);
+            valueOptions: ValueOptions.Composite,
+            typeConverter: new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries));
 
         private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX);
 

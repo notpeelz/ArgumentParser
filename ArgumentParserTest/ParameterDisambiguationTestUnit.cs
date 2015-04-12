@@ -31,7 +31,7 @@ namespace ArgumentParserTest
     public class ParameterDisambiguationTestUnit
     {
         private static readonly IArgument interfaceLongVerb = new POSIXLongArgument("interface", description: "The network interface(s) to use.");
-        private static readonly IArgument interfaceShortVerb = new POSIXShortArgument<String[]>('i', "The network interface(s) to use.", new StringArrayConverter());
+        private static readonly IArgument interfaceShortVerb = new POSIXShortArgument<String[]>('i', "The network interface(s) to use.", typeConverter: new StringArrayConverter());
         private static readonly IArgument posixPortShortVerb = new POSIXShortArgument<UInt16>('p', "The port to listen to.");
         private static readonly IArgument posixPortLongVerb = new POSIXLongArgument<UInt16>("port", "The port to listen to.");
         private static readonly IArgument windowsPortShortVerb = new WindowsArgument<UInt16>("p");
