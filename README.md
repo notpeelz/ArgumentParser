@@ -10,7 +10,7 @@ Please see our [contributing guidelines](./CONTRIBUTING.md) before reporting an 
 
 [![Issues](https://img.shields.io/github/issues/louistakepillz/argumentparser.svg)](../../issues)
 [![Forks](https://img.shields.io/github/forks/louistakepillz/argumentparser.svg)](../../network)
-[![Downloads](https://img.shields.io/nuget/dt/ArgumentParser.svg)](https://www.nuget.org/packages/ArgumentParser/0.3.0)
+[![Downloads](https://img.shields.io/nuget/dt/ArgumentParser.svg)](https://www.nuget.org/packages/ArgumentParser)
 
 ## Operative modes
 
