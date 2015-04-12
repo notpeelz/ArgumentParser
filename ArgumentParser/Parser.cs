@@ -514,24 +514,24 @@ namespace ArgumentParser
             if (aggregateImplicit && !aggregateExplicit) // Implicit not explicit
             {
                 implicitCount = bitFieldImplicit
-                    ? parameters.Aggregate(0, (c, x) => c + GetFlagValue(x.Count))
+                    ? parameters.Aggregate(0, (c, x) => c + GetBitFieldValue(x.Count))
                     : parameters.Aggregate(0, (c, x) => c + x.Count);
             }
             else if (aggregateExplicit && !aggregateImplicit) // Explicit not implicit
             {
                 explicitCount = bitFieldExplicit
-                    ? flagValues.Aggregate(0, (c, x) => c + GetFlagValue(x.Value))
+                    ? flagValues.Aggregate(0, (c, x) => c + GetBitFieldValue(x.Value))
                     : flagValues.Aggregate(0, (c, x) => c + x.Value);
             }
             else if (aggregateImplicit) // Explicit and implicit (both)
             {
                 implicitCount = bitFieldImplicit // Count only value-less parameters
-                    ? parameters.Aggregate(0, (c, x) => c + (x.Value == null ? GetFlagValue(x.Count) : 0))
+                    ? parameters.Aggregate(0, (c, x) => c + (x.Value == null ? GetBitFieldValue(x.Count) : 0))
                     : parameters.Aggregate(0, (c, x) => c + (x.Value == null ? x.Count : 0));
 
                 if (aggregateCombine || implicitCount == 0)
                     explicitCount = bitFieldExplicit
-                        ? flagValues.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : GetFlagValue(x.Value)))
+                        ? flagValues.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : GetBitFieldValue(x.Value)))
                         : flagValues.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : x.Value));
             }
             else // None
@@ -539,11 +539,11 @@ namespace ArgumentParser
                 var implicitParameter = flagValues.FirstOrDefault(x => x.Parameter.Value == null);
                 var explicitParameter = flagValues.FirstOrDefault(x => x.Parameter.Value != null);
                 implicitCount = implicitParameter != null
-                    ? (bitFieldImplicit ? GetFlagValue(implicitParameter.Parameter.Count) : implicitParameter.Parameter.Count)
+                    ? (bitFieldImplicit ? GetBitFieldValue(implicitParameter.Parameter.Count) : implicitParameter.Parameter.Count)
                     : 0;
 
                 if (aggregateCombine && explicitParameter != null)
-                    explicitCount = bitFieldExplicit ? GetFlagValue(explicitParameter.Parameter.Count) : explicitParameter.Parameter.Count;
+                    explicitCount = bitFieldExplicit ? GetBitFieldValue(explicitParameter.Parameter.Count) : explicitParameter.Parameter.Count;
             }
 
             {
@@ -555,7 +555,7 @@ namespace ArgumentParser
             }
         }
 
-        private static Int32 GetFlagValue(Int32 value)
+        private static Int32 GetBitFieldValue(Int32 value)
         {
             if (value <= 0)
                 return 0;
