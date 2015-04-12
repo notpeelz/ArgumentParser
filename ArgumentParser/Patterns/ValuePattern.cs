@@ -26,7 +26,7 @@ namespace ArgumentParser
         private const String VALUE_PATTERN = @"
             (?<=^|\s)
             (?<!\\\s)
-			(
+            (
                 "" (?<value> (?> \\.  | [^""] )*) ""|
                 '  (?<value> (?> \\.  | [^'] )*) '|
                    (?<value> (?> \\.  | [^\s""']  )*)
