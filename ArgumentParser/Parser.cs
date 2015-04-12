@@ -41,9 +41,16 @@ namespace ArgumentParser
         internal const String PREFIX_WINDOWS = "/";
 
         /// <summary>
+        /// Removes tokens from an input string.
+        /// </summary>
+        /// <param name="input">The input string to detokenize.</param>
+        /// <param name="culture">The culture to use for detokenization.</param>
+        public delegate String DetokenizerDelegate(String input, CultureInfo culture);
+
+        /// <summary>
         /// Represents the default value detokenizer predicate.
         /// </summary>
-        public static readonly Func<String, CultureInfo, String> DefaultDetokenizer = (x, c) => Regex.Unescape(x);
+        public static readonly DetokenizerDelegate DefaultDetokenizer = (x, c) => Regex.Unescape(x);
 
         /// <summary>
         /// Represents the default <see cref="T:ArgumentParser.IPairable"/> equality comparer.
@@ -77,9 +84,9 @@ namespace ArgumentParser
         /// <remarks>
         /// Flags aren't decoupled; they are passed verbatim, as a single tag.
         /// </remarks>
-        public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle, Func<String, CultureInfo, String> detokenizer, CultureInfo culture = null)
+        public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle, DetokenizerDelegate detokenizer, CultureInfo culture = null)
         {
-            return GetRawParameters(String.Join("\x20", input), tokenStyle, culture, detokenizer);
+            return GetRawParameters(String.Join("\x20", input), tokenStyle, detokenizer, culture);
         }
 
         /// <summary>
@@ -94,7 +101,7 @@ namespace ArgumentParser
         /// </remarks>
         public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, CultureInfo culture = null)
         {
-            return GetRawParameters(input, tokenStyle, culture, DefaultDetokenizer);
+            return GetRawParameters(input, tokenStyle, DefaultDetokenizer, culture);
         }
 
         /// <summary>
@@ -102,13 +109,13 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
-        /// <param name="culture">The culture to use for detokenization.</param>
         /// <param name="detokenizer">The predicate to use for detokenization.</param>
+        /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flags aren't decoupled; they are passed verbatim, as a single tag.
         /// </remarks>
-        public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, CultureInfo culture, Func<String, CultureInfo, String> detokenizer)
+        public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, DetokenizerDelegate detokenizer, CultureInfo culture)
         {
             MatchCollection matches = Regex.Matches(
                 input: input,
@@ -146,6 +153,19 @@ namespace ArgumentParser
         /// <param name="parameters">The remainder of the input string.</param>
         public static void GetParts(ParserOptions options, String input, out String[] verbs, out String parameters)
         {
+            GetParts(input, out verbs, out parameters, options.Detokenize ? options.Detokenizer : null, options.Culture);
+        }
+
+        /// <summary>
+        /// Extracts the verbs and the parameters out of an input string.
+        /// </summary>
+        /// <param name="input">The input string array to parse.</param>
+        /// <param name="verbs">The extracted verb tags.</param>
+        /// <param name="parameters">The remainder of the input string.</param>
+        /// <param name="detokenizer">The predicate to use for detokenization.</param>
+        /// <param name="culture">The culture to use for detokenization.</param>
+        public static void GetParts(String input, out String[] verbs, out String parameters, DetokenizerDelegate detokenizer, CultureInfo culture = null)
+        {
             var matches = Regex.Matches(
                 input: input,
                 pattern: VERB_PATTERN,
@@ -154,7 +174,7 @@ namespace ArgumentParser
                          RegexOptions.CultureInvariant |
                          RegexOptions.Singleline).OfType<Match>().ToArray();
 
-            if (options.Detokenize)
+            if (detokenizer == null)
             {
                 verbs = matches
                     .Where(x => x.Groups["verb"].Success)
@@ -164,7 +184,7 @@ namespace ArgumentParser
             {
                 verbs = matches
                     .Where(x => x.Groups["verb"].Success)
-                    .Select(x => DetokenizeValue(options, x.Groups["verb"].Value)).ToArray();
+                    .Select(x => DetokenizeValue(x.Groups["verb"].Value, detokenizer, culture)).ToArray();
             }
 
             parameters = matches
@@ -580,19 +600,19 @@ namespace ArgumentParser
                                  RegexOptions.Singleline)
                         .OfType<Match>()
                         .Select(m => (options.Detokenize
-                            ? DetokenizeValue(options, m.Groups["value"].Value)
+                            ? DetokenizeValue(m.Groups["value"].Value, options.Detokenizer, options.Culture)
                             : m.Groups["value"].Value)));
 
             return values;
         }
 
-        private static String DetokenizeValue(ParserOptions options, String value)
+        private static String DetokenizeValue(String value, DetokenizerDelegate detokenizer, CultureInfo culture)
         {
             try
             {
-                return options.Detokenizer == null
-                    ? DefaultDetokenizer(value, options.Culture)
-                    : options.Detokenizer(value, options.Culture);
+                return detokenizer == null
+                    ? DefaultDetokenizer(value, culture)
+                    : detokenizer(value, culture);
             }
             catch (Exception ex)
             {
@@ -605,7 +625,7 @@ namespace ArgumentParser
             try
             {
                 return options.Detokenize
-                    ? argument.GetValue(options.Culture, DetokenizeValue(options, value))
+                    ? argument.GetValue(options.Culture, DetokenizeValue(value, options.Detokenizer, options.Culture))
                     : argument.GetValue(options.Culture, value);
             }
             catch (Exception ex)

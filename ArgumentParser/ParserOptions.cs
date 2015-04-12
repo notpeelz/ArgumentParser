@@ -75,7 +75,7 @@ namespace ArgumentParser
         /// <summary>
         /// Gets or sets the detokenizer predicate to use upon parsing values.
         /// </summary>
-        public Func<String, CultureInfo, String> Detokenizer { get; set; }
+        public Parser.DetokenizerDelegate Detokenizer { get; set; }
 
         /// <summary>
         /// Gets or sets the exception handler predicate to use upon throwing an exception.
