@@ -6,7 +6,7 @@ using System.Security;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ArgumentParser")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A rich and elegant library for parameter-parsing that supports various syntaxes and flavors.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("LouisTakePILLz")]
 [assembly: AssemblyProduct("ArgumentParser")]
