@@ -25,7 +25,7 @@ Please see our [contributing guidelines](./CONTRIBUTING.md) before reporting an 
 
 ### Reflective mode
 
-  This one is just an extra programmatical sugar, yet so much more than that. Instead of manually supplying your *argument definitions*, you can adorn class members (either properties or methods) with an `IOptionAttribute`, which both serves as a binding descriptor and information container to generate your argument definitions at run-time. In other words, the parsing, solving and binding (i.e. data population) without ever having to touch the nitty-gritty of the parsing!
+  This one is just an extra programmatical sugar, yet so much more than that. Instead of manually supplying your *argument definitions*, you can adorn class members (either properties or methods) with an `IOptionAttribute`, which both serves as a binding descriptor and information container to generate your argument definitions at run-time. In other words, the parsing, solving and binding (i.e. data population) is done without ever having to touch the nitty-gritty of the parsing!
 
 ## How to use
 
