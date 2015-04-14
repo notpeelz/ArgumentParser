@@ -23,7 +23,7 @@ using ArgumentParser.Arguments;
 namespace ArgumentParser.Factory
 {
     /// <summary>
-    /// Provides static methods for coupleable argument creation.
+    /// Provides static methods for argument definition creation.
     /// </summary>
     public static class ArgumentFactory
     {
