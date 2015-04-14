@@ -100,7 +100,7 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
-        /// <param name="culture">The culture to use for detokenizationt.</param>
+        /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flags aren't decoupled; they are passed verbatim, as a single tag.
