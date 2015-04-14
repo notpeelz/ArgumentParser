@@ -23,27 +23,30 @@ namespace ArgumentParser
     public static partial class Parser
     {
         #if DEBUG
-        private const String POSIX_PARAMETERS_PATTERN = @"
+        private const String POSIX_PARAMETER_PATTERN = @"
             (?<=^|\s)
             (
                 (?<prefix>--)
-                (?<tag>(?!-)\w+)|
+                (?<tag>(?!-)[\w\-]+(?<!\-))|
                 (?<prefix>-)
                 (?<tag>[\w-[\d]])+
             )
             (
-                \s+
+                \s*
                 (?<value>
                     (
                         ("" (?> \\.  | [^""])* "")|
-                        ('  (?> \\.  | [^'])* ')|
-                        (       \\.-?| [^\-""'] | (?<!\s) \-+ | \-+ (?=\d|[^\-\w\""]|$) )+
+                        ('  (?> \\.  | [^'])* ')
                     )+
+                )|
+                \s+
+                (?<value>
+                    ( \\.-?  | [^\-] | (?<!\s) \-+ | \-+ (?=\d|[^\-\w]|$) )+
                 )
             )?
             (?=\s|$)";
         #else
-        private const String POSIX_PARAMETER_PATTERN = @"(?<=^|\s)((?<prefix>--)(?<tag>(?!-)\w+)|(?<prefix>-)(?<tag>[\w-[\d]])+)(\s+(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\.-?|[^\-""']|(?<!\s)\-+|\-+(?=\d|[^\-\w\""]|$))+)+))?(?=\s|$)";
+        private const String POSIX_PARAMETER_PATTERN = @"(?<=^|\s)((?<prefix>--)(?<tag>(?!-)[\w\-]+(?<!\-))|(?<prefix>-)(?<tag>[\w-[\d]])+)(\s*(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*'))+)|\s+(?<value>(\\.-?|[^\-]|(?<!\s)\-+|\-+(?=\d|[^\-\w]|$))+))?(?=\s|$)";
         #endif
     }
 }
