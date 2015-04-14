@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ParameterTokenStyle.cs" company="LouisTakePILLz">
+// <copyright file="IPSOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -16,36 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace ArgumentParser
+namespace ArgumentParser.Factory.PowerShell
 {
     /// <summary>
-    /// Specifies the parameter syntax to be used by the parser.
+    /// Represents an PowerShell-flavored argument definition attribute.
     /// </summary>
-    public enum ParameterTokenStyle
-    {
-        /// <summary>
-        /// Parse POSIX-flavored input parameters.
-        /// </summary>
-        POSIX = 1,
-
-        /// <summary>
-        /// Parse Windows-flavored input parameters.
-        /// </summary>
-        Windows,
-
-        /// <summary>
-        /// Parse Windows-flavored input parameters, using the colon character as the attribution token.
-        /// </summary>
-        WindowsColon,
-
-        /// <summary>
-        /// Parse Windows-flavored input parameters, using the equal character as the attribution token.
-        /// </summary>
-        WindowsEqual,
-
-        /// <summary>
-        /// Parse PowerShell-like input parameters.
-        /// </summary>
-        PowerShell
-    }
+    public interface IPSOptionAttribute : IOptionAttribute { }
 }

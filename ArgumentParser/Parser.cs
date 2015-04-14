@@ -26,6 +26,7 @@ using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using ArgumentParser.Arguments;
 using ArgumentParser.Factory;
+using ArgumentParser.Factory.PowerShell;
 using ArgumentParser.Factory.POSIX;
 using ArgumentParser.Factory.Windows;
 using ArgumentParser.Helpers;
@@ -464,6 +465,8 @@ namespace ArgumentParser
                     return WINDOWS_EQUAL_PARAMETER_PATTERN;
                 case ParameterTokenStyle.POSIX:
                     return POSIX_PARAMETER_PATTERN;
+                case ParameterTokenStyle.PowerShell:
+                    return POWERSHELL_PARAMETER_PATTERN;
                 default:
                     throw new InvalidEnumArgumentException(INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -691,6 +694,10 @@ namespace ArgumentParser
                 case ParameterTokenStyle.Windows:
                     return bindingMap
                         .Where(x => x.Attribute is IWindowsOptionAttribute)
+                        .ToDictionary(x => GetStandardArgument(options.TokenStyle, x.Attribute, x.Member));
+                case ParameterTokenStyle.PowerShell:
+                    return bindingMap
+                        .Where(x => x.Attribute is IPSOptionAttribute)
                         .ToDictionary(x => GetStandardArgument(options.TokenStyle, x.Attribute, x.Member));
                 default:
                     throw new InvalidEnumArgumentException(INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);

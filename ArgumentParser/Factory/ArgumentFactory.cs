@@ -54,6 +54,9 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.Windows:
                     type = typeof (WindowsArgument<>).MakeGenericType(returnType);
                     break;
+                case ParameterTokenStyle.PowerShell:
+                    type = typeof (PowerShellArgument<>).MakeGenericType(returnType);
+                    break;
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -82,6 +85,8 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.Windows:
                     return new WindowsArgument<T>(tag, description, valueOptions, typeConverter, defaultValue);
+                case ParameterTokenStyle.PowerShell:
+                    return new PowerShellArgument<T>(tag, description, valueOptions, typeConverter, defaultValue);
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -106,6 +111,8 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.Windows:
                     return new WindowsArgument(tag, description, valueOptions, defaultValue);
+                case ParameterTokenStyle.PowerShell:
+                    return new PowerShellArgument(tag, description, valueOptions, defaultValue);
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -139,6 +146,9 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.Windows:
                     type = typeof (WindowsArgument<>).MakeGenericType(returnType);
                     break;
+                case ParameterTokenStyle.PowerShell:
+                    type = typeof (PowerShellArgument<>).MakeGenericType(returnType);
+                    break;
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -167,6 +177,8 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.Windows:
                     return new WindowsArgument<T>(tag.ToString(), description, valueOptions, typeConverter, defaultValue);
+                case ParameterTokenStyle.PowerShell:
+                    return new PowerShellArgument<T>(tag.ToString(), description, valueOptions, typeConverter, defaultValue);
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -191,6 +203,8 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.Windows:
                     return new WindowsArgument(tag.ToString(), description, valueOptions, defaultValue);
+                case ParameterTokenStyle.PowerShell:
+                    return new PowerShellArgument(tag.ToString(), description, valueOptions, defaultValue);
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -224,6 +238,9 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.Windows:
                     type = typeof (WindowsFlag<>).MakeGenericType(returnType);
+                    break;
+                case ParameterTokenStyle.PowerShell:
+                    type = typeof (PowerShellFlag<>).MakeGenericType(returnType);
                     break;
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
@@ -259,6 +276,9 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.Windows:
                     type = typeof (WindowsFlag<>).MakeGenericType(returnType);
                     break;
+                case ParameterTokenStyle.PowerShell:
+                    type = typeof (PowerShellFlag<>).MakeGenericType(returnType);
+                    break;
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -288,6 +308,8 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.Windows:
                     return new WindowsFlag<T>(tag, description, valueOptions, options, typeConverter, defaultValue);
+                case ParameterTokenStyle.PowerShell:
+                    return new PowerShellFlag<T>(tag, description, valueOptions, options, typeConverter, defaultValue);
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -313,6 +335,8 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.Windows:
                     return new WindowsFlag(tag, description, valueOptions, options, defaultValue);
+                case ParameterTokenStyle.PowerShell:
+                    return new PowerShellFlag(tag, description, valueOptions, options, defaultValue);
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -340,6 +364,8 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.Windows:
                     return new WindowsFlag<T>(tag.ToString(), description, valueOptions, options, typeConverter, defaultValue);
+                case ParameterTokenStyle.PowerShell:
+                    return new PowerShellFlag<T>(tag.ToString(), description, valueOptions, options, typeConverter, defaultValue);
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
@@ -365,6 +391,8 @@ namespace ArgumentParser.Factory
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.Windows:
                     return new WindowsFlag(tag.ToString(), description, valueOptions, options, defaultValue);
+                case ParameterTokenStyle.PowerShell:
+                    return new PowerShellFlag(tag.ToString(), description, valueOptions, options, defaultValue);
                 default:
                     throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }

@@ -44,11 +44,18 @@
     <Compile Include="Arguments\IArgument`1.cs" />
     <Compile Include="Arguments\POSIXLongFlag.cs" />
     <Compile Include="Arguments\POSIXLongFlag`1.cs" />
+    <Compile Include="Arguments\PowerShellArgument.cs" />
+    <Compile Include="Arguments\PowerShellArgument`1.cs" />
+    <Compile Include="Arguments\PowerShellFlag.cs" />
+    <Compile Include="Arguments\PowerShellFlag`1.cs" />
     <Compile Include="Arguments\ValueOptions.cs" />
     <Compile Include="Factory\ArgumentFactory.cs" />
     <Compile Include="Factory\IFlagOptionAttribute.cs" />
     <Compile Include="Factory\ICoupleableOptionAttribute.cs" />
     <Compile Include="Factory\POSIX\IPOSIXOptionAttribute.cs" />
+    <Compile Include="Factory\PowerShell\IPSOptionAttribute.cs" />
+    <Compile Include="Factory\PowerShell\PSFlagAttribute.cs" />
+    <Compile Include="Factory\PowerShell\PSOptionAttribute.cs" />
     <Compile Include="Factory\Windows\IWindowsOptionAttribute.cs" />
     <Compile Include="Helpers\ValueConverter.cs" />
     <Compile Include="Arguments\WindowsFlag.cs" />
@@ -68,6 +75,7 @@
     <Compile Include="IParserContext.cs" />
     <Compile Include="IVerbContext.cs" />
     <Compile Include="Patterns\POSIXParameterPattern.cs" />
+    <Compile Include="Patterns\PSParameterPattern.cs" />
     <Compile Include="Patterns\ValuePattern.cs" />
     <Compile Include="Patterns\VerbPattern.cs" />
     <Compile Include="Patterns\WindowsColonParameterPattern.cs" />
