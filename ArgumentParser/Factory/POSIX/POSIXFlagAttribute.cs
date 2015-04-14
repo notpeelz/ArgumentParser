@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="POSIXOptionAttribute.cs" company="LouisTakePILLz">
+// <copyright file="POSIXFlagAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -20,28 +20,28 @@ using System;
 using System.ComponentModel;
 using ArgumentParser.Arguments;
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Factory.POSIX
 {
     /// <summary>
-    /// Represents a POSIX-flavored option attribute.
+    /// Represents a POSIX-flavored flag option attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class POSIXOptionAttribute : Attribute, ICoupleableOptionAttribute
+    public class POSIXFlagAttribute : Attribute, IPOSIXOptionAttribute, IFlagOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXFlagAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public POSIXOptionAttribute(String tag)
+        public POSIXFlagAttribute(String tag)
         {
             this.Tag = tag;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXFlagAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public POSIXOptionAttribute(Char tag)
+        public POSIXFlagAttribute(Char tag)
         {
             this.Tag = tag.ToString();
             this.IsShort = true;
@@ -78,16 +78,24 @@ namespace ArgumentParser.Factory
         public Boolean IsShort { get; private set; }
 
         /// <summary>
-        /// Gets the type converter used for value conversion.
+        /// Gets or sets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
         /// </summary>
-        public virtual TypeConverter TypeConverter { get; private set; }
+        public FlagOptions Options { get; set; }
 
         /// <summary>
-        /// Gets the unique identifier for this <see cref="T:ArgumentParser.Factory.POSIXOptionAttribute"/>.
+        /// Gets the unique identifier for this <see cref="T:ArgumentParser.Factory.POSIX.POSIXOptionAttribute"/>.
         /// </summary>
         public override Object TypeId
         {
             get { return Guid.NewGuid(); }
+        }
+
+        /// <summary>
+        /// Gets the type converter used for value conversion.
+        /// </summary>
+        TypeConverter IOptionAttribute.TypeConverter
+        {
+            get { return null; }
         }
     }
 }

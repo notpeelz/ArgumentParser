@@ -19,7 +19,7 @@
 using System;
 using ArgumentParser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ArgumentParser.Factory;
+using ArgumentParser.Factory.Windows;
 
 namespace ArgumentParserTest
 {

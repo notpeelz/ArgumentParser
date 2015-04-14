@@ -43,7 +43,7 @@ namespace ArgumentParser
             )?
             (?=\s|$)";
         #else
-        private const String POSIX_PARAMETERS_PATTERN = @"(?<=^|\s)((?<prefix>--)(?<tag>(?!-)\w+)|(?<prefix>-)(?<tag>[\w-[\d]])+)(\s+(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\.-?|[^\-""']|(?<!\s)\-+|\-+(?=\d|[^\-\w\""]|$))+)+))?(?=\s|$)";
+        private const String POSIX_PARAMETER_PATTERN = @"(?<=^|\s)((?<prefix>--)(?<tag>(?!-)\w+)|(?<prefix>-)(?<tag>[\w-[\d]])+)(\s+(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\.-?|[^\-""']|(?<!\s)\-+|\-+(?=\d|[^\-\w\""]|$))+)+))?(?=\s|$)";
         #endif
     }
 }

@@ -23,7 +23,7 @@ namespace ArgumentParser
     public static partial class Parser
     {
         #if DEBUG
-        private const String WINDOWS_COLON_PARAMETERS_PATTERN = @"
+        private const String WINDOWS_COLON_PARAMETER_PATTERN = @"
             (?<=^|\s)(?<prefix>/)
             (
                 (?<tag>[\w\-]+)
@@ -39,7 +39,7 @@ namespace ArgumentParser
                 )?
             )(?=$|\s)";
         #else
-        private const String WINDOWS_COLON_PARAMETERS_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-]+)((\s+|:)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\./?|[^/""']|(?<!\s)/+)+)+))?)(?=$|\s)";
+        private const String WINDOWS_COLON_PARAMETER_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-]+)((\s+|:)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\./?|[^/""']|(?<!\s)/+)+)+))?)(?=$|\s)";
         #endif
     }
 }

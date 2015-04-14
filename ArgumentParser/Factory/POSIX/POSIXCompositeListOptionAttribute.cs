@@ -21,7 +21,7 @@ using System.ComponentModel;
 using ArgumentParser.Arguments;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Factory.POSIX
 {
     /// <summary>
     /// Represents a POSIX-flavored option attribute that supports splitting using spaces.
@@ -31,7 +31,7 @@ namespace ArgumentParser.Factory
         private static readonly StringArrayConverter typeConverter = new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXCompositeListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXCompositeListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXCompositeListOptionAttribute(String tag) : base(tag)
@@ -40,7 +40,7 @@ namespace ArgumentParser.Factory
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIXCompositeListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXCompositeListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXCompositeListOptionAttribute(Char tag) : base(tag)

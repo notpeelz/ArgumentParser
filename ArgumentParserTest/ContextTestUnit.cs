@@ -22,6 +22,7 @@ using System.Linq;
 using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Factory;
+using ArgumentParser.Factory.POSIX;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ArgumentParserTest

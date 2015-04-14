@@ -20,16 +20,16 @@ using System;
 using System.ComponentModel;
 using ArgumentParser.Arguments;
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Factory.Windows
 {
     /// <summary>
     /// Represents a Windows-flavored option attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class WindowsOptionAttribute : Attribute, IOptionAttribute
+    public class WindowsOptionAttribute : Attribute, IWindowsOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.WindowsOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.Windows.WindowsOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public WindowsOptionAttribute(String tag)

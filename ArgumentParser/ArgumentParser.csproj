@@ -42,9 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments\IArgument`1.cs" />
+    <Compile Include="Arguments\POSIXLongFlag.cs" />
+    <Compile Include="Arguments\POSIXLongFlag`1.cs" />
     <Compile Include="Arguments\ValueOptions.cs" />
+    <Compile Include="Factory\ArgumentFactory.cs" />
     <Compile Include="Factory\IFlagOptionAttribute.cs" />
     <Compile Include="Factory\ICoupleableOptionAttribute.cs" />
+    <Compile Include="Factory\POSIX\IPOSIXOptionAttribute.cs" />
+    <Compile Include="Factory\Windows\IWindowsOptionAttribute.cs" />
     <Compile Include="Helpers\ValueConverter.cs" />
     <Compile Include="Arguments\WindowsFlag.cs" />
     <Compile Include="Arguments\WindowsFlag`1.cs" />
@@ -53,15 +58,13 @@
     <Compile Include="Factory\BindingPolicyAttribute.cs" />
     <Compile Include="Arguments\FlagOptions.cs" />
     <Compile Include="Arguments\POSIXFlag`1.cs" />
-    <Compile Include="Arguments\POSIXLongFlag.cs" />
-    <Compile Include="Arguments\POSIXLongFlag`1.cs" />
     <Compile Include="Factory\BindingEventArgs.cs" />
     <Compile Include="Factory\IOptionAttribute.cs" />
-    <Compile Include="Factory\POSIXCompositeListOptionAttribute.cs" />
-    <Compile Include="Factory\POSIXFlagAttribute.cs" />
-    <Compile Include="Factory\POSIXListOptionAttribute.cs" />
-    <Compile Include="Factory\WindowsFlagAttribute.cs" />
-    <Compile Include="Factory\WindowsOptionAttribute.cs" />
+    <Compile Include="Factory\POSIX\POSIXCompositeListOptionAttribute.cs" />
+    <Compile Include="Factory\POSIX\POSIXFlagAttribute.cs" />
+    <Compile Include="Factory\POSIX\POSIXListOptionAttribute.cs" />
+    <Compile Include="Factory\Windows\WindowsFlagAttribute.cs" />
+    <Compile Include="Factory\Windows\WindowsOptionAttribute.cs" />
     <Compile Include="IParserContext.cs" />
     <Compile Include="IVerbContext.cs" />
     <Compile Include="Patterns\POSIXParameterPattern.cs" />
@@ -73,14 +76,13 @@
     <Compile Include="RawParameter.cs" />
     <Compile Include="FlagPair.cs" />
     <Compile Include="IPairable.cs" />
-    <Compile Include="Factory\POSIXOptionAttribute.cs" />
+    <Compile Include="Factory\POSIX\POSIXOptionAttribute.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="ParameterPair.cs" />
     <Compile Include="Helpers\ProjectionEqualityComparer.cs" />
     <Compile Include="Helpers\StringArrayConverter.cs" />
     <Compile Include="ParserExtension.cs" />
     <Compile Include="ParsingException.cs" />
-    <Compile Include="Factory\ArgumentFactory.cs" />
     <Compile Include="Arguments\IFlag.cs" />
     <Compile Include="Arguments\IArgument.cs" />
     <Compile Include="ParameterTokenStyle.cs" />

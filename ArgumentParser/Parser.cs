@@ -26,6 +26,8 @@ using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using ArgumentParser.Arguments;
 using ArgumentParser.Factory;
+using ArgumentParser.Factory.POSIX;
+using ArgumentParser.Factory.Windows;
 using ArgumentParser.Helpers;
 
 namespace ArgumentParser
@@ -36,9 +38,11 @@ namespace ArgumentParser
     [ReflectionPermission(SecurityAction.Assert, MemberAccess = true)]
     public static partial class Parser
     {
+        internal const String INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE = "The token style is not within the valid range of values.";
         internal const String PREFIX_UNIX_LONG = "--";
         internal const String PREFIX_UNIX_SHORT = "-";
         internal const String PREFIX_WINDOWS = "/";
+        internal const String PREFIX_POWERSHELL = "-";
 
         /// <summary>
         /// Removes tokens from an input string.
@@ -95,7 +99,7 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
-        /// <param name="culture">The culture to use for detokenization.</param>
+        /// <param name="culture">The culture to use for detokenizationt.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flags aren't decoupled; they are passed verbatim, as a single tag.
@@ -453,15 +457,15 @@ namespace ArgumentParser
             switch (tokenStyle)
             {
                 case ParameterTokenStyle.Windows:
-                    return WINDOWS_PARAMETERS_PATTERN;
+                    return WINDOWS_PARAMETER_PATTERN;
                 case ParameterTokenStyle.WindowsColon:
-                    return WINDOWS_COLON_PARAMETERS_PATTERN;
+                    return WINDOWS_COLON_PARAMETER_PATTERN;
                 case ParameterTokenStyle.WindowsEqual:
-                    return WINDOWS_EQUAL_PARAMETERS_PATTERN;
+                    return WINDOWS_EQUAL_PARAMETER_PATTERN;
                 case ParameterTokenStyle.POSIX:
-                    return POSIX_PARAMETERS_PATTERN;
+                    return POSIX_PARAMETER_PATTERN;
                 default:
-                    throw new InvalidEnumArgumentException("The token style is not within the valid range of values.");
+                    throw new InvalidEnumArgumentException(INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
         }
 
@@ -680,29 +684,30 @@ namespace ArgumentParser
             {
                 case ParameterTokenStyle.POSIX:
                     return bindingMap
-                        .Where(x => x.Attribute is ICoupleableOptionAttribute)
-                        .ToDictionary(x => GetCoupleableArgument((ICoupleableOptionAttribute) x.Attribute, x.Member));
+                        .Where(x => x.Attribute is IPOSIXOptionAttribute)
+                        .ToDictionary(x => GetCoupleableArgument(options.TokenStyle, (ICoupleableOptionAttribute) x.Attribute, x.Member));
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.WindowsEqual:
                 case ParameterTokenStyle.Windows:
                     return bindingMap
-                        .Where(x => !(x.Attribute is ICoupleableOptionAttribute))
-                        .ToDictionary(x => GetStandardArgument((WindowsOptionAttribute) x.Attribute, x.Member));
+                        .Where(x => x.Attribute is IWindowsOptionAttribute)
+                        .ToDictionary(x => GetStandardArgument(options.TokenStyle, x.Attribute, x.Member));
                 default:
-                    throw new InvalidOperationException("The logic for the provided token style is not defined.");
+                    throw new InvalidEnumArgumentException(INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
         }
 
-        private static IArgument GetStandardArgument(WindowsOptionAttribute attribute, Object member)
+        private static IArgument GetStandardArgument(ParameterTokenStyle tokenStyle, IOptionAttribute attribute, Object member)
         {
             var descriptor = member as PropertyInfo;
-            var flagAttribute = attribute as WindowsFlagAttribute;
+            var flagAttribute = attribute as IFlagOptionAttribute;
             var returnType = descriptor != null
                 ? descriptor.PropertyType
                 : ((MethodInfo) member).GetParameters().First().ParameterType;
 
             if (flagAttribute != null)
-                return WindowsArgumentFactory.CreateFlag(
+                return ArgumentFactory.CreateFlag(
+                    tokenStyle: tokenStyle,
                     tag: flagAttribute.Tag,
                     description: flagAttribute.Description,
                     returnType: returnType,
@@ -711,7 +716,8 @@ namespace ArgumentParser
                     typeConverter: flagAttribute.TypeConverter,
                     defaultValue: flagAttribute.DefaultValue);
 
-            return WindowsArgumentFactory.CreateArgument(
+            return ArgumentFactory.CreateArgument(
+                tokenStyle: tokenStyle,
                 tag: attribute.Tag,
                 description: attribute.Description,
                 returnType: returnType,
@@ -720,7 +726,7 @@ namespace ArgumentParser
                 defaultValue: attribute.DefaultValue);
         }
 
-        private static IArgument GetCoupleableArgument(ICoupleableOptionAttribute attribute, Object member)
+        private static IArgument GetCoupleableArgument(ParameterTokenStyle tokenStyle, ICoupleableOptionAttribute attribute, Object member)
         {
             var descriptor = member as PropertyInfo;
             var returnType = descriptor != null
@@ -732,7 +738,8 @@ namespace ArgumentParser
             if (flagAttribute != null)
             {
                 if (attribute.IsShort)
-                    return POSIXArgumentFactory.CreateFlag(
+                    return ArgumentFactory.CreateFlag(
+                        tokenStyle: tokenStyle,
                         tag: flagAttribute.Tag.First(), // The "Tag" property should hold a single character.
                         description: flagAttribute.Description,
                         returnType: returnType,
@@ -741,7 +748,8 @@ namespace ArgumentParser
                         typeConverter: flagAttribute.TypeConverter,
                         defaultValue: flagAttribute.DefaultValue);
 
-                return POSIXArgumentFactory.CreateFlag(
+                return ArgumentFactory.CreateFlag(
+                        tokenStyle: tokenStyle,
                         tag: flagAttribute.Tag,
                         description: flagAttribute.Description,
                         returnType: returnType,
@@ -752,7 +760,8 @@ namespace ArgumentParser
             }
 
             if (attribute.IsShort)
-                return POSIXArgumentFactory.CreateArgument(
+                return ArgumentFactory.CreateArgument(
+                    tokenStyle: tokenStyle,
                     tag: attribute.Tag.First(),
                     description: attribute.Description,
                     returnType: returnType,
@@ -760,7 +769,8 @@ namespace ArgumentParser
                     typeConverter: attribute.TypeConverter,
                     defaultValue: attribute.DefaultValue);
 
-            return POSIXArgumentFactory.CreateArgument(
+            return ArgumentFactory.CreateArgument(
+                tokenStyle: tokenStyle,
                 tag: attribute.Tag,
                 description: attribute.Description,
                 returnType: returnType,

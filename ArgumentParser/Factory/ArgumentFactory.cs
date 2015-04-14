@@ -23,14 +23,15 @@ using ArgumentParser.Arguments;
 namespace ArgumentParser.Factory
 {
     /// <summary>
-    /// Provides static methods for POSIX-flavored argument creation.
+    /// Provides static methods for coupleable argument creation.
     /// </summary>
-    public static class POSIXArgumentFactory
+    public static class ArgumentFactory
     {
         #region LongArgument methods
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXLongArgument`1"/> of a dynamically-resolved type.
+        /// Creates an argument definition of a dynamically-resolved type.
         /// </summary>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="returnType">The value type of the argument.</param>
@@ -38,47 +39,84 @@ namespace ArgumentParser.Factory
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IArgument CreateArgument(String tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IArgument CreateArgument(ParameterTokenStyle tokenStyle, String tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Object defaultValue = null)
         {
-            var type = typeof (POSIXLongArgument<>).MakeGenericType(returnType);
-            var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
+            Type type;
+            Object value = GetDefaultValue(returnType, typeConverter, defaultValue);
+
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    type = typeof (POSIXLongArgument<>).MakeGenericType(returnType);
+                    break;
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    type = typeof (WindowsArgument<>).MakeGenericType(returnType);
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
 
             return (IArgument) Activator.CreateInstance(type, tag, description, valueOptions, typeConverter, value);
         }
 
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXLongArgument`1"/> of a generic type.
+        /// Creates an argument definition of a generic type.
         /// </summary>
         /// <typeparam name="T">The value type of the argument.</typeparam>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument<T>(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IArgument CreateArgument<T>(ParameterTokenStyle tokenStyle, String tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
         {
-            return new POSIXLongArgument<T>(tag, description, valueOptions, typeConverter, defaultValue);
+            switch(tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    return new POSIXLongArgument<T>(tag, description, valueOptions, typeConverter, defaultValue);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    return new WindowsArgument<T>(tag, description, valueOptions, typeConverter, defaultValue);
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
         }
 
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXLongArgument"/> of an undefined type.
+        /// Creates an argument definition of an undefined type.
         /// </summary>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
+        public static IArgument CreateArgument(ParameterTokenStyle tokenStyle, String tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
         {
-            return new POSIXLongArgument(tag, description, valueOptions, defaultValue);
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    return new POSIXLongArgument(tag, description, valueOptions, defaultValue);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    return new WindowsArgument(tag, description, valueOptions, defaultValue);
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
         }
         #endregion
 
         #region ShortArgument methods
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXShortArgument`1"/> of a dynamically-resolved type.
+        /// Creates an argument definition of a dynamically-resolved type.
         /// </summary>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="returnType">The value type of the argument.</param>
@@ -86,47 +124,84 @@ namespace ArgumentParser.Factory
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IArgument CreateArgument(Char tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IArgument CreateArgument(ParameterTokenStyle tokenStyle, Char tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Object defaultValue = null)
         {
-            var type = typeof (POSIXShortArgument<>).MakeGenericType(returnType);
-            var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
+            Type type;
+            Object value = GetDefaultValue(returnType, typeConverter, defaultValue);
 
-            return (IArgument) Activator.CreateInstance(type, tag, description, valueOptions, typeConverter, value);
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    type = typeof (POSIXShortArgument<>).MakeGenericType(returnType);
+                    return (IArgument) Activator.CreateInstance(type, tag, description, valueOptions, typeConverter, value);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    type = typeof (WindowsArgument<>).MakeGenericType(returnType);
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
+
+            return (IArgument) Activator.CreateInstance(type, tag.ToString(), description, valueOptions, typeConverter, value);
         }
 
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXShortArgument`1"/> of a generic type.
+        /// Creates an argument definition of a generic type.
         /// </summary>
         /// <typeparam name="T">The value type of the argument.</typeparam>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument<T>(Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IArgument CreateArgument<T>(ParameterTokenStyle tokenStyle, Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
         {
-            return new POSIXShortArgument<T>(tag, description, valueOptions, typeConverter, defaultValue);
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    return new POSIXShortArgument<T>(tag, description, valueOptions, typeConverter, defaultValue);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    return new WindowsArgument<T>(tag.ToString(), description, valueOptions, typeConverter, defaultValue);
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
         }
 
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXShortArgument"/> of an undefined type.
+        /// Creates an argument definition of an undefined type.
         /// </summary>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument(Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
+        public static IArgument CreateArgument(ParameterTokenStyle tokenStyle, Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
         {
-            return new POSIXShortArgument(tag, description, valueOptions, defaultValue);
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    return new POSIXShortArgument(tag, description, valueOptions, defaultValue);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    return new WindowsArgument(tag.ToString(), description, valueOptions, defaultValue);
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
         }
         #endregion
 
         #region Flag methods
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXLongFlag`1"/> of a dynamically-resolved type.
+        /// Creates a flag argument definition of a dynamically-resolved type.
         /// </summary>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="returnType">The value type of the argument.</param>
@@ -135,17 +210,32 @@ namespace ArgumentParser.Factory
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IFlag CreateFlag(String tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IFlag CreateFlag(ParameterTokenStyle tokenStyle, String tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null)
         {
-            var type = typeof (POSIXLongFlag<>).MakeGenericType(returnType);
-            var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
+            Type type;
+            Object value = GetDefaultValue(returnType, typeConverter, defaultValue);
+
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    type = typeof (POSIXLongFlag<>).MakeGenericType(returnType);
+                    break;
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    type = typeof (WindowsFlag<>).MakeGenericType(returnType);
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
 
             return (IFlag) Activator.CreateInstance(type, tag, description, valueOptions, options, typeConverter, value);
         }
 
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXFlag`1"/> of a dynamically-resolved type.
+        /// Creates a flag argument definition of a dynamically-resolved type.
         /// </summary>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="returnType">The value type of the argument.</param>
@@ -154,18 +244,33 @@ namespace ArgumentParser.Factory
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IFlag CreateFlag(Char tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null)
+        public static IFlag CreateFlag(ParameterTokenStyle tokenStyle, Char tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null)
         {
-            var type = typeof (POSIXFlag<>).MakeGenericType(returnType);
-            var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
+            Type type;
+            Object value = GetDefaultValue(returnType, typeConverter, defaultValue);
 
-            return (IFlag) Activator.CreateInstance(type, tag, description, valueOptions, options, typeConverter, value);
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    type = typeof (POSIXFlag<>).MakeGenericType(returnType);
+                    return (IFlag) Activator.CreateInstance(type, tag, description, valueOptions, options, typeConverter, value);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    type = typeof (WindowsFlag<>).MakeGenericType(returnType);
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
+
+            return (IFlag) Activator.CreateInstance(type, tag.ToString(), description, valueOptions, options, typeConverter, value);
         }
 
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXLongFlag`1"/> of a generic type.
+        /// Creates a flag argument definition of a generic type.
         /// </summary>
         /// <typeparam name="T">The value type of the argument.</typeparam>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
@@ -173,29 +278,51 @@ namespace ArgumentParser.Factory
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag<T>(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IFlag CreateFlag<T>(ParameterTokenStyle tokenStyle, String tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
         {
-            return new POSIXLongFlag<T>(tag, description, valueOptions, options, typeConverter, defaultValue);
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    return new POSIXLongFlag<T>(tag, description, valueOptions, options, typeConverter, defaultValue);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    return new WindowsFlag<T>(tag, description, valueOptions, options, typeConverter, defaultValue);
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
         }
 
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXLongFlag"/> of an undefined type.
+        /// Creates a flag argument definition of an undefined type.
         /// </summary>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, String defaultValue = null)
+        public static IFlag CreateFlag(ParameterTokenStyle tokenStyle, String tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, String defaultValue = null)
         {
-            return new POSIXLongFlag(tag, description, valueOptions, options, defaultValue);
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    return new POSIXLongFlag(tag, description, valueOptions, options, defaultValue);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    return new WindowsFlag(tag, description, valueOptions, options, defaultValue);
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
         }
 
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXFlag`1"/> of a generic type.
+        /// Creates a flag argument definition of a generic type.
         /// </summary>
         /// <typeparam name="T">The value type of the argument.</typeparam>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
@@ -203,135 +330,49 @@ namespace ArgumentParser.Factory
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag<T>(Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public static IFlag CreateFlag<T>(ParameterTokenStyle tokenStyle, Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
         {
-            return new POSIXFlag<T>(tag, description, valueOptions, options, typeConverter, defaultValue);
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    return new POSIXFlag<T>(tag, description, valueOptions, options, typeConverter, defaultValue);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    return new WindowsFlag<T>(tag.ToString(), description, valueOptions, options, typeConverter, defaultValue);
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
         }
 
         /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.POSIXFlag"/> of an undefined type.
+        /// Creates a flag argument definition of an undefined type.
         /// </summary>
+        /// <param name="tokenStyle">The token style to use to help determine the appropriate argument definition type.</param>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="options">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag(Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, String defaultValue = null)
+        public static IFlag CreateFlag(ParameterTokenStyle tokenStyle, Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, String defaultValue = null)
         {
-            return new POSIXFlag(tag, description, valueOptions, options, defaultValue);
+            switch (tokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    return new POSIXFlag(tag, description, valueOptions, options, description);
+                case ParameterTokenStyle.WindowsEqual:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.Windows:
+                    return new WindowsFlag(tag.ToString(), description, valueOptions, options, defaultValue);
+                default:
+                    throw new InvalidEnumArgumentException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
         }
         #endregion
-    }
 
-    /// <summary>
-    /// Provides static methods for Windows-flavored argument creation.
-    /// </summary>
-    public static class WindowsArgumentFactory
-    {
-        #region Argument methods
-        /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.WindowsArgument`1"/> of a dynamically-resolved type.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="returnType">The value type of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IArgument CreateArgument(String tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Object defaultValue = null)
-        {
-            var type = typeof (WindowsArgument<>).MakeGenericType(returnType);
-            var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
-
-            return (IArgument) Activator.CreateInstance(type, tag, description, valueOptions, typeConverter, value);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.WindowsArgument`1"/> of a generic type.
-        /// </summary>
-        /// <typeparam name="T">The value type of the argument.</typeparam>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument<T>(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
-        {
-            return new WindowsArgument<T>(tag, description, valueOptions, typeConverter, defaultValue);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.WindowsArgument"/> of an undefined type.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        /// <returns>The newly created argument.</returns>
-        public static IArgument CreateArgument(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-        {
-            return new WindowsArgument(tag, description, valueOptions, defaultValue);
-        }
-        #endregion
-
-        #region Flag methods
-        /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.WindowsFlag`1"/> of a dynamically-resolved type.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="returnType">The value type of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="options">The value conversion behavior.</param>
-        /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        /// <returns>The newly created dynamically-resolved argument.</returns>
-        public static IFlag CreateFlag(String tag, String description, Type returnType, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, Object defaultValue = null)
-        {
-            var type = typeof (WindowsFlag<>).MakeGenericType(returnType);
-            var value = ArgumentFactory.GetDefaultValue(returnType, typeConverter, defaultValue);
-
-            return (IFlag) Activator.CreateInstance(type, tag, description, valueOptions, options, typeConverter, value);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.WindowsFlag`1"/> of a generic type.
-        /// </summary>
-        /// <typeparam name="T">The value type of the argument.</typeparam>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="options">The value conversion behavior.</param>
-        /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag<T>(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
-        {
-            return new WindowsFlag<T>(tag, description, valueOptions, options, typeConverter, defaultValue);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="T:ArgumentParser.Arguments.WindowsFlag"/> of an undefined type.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="options">The value conversion behavior.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        /// <returns>The newly created argument.</returns>
-        public static IFlag CreateFlag(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, String defaultValue = null)
-        {
-            return new WindowsFlag(tag, description, valueOptions, options, defaultValue);
-        }
-        #endregion
-    }
-
-    internal static class ArgumentFactory
-    {
-        public static Object GetDefaultValue(Type returnType, TypeConverter typeConverter, Object defaultValue)
+        #region Internal methods
+        internal static Object GetDefaultValue(Type returnType, TypeConverter typeConverter, Object defaultValue)
         {
             Object value = defaultValue;
             if (value != null && !value.GetType().IsAssignableFrom(returnType))
@@ -343,5 +384,6 @@ namespace ArgumentParser.Factory
 
             return value;
         }
+        #endregion
     }
 }
