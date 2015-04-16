@@ -399,8 +399,7 @@ namespace ArgumentParser.Factory
         }
         #endregion
 
-        #region Internal methods
-        internal static Object GetDefaultValue(Type returnType, TypeConverter typeConverter, Object defaultValue)
+        private static Object GetDefaultValue(Type returnType, TypeConverter typeConverter, Object defaultValue)
         {
             Object value = defaultValue;
             if (value != null && !value.GetType().IsAssignableFrom(returnType))
@@ -412,6 +411,5 @@ namespace ArgumentParser.Factory
 
             return value;
         }
-        #endregion
     }
 }
