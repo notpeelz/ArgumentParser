@@ -54,9 +54,13 @@
     <Compile Include="Factory\ICoupleableOptionAttribute.cs" />
     <Compile Include="Factory\POSIX\IPOSIXOptionAttribute.cs" />
     <Compile Include="Factory\PowerShell\IPSOptionAttribute.cs" />
+    <Compile Include="Factory\PowerShell\PSCompositeListOptionAttribute.cs" />
+    <Compile Include="Factory\PowerShell\PSListOptionAttribute.cs" />
     <Compile Include="Factory\PowerShell\PSFlagAttribute.cs" />
     <Compile Include="Factory\PowerShell\PSOptionAttribute.cs" />
     <Compile Include="Factory\Windows\IWindowsOptionAttribute.cs" />
+    <Compile Include="Factory\Windows\WindowsCompositeListOptionAttribute.cs" />
+    <Compile Include="Factory\Windows\WindowsListOptionAttribute.cs" />
     <Compile Include="Helpers\ValueConverter.cs" />
     <Compile Include="Arguments\WindowsFlag.cs" />
     <Compile Include="Arguments\WindowsFlag`1.cs" />

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="POSIXCompositeListOptionAttribute.cs" company="LouisTakePILLz">
+// <copyright file="WindowsCompositeListOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -21,30 +21,21 @@ using System.ComponentModel;
 using ArgumentParser.Arguments;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.POSIX
+namespace ArgumentParser.Factory.Windows
 {
     /// <summary>
-    /// Represents a POSIX-flavored option attribute that supports splitting using spaces.
+    /// Represents a Windows-flavored option attribute that supports splitting using spaces.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class POSIXCompositeListOptionAttribute : POSIXOptionAttribute
+    public class WindowsCompositeListOptionAttribute : WindowsOptionAttribute
     {
         private static readonly StringArrayConverter typeConverter = new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXCompositeListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.Windows.WindowsCompositeListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public POSIXCompositeListOptionAttribute(String tag) : base(tag)
-        {
-            this.ValueOptions = ValueOptions.Composite;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXCompositeListOptionAttribute"/> class.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        public POSIXCompositeListOptionAttribute(Char tag) : base(tag)
+        public WindowsCompositeListOptionAttribute(String tag) : base(tag)
         {
             this.ValueOptions = ValueOptions.Composite;
         }

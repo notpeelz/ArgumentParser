@@ -25,7 +25,7 @@ namespace ArgumentParser.Factory.Windows
     /// <summary>
     /// Represents a Windows-flavored option attribute.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
     public class WindowsOptionAttribute : Attribute, IWindowsOptionAttribute
     {
         /// <summary>

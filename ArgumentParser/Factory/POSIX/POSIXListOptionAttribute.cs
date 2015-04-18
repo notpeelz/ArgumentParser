@@ -25,6 +25,7 @@ namespace ArgumentParser.Factory.POSIX
     /// <summary>
     /// Represents a POSIX-flavored option attribute that supports splitting using a culture-dependent separator.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
     public class POSIXListOptionAttribute : POSIXOptionAttribute
     {
         private static readonly StringArrayConverter typeConverter = new StringArrayConverter();
