@@ -520,7 +520,7 @@ namespace ArgumentParser
                 int value;
                 var trailingValues = default (IEnumerable<String>);
 
-                // Determine whether the flag level should be implicitly computed (doesn't access values, has no value or is coupled)
+                // Determine whether the flag level should be implicitly computed (doesn't accept values, has no value or is coupled)
                 if (flag.ValueOptions == ValueOptions.None || x.Key.Value == null || x.Key.CoupleCount > 1)
                 {
                     value = invertImplicit ? 0 : 1;
