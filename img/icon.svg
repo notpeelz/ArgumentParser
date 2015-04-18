@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="512px"
+	 height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<g>
+	<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#5F8AA3" points="457.586,261.561 228.37,207.041 54.414,248.355 283.762,303.133"/>
+	<g>
+		<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#ADD9F2" points="243,-0.008 228.37,207.041 457.586,261.561"/>
+	</g>
+	<g>
+		<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#7CA8C0" points="228.369,207.041 243,-0.008 54.416,248.355"/>
+	</g>
+	<g>
+		<path fill="#D8D8D8" d="M207.431,253.505l-36.146-8.517l-27.749,4.875l-16.047-3.78l112.024-18.765l15.268,3.597l-42.54,35.137 l-16.047-3.781L207.431,253.505z M183.476,242.867l28.9,6.809l19.512-15.128l-0.467-0.11L183.476,242.867z"/>
+		<path fill="#D8D8D8" d="M271.26,262.092l-30.512,10.678l-15.813-3.727l77.126-26.987l37.234,8.773 c10.594,2.496,16.762,5.203,18.506,8.121c1.743,2.916-0.874,5.596-7.851,8.037c-7.012,2.453-15.661,3.717-25.947,3.789 c-10.288,0.072-20.729-1.141-31.322-3.637L271.26,262.092z M279.418,259.239l21.422,5.047c5.971,1.406,11.916,1.973,17.833,1.695 c5.915-0.275,11.037-1.17,15.361-2.684c4.393-1.537,6.515-3.17,6.364-4.896c-0.149-1.725-3.234-3.298-9.26-4.717l-21.422-5.048 L279.418,259.239z"/>
+	</g>
+</g>
+<g>
+	<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#ADD9F2" points="269.063,512.008 283.761,303.133 54.416,248.355"/>
+</g>
+<g>
+	<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#7CA8C0" points="283.762,303.133 269.063,512.008 457.586,261.561"/>
+</g>
+</svg>
