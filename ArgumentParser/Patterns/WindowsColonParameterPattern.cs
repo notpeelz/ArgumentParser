@@ -34,12 +34,12 @@ namespace ArgumentParser
                             ("" (?> \\.  | [^""])* "")|
                             ('  (?> \\.  | [^'])* ')|
                             ( \\./?  | [^/""'] | (?<!\s) /+ )+
-                        )+
+                        )*
                     )
                 )?
             )(?=$|\s)";
         #else
-        private const String WINDOWS_COLON_PARAMETER_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-]+)((\s+|:)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\./?|[^/""']|(?<!\s)/+)+)+))?)(?=$|\s)";
+        private const String WINDOWS_COLON_PARAMETER_PATTERN = @"(?<=^|\s)(?<prefix>/)((?<tag>[\w\-]+)((\s+|:)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\./?|[^/""']|(?<!\s)/+)+)*))?)(?=$|\s)";
         #endif
     }
 }
