@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using ArgumentParser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ArgumentParser.Factory.Windows;
@@ -57,17 +58,17 @@ namespace ArgumentParserTest
                 get { return options; }
             }
 
-            public void Init(String[] verbs)
+            public void Init(IEnumerable<String> verbs)
             {
 
             }
 
-            public void HandleParameter(RawParameter parameter)
+            public void HandleParameters(IEnumerable<RawParameter> parameters)
             {
 
             }
 
-            public void HandleValue(UnboundValue value)
+            public void HandleValues(IEnumerable<UnboundValue> values)
             {
 
             }

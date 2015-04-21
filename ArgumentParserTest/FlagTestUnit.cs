@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ArgumentParser;
 using ArgumentParser.Arguments;
@@ -57,23 +58,23 @@ namespace ArgumentParserTest
                 get { return options; }
             }
 
-            public void Init(String[] verbs)
+            public void Init(IEnumerable<String> verbs)
+            {
+
+            }
+
+            public void HandleParameters(IEnumerable<RawParameter> parameters)
+            {
+                this.Test = parameters.Aggregate(String.Empty, (a, x) => String.Join(String.Empty, Enumerable.Repeat(x.Key.Tag, x.Count)) + Environment.NewLine);
+            }
+
+            public void HandleValues(IEnumerable<UnboundValue> values)
             {
 
             }
             #endregion
 
             public String Test { get; private set; }
-
-            public void HandleParameter(RawParameter parameter)
-            {
-                this.Test += String.Join(String.Empty, Enumerable.Repeat(parameter.Key.Tag, parameter.Count));
-            }
-
-            public void HandleValue(UnboundValue value)
-            {
-
-            }
 
             [POSIXFlag('t', Options = FlagOptions.AggregateExplicit | FlagOptions.AggregateImplicit)]
             //[POSIXFlag("foobar", Options = FlagOptions.Aggregate | FlagOptions.AggregateExplicit)]

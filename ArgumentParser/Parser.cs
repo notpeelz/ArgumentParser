@@ -315,16 +315,8 @@ namespace ArgumentParser
                     options.PairEqualityComparer)
                 .ToLookup(x => x.MemberBinding, x => x.ParameterPair);
 
-            if (!options.IgnoreUnmatchedParameters)
-            {
-                var parameters = pairs.OfType<RawParameter>();
-                foreach (var parameter in parameters)
-                    context.HandleParameter(parameter);
-            }
-
-            var values = pairs.OfType<UnboundValue>();
-            foreach (var value in values)
-                context.HandleValue(value);
+            context.HandleParameters(pairs.OfType<RawParameter>());
+            context.HandleValues(pairs.OfType<UnboundValue>());
 
             BindValues(options, context, matches);
         }
@@ -419,9 +411,6 @@ namespace ArgumentParser
                         return pair;
                     },
                     options.PairEqualityComparer);
-
-            if (options.IgnoreUnmatchedParameters)
-                return pairs.Concat<IPairable>(unboundValues);
 
             pairs = pairs.ToArray();
 

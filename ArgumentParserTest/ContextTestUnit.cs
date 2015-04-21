@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using ArgumentParser;
@@ -101,7 +102,6 @@ namespace ArgumentParserTest
             private readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX)
             {
                 Detokenize = true,
-                IgnoreUnmatchedParameters = false,
                 ExceptionHandler = ExceptionHandler
             };
 
@@ -110,19 +110,21 @@ namespace ArgumentParserTest
                 get { return this.options; }
             }
 
-            public void Init(String[] verbs)
+            public void Init(IEnumerable<String> verbs)
             {
 
             }
 
-            public void HandleParameter(RawParameter parameter)
+            public void HandleParameters(IEnumerable<RawParameter> parameters)
             {
-                Debug.WriteLine("{0} #{1}: \"{2}\" (Compound: {3})", parameter.Key, parameter.Count, parameter.Value, parameter.CoupleCount > 1);
+                foreach (var parameter in parameters)
+                    Debug.WriteLine("{0} #{1}: \"{2}\" (Compound: {3})", parameter.Key, parameter.Count, parameter.Value, parameter.CoupleCount > 1);
             }
 
-            public void HandleValue(UnboundValue value)
+            public void HandleValues(IEnumerable<UnboundValue> values)
             {
-                Debug.WriteLine("Parent: {0}, Value: {1}", value.Key, value.Value);
+                foreach (var value in values)
+                    Debug.WriteLine("Parent: {0}, Value: {1}", value.Key, value.Value);
             }
 
             private static Boolean ExceptionHandler(ParsingException exception)
@@ -185,21 +187,22 @@ namespace ArgumentParserTest
             {
                 public Install() { }
 
-                public void Init(String[] verbs)
+                public void Init(IEnumerable<String> verbs)
                 {
-                    if (!verbs.Any())
+                    var values = verbs.ToArray();
+                    if (!values.Any())
                         throw new NotSupportedException();
 
                     this.InstallLocal = new Local();
-                    this.InstallLocal.Init(verbs);
+                    this.InstallLocal.Init(values);
                 }
 
-                public void HandleParameter(RawParameter parameter)
+                public void HandleParameters(IEnumerable<RawParameter> parameters)
                 {
 
                 }
 
-                public void HandleValue(UnboundValue value)
+                public void HandleValues(IEnumerable<UnboundValue> values)
                 {
 
                 }
@@ -216,22 +219,23 @@ namespace ArgumentParserTest
                 #region Nested verb classes
                 public class Local : IVerbContext
                 {
-                    public void Init(String[] verbs)
+                    public void Init(IEnumerable<String> verbs)
                     {
-                        if (!verbs.Any())
+                        var values = verbs.ToArray();
+                        if (!values.Any())
                             throw new NotSupportedException();
 
-                        this.Names = verbs;
+                        this.Names = values;
                     }
 
-                    public void HandleParameter(RawParameter parameter)
+                    public void HandleParameters(IEnumerable<RawParameter> parameters)
                     {
-                        throw new NotImplementedException();
+
                     }
 
-                    public void HandleValue(UnboundValue value)
+                    public void HandleValues(IEnumerable<UnboundValue> values)
                     {
-                        throw new NotImplementedException();
+
                     }
 
                     [POSIXFlag('f')]
@@ -242,22 +246,23 @@ namespace ArgumentParserTest
 
                 public class Global : IVerbContext
                 {
-                    public void Init(String[] verbs)
+                    public void Init(IEnumerable<String> verbs)
                     {
-                        if (!verbs.Any())
+                        var values = verbs.ToArray();
+                        if (!values.Any())
                             throw new NotSupportedException();
 
-                        this.Names = verbs;
+                        this.Names = values;
                     }
 
-                    public void HandleParameter(RawParameter parameter)
+                    public void HandleParameters(IEnumerable<RawParameter> parameters)
                     {
-                        throw new NotImplementedException();
+
                     }
 
-                    public void HandleValue(UnboundValue value)
+                    public void HandleValues(IEnumerable<UnboundValue> values)
                     {
-                        throw new NotImplementedException();
+
                     }
 
                     [POSIXFlag('f')]

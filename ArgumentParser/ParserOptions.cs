@@ -68,11 +68,6 @@ namespace ArgumentParser
         public Boolean Detokenize { get; set; }
 
         /// <summary>
-        /// Gets or sets a boolean value indicating whether unrecognized parameters should be ignored or not.
-        /// </summary>
-        public Boolean IgnoreUnmatchedParameters { get; set; }
-
-        /// <summary>
         /// Gets or sets the detokenizer predicate to use upon parsing values.
         /// </summary>
         public Parser.DetokenizerDelegate Detokenizer { get; set; }

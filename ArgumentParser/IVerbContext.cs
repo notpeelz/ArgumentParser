@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace ArgumentParser
 {
@@ -28,19 +29,19 @@ namespace ArgumentParser
         /// <summary>
         /// Handles unmatched verb entries upon parsing.
         /// </summary>
-        /// <param name="verbs">An array of the remaining unmatched verb tags.</param>
-        void Init(String[] verbs);
+        /// <param name="verbs">A sequence of strings representing the unmatched verb tags.</param>
+        void Init(IEnumerable<String> verbs);
 
         /// <summary>
         /// Handles undefined parameter entries upon parsing.
         /// </summary>
-        /// <param name="parameter">A raw parameter representing an unmatched input.</param>
-        void HandleParameter(RawParameter parameter);
+        /// <param name="parameters">A sequence of raw, unmatched parameters representing unpaired entries.</param>
+        void HandleParameters(IEnumerable<RawParameter> parameters);
 
         /// <summary>
         /// Handles trailing values upon parsing.
         /// </summary>
-        /// <param name="value">An object representing an unbound, trailing value.</param>
-        void HandleValue(UnboundValue value);
+        /// <param name="values">A sequence of objects representing unbound, trailing values.</param>
+        void HandleValues(IEnumerable<UnboundValue> values);
     }
 }

@@ -55,14 +55,12 @@ namespace ArgumentParserTest
 
         private static readonly ParserOptions posixOptions = new ParserOptions(ParameterTokenStyle.POSIX)
         {
-            Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE"),
-            IgnoreUnmatchedParameters = false
+            Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE")
         };
 
         private static readonly ParserOptions windowsOptions = new ParserOptions(ParameterTokenStyle.Windows)
         {
-            Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE"),
-            IgnoreUnmatchedParameters = false
+            Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE")
         };
 
         [TestMethod]
