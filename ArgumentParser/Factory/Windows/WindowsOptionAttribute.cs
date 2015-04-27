@@ -19,6 +19,7 @@
 using System;
 using System.ComponentModel;
 using ArgumentParser.Arguments;
+using ArgumentParser.Helpers;
 
 namespace ArgumentParser.Factory.Windows
 {
@@ -66,5 +67,27 @@ namespace ArgumentParser.Factory.Windows
         /// Gets the type converter used for value conversion.
         /// </summary>
         public virtual TypeConverter TypeConverter { get; private set; }
+
+        /// <summary>
+        /// Gets an argument definition using the supplied specifications.
+        /// </summary>
+        /// <param name="valueType">The expected value type to convert and bind to.</param>
+        /// <param name="formatProvider">The format provider to use.</param>
+        /// <returns>The newly created argument definition.</returns>
+        public virtual IArgument CreateArgument(Type valueType, IFormatProvider formatProvider)
+        {
+            var value = ValueConverter.GetDefaultValue(valueType, this.TypeConverter, this.DefaultValue);
+            var type = typeof (WindowsArgument<>).MakeGenericType(valueType);
+
+            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, value);
+        }
+
+        /// <summary>
+        /// Gets the unique identifier for this option attribute.
+        /// </summary>
+        public override Object TypeId
+        {
+            get { return Guid.NewGuid(); }
+        }
     }
 }

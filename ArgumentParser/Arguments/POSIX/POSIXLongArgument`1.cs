@@ -19,7 +19,7 @@
 using System;
 using System.ComponentModel;
 
-namespace ArgumentParser.Arguments
+namespace ArgumentParser.Arguments.POSIX
 {
     /// <summary>
     /// Represents a POSIX-flavored argument identified by a <see cref="T:System.String"/> tag.
@@ -31,29 +31,19 @@ namespace ArgumentParser.Arguments
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument`1"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        public POSIXLongArgument(String tag, TypeConverter typeConverter = null, T defaultValue = default (T), ValueOptions valueOptions = ValueOptions.Single)
-            : base(Prefix, tag, valueOptions, typeConverter, defaultValue) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument`1"/> class.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXLongArgument(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : base(Prefix, tag, description, valueOptions, typeConverter, defaultValue) { }
+        public POSIXLongArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
+            : base(new Key(Prefix, tag), description, valueOptions, typeConverter, defaultValue) { }
 
         /// <summary>
         /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument`1"/> type.
         /// </summary>
         public static String Prefix
         {
-            get { return Parser.PREFIX_UNIX_LONG; }
+            get { return Parser.PREFIX_POSIX_LONG; }
         }
     }
 }

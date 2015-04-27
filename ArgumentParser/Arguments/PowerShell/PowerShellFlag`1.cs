@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="PowerShellArgument.cs" company="LouisTakePILLz">
+// <copyright file="PowerShellFlag`1.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -17,35 +17,30 @@
  */
 
 using System;
+using System.ComponentModel;
 
-namespace ArgumentParser.Arguments
+namespace ArgumentParser.Arguments.PowerShell
 {
     /// <summary>
-    /// Represents a PowerShell-like argument of an undefined value type.
+    /// Represents a PowerShell-like flag that supports special value handling.
     /// </summary>
-    public class PowerShellArgument : Argument
+    /// <typeparam name="T">The type of the value.</typeparam>
+    public class PowerShellFlag<T> : FlagArgument<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.PowerShellArgument"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.PowerShellFlag`1"/> class.
         /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        public PowerShellArgument(String tag, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(Prefix, tag, valueOptions, defaultValue) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.PowerShellArgument"/> class.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
+        /// <param name="tag">The tag that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
+        /// <param name="flagOptions">The value conversion behavior.</param>
+        /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public PowerShellArgument(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(Prefix, tag, description, valueOptions, defaultValue) { }
+        public PowerShellFlag(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+            : base(new Key(Prefix, tag), description, valueOptions, flagOptions, typeConverter, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.PowerShellArgument"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.PowerShell.PowerShellFlag`1"/> type.
         /// </summary>
         public static String Prefix
         {

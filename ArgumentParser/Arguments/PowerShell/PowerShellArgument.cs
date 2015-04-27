@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="POSIXLongArgument.cs" company="LouisTakePILLz">
+// <copyright file="PowerShellArgument.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -18,38 +18,29 @@
 
 using System;
 
-namespace ArgumentParser.Arguments
+namespace ArgumentParser.Arguments.PowerShell
 {
     /// <summary>
-    /// Represents a POSIX-flavored argument identified by a <see cref="T:System.String"/> tag.
+    /// Represents a PowerShell-like argument of an undefined value type.
     /// </summary>
-    public class POSIXLongArgument : Argument
+    public class PowerShellArgument : Argument
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument"/> class.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXLongArgument(String tag, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(Prefix, tag, valueOptions, defaultValue) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.PowerShell.PowerShellArgument"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXLongArgument(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(Prefix, tag, description, valueOptions, defaultValue) { }
+        public PowerShellArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
+            : base(new Key(Prefix, tag), description, valueOptions, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.PowerShell.PowerShellArgument"/> type.
         /// </summary>
         public static String Prefix
         {
-            get { return Parser.PREFIX_UNIX_LONG; }
+            get { return Parser.PREFIX_POWERSHELL; }
         }
     }
 }

@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -106,6 +107,86 @@ namespace ArgumentParser.Helpers
                 return Convert.ChangeType(value, type, formatProvider);
 
             return value;
+        }
+
+        /// <summary>
+        /// Converts a value to a native equivalent.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <param name="type">The type to convert the value to.</param>
+        /// <param name="convertedValue">The converted value.</param>
+        /// <returns>A boolean value indicating whether the conversion succeeded.</returns>
+        public static Boolean TryConvertValue(Object value, Type type, out Object convertedValue)
+        {
+            return TryConvertValue(value, type, null, out convertedValue);
+        }
+
+        /// <summary>
+        /// Converts a value to a native equivalent.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <param name="type">The type to convert the value to.</param>
+        /// <param name="formatProvider">The format provider to use.</param>
+        /// <param name="convertedValue">The converted value.</param>
+        /// <returns>A boolean value indicating whether the conversion succeeded.</returns>
+        public static Boolean TryConvertValue(Object value, Type type, IFormatProvider formatProvider, out Object convertedValue)
+        {
+            if (value == null)
+            {
+                convertedValue = null;
+                return false;
+            }
+
+            if (value.GetType().IsAssignableFrom(type))
+            {
+                convertedValue = value;
+                return true;
+            }
+
+            if (type.IsEnum)
+            {
+                convertedValue = Enum.ToObject(type, value);
+                return true;
+            }
+
+            if (value is IConvertible && type.GetInterfaces().Any(x => x == typeof (IConvertible)))
+            {
+                convertedValue = Convert.ChangeType(value, type, formatProvider);
+                return true;
+            }
+
+            convertedValue = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Determines the appropriate type-safe default value for a given type.
+        /// </summary>
+        /// <param name="type">The type to use for conversion.</param>
+        /// <param name="typeConverter">The type converter to use.</param>
+        /// <param name="defaultValue">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        public static Object GetDefaultValue(Type type, TypeConverter typeConverter, Object defaultValue)
+        {
+            Object value = defaultValue;
+            if (value != null && !value.GetType().IsAssignableFrom(type))
+            {
+                value = typeConverter != null && typeConverter.CanConvertFrom(value.GetType())
+                    ? typeConverter.ConvertFrom(defaultValue)
+                    : null;
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Determines whether a given type supports implicit value conversion.
+        /// </summary>
+        /// <param name="type">The type to test.</param>
+        /// <returns>A boolean value indicating whether the provided value is implicitly convertible.</returns>
+        public static Boolean IsConvertible(Type type)
+        {
+            return type.IsEnum || type.GetInterfaces().Any(x => x == typeof(IConvertible));
         }
     }
 }

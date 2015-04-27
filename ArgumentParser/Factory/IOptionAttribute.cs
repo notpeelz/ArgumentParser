@@ -56,5 +56,13 @@ namespace ArgumentParser.Factory
         /// Gets the type converter used for value conversion.
         /// </summary>
         TypeConverter TypeConverter { get; }
+
+        /// <summary>
+        /// Gets an argument definition using the supplied specifications.
+        /// </summary>
+        /// <param name="valueType">The expected value type to convert and bind to.</param>
+        /// <param name="formatProvider">The format provider to use.</param>
+        /// <returns>The newly created argument definition.</returns>
+        IArgument CreateArgument(Type valueType, IFormatProvider formatProvider);
     }
 }

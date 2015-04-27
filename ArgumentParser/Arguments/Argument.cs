@@ -29,49 +29,22 @@ namespace ArgumentParser.Arguments
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument"/> class.
         /// </summary>
+        protected Argument() { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument"/> class.
+        /// </summary>
         /// <param name="key">The unique identifier to use to represent the argument.</param>
+        /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, ValueOptions valueOptions, String defaultValue)
+        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
         {
             this.Key = key;
+            this.Description = description;
             this.ValueOptions = valueOptions;
             this.DefaultValue = defaultValue;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument"/> class.
-        /// </summary>
-        /// <param name="key">The unique identifier to use to represent the argument.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String description, ValueOptions valueOptions, String defaultValue)
-            : this(key, valueOptions, defaultValue)
-        {
-            this.Description = description;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument"/> class.
-        /// </summary>
-        /// <param name="prefix">The prefix to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
-        /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(String prefix, String tag, ValueOptions valueOptions, String defaultValue)
-            : this(new Key(prefix, tag), valueOptions, defaultValue) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument"/> class.
-        /// </summary>
-        /// <param name="prefix">The prefix to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
-        /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(String prefix, String tag, String description, ValueOptions valueOptions, String defaultValue)
-            : this(new Key(prefix, tag), description, valueOptions, defaultValue) { }
 
         /// <summary>
         /// Gets the <see cref="T:ArgumentParser.Key"/> representing the argument.
@@ -112,7 +85,7 @@ namespace ArgumentParser.Arguments
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
         /// <param name="value">The input value to convert from.</param>
         /// <returns>The converted value.</returns>
-        public String GetValue(CultureInfo culture, String value)
+        public virtual String GetValue(CultureInfo culture, String value)
         {
             return value;
         }
@@ -122,7 +95,7 @@ namespace ArgumentParser.Arguments
         /// </summary>
         /// <param name="value">The input value to convert from.</param>
         /// <returns>The converted value.</returns>
-        public String GetValue(String value)
+        public virtual String GetValue(String value)
         {
             return value;
         }

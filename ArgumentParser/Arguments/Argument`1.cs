@@ -32,54 +32,24 @@ namespace ArgumentParser.Arguments
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument`1"/> class.
         /// </summary>
+        protected Argument() { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument`1"/> class.
+        /// </summary>
         /// <param name="key">The unique identifier to use to represent the argument.</param>
+        /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
+        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
         {
-            this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof (T));
             this.Key = key;
-            this.DefaultValue = defaultValue;
-            this.ValueOptions = valueOptions;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument`1"/> class.
-        /// </summary>
-        /// <param name="key">The unique identifier to use to represent the argument.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : this(key, valueOptions, typeConverter, defaultValue)
-        {
             this.Description = description;
+            this.ValueOptions = valueOptions;
+            this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof(T));
+            this.DefaultValue = defaultValue;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument`1"/> class.
-        /// </summary>
-        /// <param name="prefix">The prefix to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
-        /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(String prefix, String tag, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : this(new Key(prefix, tag), valueOptions, typeConverter, defaultValue) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument`1"/> class.
-        /// </summary>
-        /// <param name="prefix">The prefix to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
-        /// <param name="tag">The tag to use as a part of the <see cref="T:ArgumentParser.Key"/>.</param>
-        /// <param name="description">The description of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(String prefix, String tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : this(new Key(prefix, tag), description, valueOptions, typeConverter, defaultValue) { }
 
         /// <summary>
         /// Gets the <see cref="T:ArgumentParser.Key"/> representing the argument.

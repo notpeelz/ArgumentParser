@@ -19,24 +19,14 @@
 using System;
 using System.ComponentModel;
 
-namespace ArgumentParser.Arguments
+namespace ArgumentParser.Arguments.POSIX
 {
     /// <summary>
     /// Represents a POSIX-flavored argument identified by a <see cref="T:System.Char"/> tag.
     /// </summary>
     /// <typeparam name="T">The type of the value.</typeparam>
-    public class POSIXShortArgument<T> : ShortArgument<T>
+    public class POSIXShortArgument<T> : Argument<T>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument`1"/> class.
-        /// </summary>
-        /// <param name="tag">The character that defines the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="typeConverter">The type converter to use for value conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXShortArgument(Char tag, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : base(Prefix, tag, valueOptions, typeConverter, defaultValue) { }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument`1"/> class.
         /// </summary>
@@ -45,15 +35,15 @@ namespace ArgumentParser.Arguments
         /// <param name="valueOptions">The value parsing behavior  of the argument.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXShortArgument(Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : base(Prefix, tag, description, valueOptions, typeConverter, defaultValue) { }
+        public POSIXShortArgument(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
+            : base(new Key(Prefix, tag.ToString()), description, valueOptions, typeConverter, defaultValue) { }
 
         /// <summary>
         /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument`1"/> type.
         /// </summary>
         public static String Prefix
         {
-            get { return Parser.PREFIX_UNIX_SHORT; }
+            get { return Parser.PREFIX_POSIX_SHORT; }
         }
     }
 }

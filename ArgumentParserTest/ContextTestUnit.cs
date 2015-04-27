@@ -140,7 +140,7 @@ namespace ArgumentParserTest
             [POSIXFlag('f', DefaultValue = true)]
             public Boolean UnaffectedDefault { get; set; }
 
-            [POSIXFlag('i', DefaultValue = true, Options = FlagOptions.InvertBoolean)]
+            [POSIXFlag('i', DefaultValue = true, FlagOptions = FlagOptions.InvertBoolean)]
             public Boolean ImplicitlyConvertedValue { get; set; }
 
             [POSIXFlag('t', DefaultValue = 1)]
@@ -173,7 +173,7 @@ namespace ArgumentParserTest
                     : level;
             }*/
 
-            [POSIXFlag('h', ManualBinding = true, Options = FlagOptions.BitFieldImplicit | FlagOptions.AggregateImplicit | FlagOptions.AggregateCombine)]
+            [POSIXFlag('h', ManualBinding = true, FlagOptions = FlagOptions.BitFieldImplicit | FlagOptions.AggregateImplicit | FlagOptions.AggregateCombine)]
             public VerbosityLevel ThirdVerbosityLevel { get; set; }
             #endregion
 

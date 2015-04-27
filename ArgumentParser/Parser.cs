@@ -26,9 +26,6 @@ using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using ArgumentParser.Arguments;
 using ArgumentParser.Factory;
-using ArgumentParser.Factory.PowerShell;
-using ArgumentParser.Factory.POSIX;
-using ArgumentParser.Factory.Windows;
 using ArgumentParser.Helpers;
 
 namespace ArgumentParser
@@ -40,8 +37,8 @@ namespace ArgumentParser
     public static partial class Parser
     {
         internal const String INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE = "The token style is not within the valid range of values.";
-        internal const String PREFIX_UNIX_LONG = "--";
-        internal const String PREFIX_UNIX_SHORT = "-";
+        internal const String PREFIX_POSIX_LONG = "--";
+        internal const String PREFIX_POSIX_SHORT = "-";
         internal const String PREFIX_WINDOWS = "/";
         internal const String PREFIX_POWERSHELL = "-";
 
@@ -52,6 +49,13 @@ namespace ArgumentParser
         /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>The detokenized input string.</returns>
         public delegate String DetokenizerDelegate(String input, CultureInfo culture);
+
+        /// <summary>
+        /// Determines whether a given attribute should be filtered in for argument creation.
+        /// </summary>
+        /// <param name="attribute">The attribute to test.</param>
+        /// <returns>A boolean value indicating whether the member should be filtered in.</returns>
+        public delegate Boolean AttributeFilterDelegate(IOptionAttribute attribute);
 
         /// <summary>
         /// Represents the default value detokenizer predicate.
@@ -499,8 +503,8 @@ namespace ArgumentParser
             }
 
             bool isBoolean = flag.Type == typeof (Boolean);
-            bool invertImplicit = (flag.Options & FlagOptions.InvertBooleanImplicit) != 0;
-            bool invertExplicit = (flag.Options & FlagOptions.InvertBooleanExplicit) != 0;
+            bool invertImplicit = (flag.FlagOptions & FlagOptions.InvertBooleanImplicit) != 0;
+            bool invertExplicit = (flag.FlagOptions & FlagOptions.InvertBooleanExplicit) != 0;
 
             var canonicalValues = GetCompositeValueParts(options, parameters);
 
@@ -545,11 +549,11 @@ namespace ArgumentParser
                 return flagPair;
             }
 
-            bool aggregateImplicit = (flag.Options & FlagOptions.AggregateImplicit) != 0,
-                 aggregateExplicit = (flag.Options & FlagOptions.AggregateExplicit) != 0,
-                 aggregateCombine = (flag.Options & FlagOptions.AggregateCombine) != 0,
-                 bitFieldImplicit = (flag.Options & FlagOptions.BitFieldImplicit) != 0,
-                 bitFieldExplicit = (flag.Options & FlagOptions.BitFieldExplicit) != 0;
+            bool aggregateImplicit = (flag.FlagOptions & FlagOptions.AggregateImplicit) != 0,
+                 aggregateExplicit = (flag.FlagOptions & FlagOptions.AggregateExplicit) != 0,
+                 aggregateCombine = (flag.FlagOptions & FlagOptions.AggregateCombine) != 0,
+                 bitFieldImplicit = (flag.FlagOptions & FlagOptions.BitFieldImplicit) != 0,
+                 bitFieldExplicit = (flag.FlagOptions & FlagOptions.BitFieldExplicit) != 0;
 
             int implicitCount = 0,
                 explicitCount = 0;
@@ -661,6 +665,8 @@ namespace ArgumentParser
 
         private static IDictionary<IArgument, MemberBinding> GetArgumentMap(ParserOptions options, IEnumerable<Object> members)
         {
+            var filter = options.GetAttributeFilter();
+
             var bindingMap =
                 from member in members
                     let isProperty = member is PropertyInfo
@@ -668,111 +674,22 @@ namespace ArgumentParser
                     let bpAttribute = attributes.OfType<BindingPolicyAttribute>().SingleOrDefault()
                     from attribute in attributes
                         where attribute is IOptionAttribute
+                        where filter((IOptionAttribute) attribute)
                         select new MemberBinding(member, (IOptionAttribute) attribute, bpAttribute != null
                             ? bpAttribute.BindingPolicy
                             : BindingPolicy.Default);
 
-            switch (options.TokenStyle)
-            {
-                case ParameterTokenStyle.POSIX:
-                    return bindingMap
-                        .Where(x => x.Attribute is IPOSIXOptionAttribute)
-                        .ToDictionary(x => GetCoupleableArgument(options.TokenStyle, (ICoupleableOptionAttribute) x.Attribute, x.Member));
-                case ParameterTokenStyle.WindowsColon:
-                case ParameterTokenStyle.WindowsEqual:
-                case ParameterTokenStyle.Windows:
-                    return bindingMap
-                        .Where(x => x.Attribute is IWindowsOptionAttribute)
-                        .ToDictionary(x => GetStandardArgument(options.TokenStyle, x.Attribute, x.Member));
-                case ParameterTokenStyle.PowerShell:
-                    return bindingMap
-                        .Where(x => x.Attribute is IPSOptionAttribute)
-                        .ToDictionary(x => GetStandardArgument(options.TokenStyle, x.Attribute, x.Member));
-                default:
-                    throw new InvalidEnumArgumentException(INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
-            }
+            return bindingMap.ToDictionary(x => CreateArgument(options.Culture, x.Attribute, x.Member));
         }
 
-        private static IArgument GetStandardArgument(ParameterTokenStyle tokenStyle, IOptionAttribute attribute, Object member)
-        {
-            var descriptor = member as PropertyInfo;
-            var flagAttribute = attribute as IFlagOptionAttribute;
-            var returnType = descriptor != null
-                ? descriptor.PropertyType
-                : ((MethodInfo) member).GetParameters().First().ParameterType;
-
-            if (flagAttribute != null)
-                return ArgumentFactory.CreateFlag(
-                    tokenStyle: tokenStyle,
-                    tag: flagAttribute.Tag,
-                    description: flagAttribute.Description,
-                    returnType: returnType,
-                    valueOptions: flagAttribute.ValueOptions,
-                    options: flagAttribute.Options,
-                    typeConverter: flagAttribute.TypeConverter,
-                    defaultValue: flagAttribute.DefaultValue);
-
-            return ArgumentFactory.CreateArgument(
-                tokenStyle: tokenStyle,
-                tag: attribute.Tag,
-                description: attribute.Description,
-                returnType: returnType,
-                valueOptions: attribute.ValueOptions,
-                typeConverter: attribute.TypeConverter,
-                defaultValue: attribute.DefaultValue);
-        }
-
-        private static IArgument GetCoupleableArgument(ParameterTokenStyle tokenStyle, ICoupleableOptionAttribute attribute, Object member)
+        private static IArgument CreateArgument(IFormatProvider formatProvider, IOptionAttribute attribute, Object member)
         {
             var descriptor = member as PropertyInfo;
             var returnType = descriptor != null
                 ? descriptor.PropertyType
                 : ((MethodInfo) member).GetParameters().First().ParameterType;
 
-            var flagAttribute = attribute as IFlagOptionAttribute;
-
-            if (flagAttribute != null)
-            {
-                if (attribute.IsShort)
-                    return ArgumentFactory.CreateFlag(
-                        tokenStyle: tokenStyle,
-                        tag: flagAttribute.Tag.First(), // The "Tag" property should hold a single character.
-                        description: flagAttribute.Description,
-                        returnType: returnType,
-                        valueOptions: flagAttribute.ValueOptions,
-                        options: flagAttribute.Options,
-                        typeConverter: flagAttribute.TypeConverter,
-                        defaultValue: flagAttribute.DefaultValue);
-
-                return ArgumentFactory.CreateFlag(
-                        tokenStyle: tokenStyle,
-                        tag: flagAttribute.Tag,
-                        description: flagAttribute.Description,
-                        returnType: returnType,
-                        valueOptions: flagAttribute.ValueOptions,
-                        options: flagAttribute.Options,
-                        typeConverter: flagAttribute.TypeConverter,
-                        defaultValue: flagAttribute.DefaultValue);
-            }
-
-            if (attribute.IsShort)
-                return ArgumentFactory.CreateArgument(
-                    tokenStyle: tokenStyle,
-                    tag: attribute.Tag.First(),
-                    description: attribute.Description,
-                    returnType: returnType,
-                    valueOptions: attribute.ValueOptions,
-                    typeConverter: attribute.TypeConverter,
-                    defaultValue: attribute.DefaultValue);
-
-            return ArgumentFactory.CreateArgument(
-                tokenStyle: tokenStyle,
-                tag: attribute.Tag,
-                description: attribute.Description,
-                returnType: returnType,
-                valueOptions: attribute.ValueOptions,
-                typeConverter: attribute.TypeConverter,
-                defaultValue: attribute.DefaultValue);
+            return attribute.CreateArgument(returnType, formatProvider);
         }
         #endregion
 

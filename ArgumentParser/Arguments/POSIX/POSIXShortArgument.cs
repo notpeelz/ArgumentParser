@@ -18,22 +18,13 @@
 
 using System;
 
-namespace ArgumentParser.Arguments
+namespace ArgumentParser.Arguments.POSIX
 {
     /// <summary>
     /// Represents a POSIX-flavored argument identified by a <see cref="T:System.Char"/> tag.
     /// </summary>
-    public class POSIXShortArgument : ShortArgument
+    public class POSIXShortArgument : Argument
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument"/> class.
-        /// </summary>
-        /// <param name="tag">The character that defines the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXShortArgument(Char tag, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(Prefix, tag, valueOptions, defaultValue) { }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument"/> class.
         /// </summary>
@@ -41,15 +32,15 @@ namespace ArgumentParser.Arguments
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXShortArgument(Char tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(Prefix, tag, description, valueOptions, defaultValue) { }
+        public POSIXShortArgument(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
+            : base(new Key(Prefix, tag.ToString()), description, valueOptions, defaultValue) { }
 
         /// <summary>
         /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument"/> type.
         /// </summary>
         public static String Prefix
         {
-            get { return Parser.PREFIX_UNIX_SHORT; }
+            get { return Parser.PREFIX_POSIX_SHORT; }
         }
     }
 }

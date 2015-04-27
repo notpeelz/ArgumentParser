@@ -19,6 +19,7 @@
 using System;
 using ArgumentParser;
 using ArgumentParser.Arguments;
+using ArgumentParser.Arguments.POSIX;
 using ArgumentParser.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

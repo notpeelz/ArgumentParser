@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="WindowsArgument.cs" company="LouisTakePILLz">
+// <copyright file="WindowsFlag.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -18,34 +18,26 @@
 
 using System;
 
-namespace ArgumentParser.Arguments
+namespace ArgumentParser.Arguments.Windows
 {
     /// <summary>
-    /// Represents a Windows-flavored argument of an undefined value type.
+    /// Represents a Windows-flavored flag that supports special value handling.
     /// </summary>
-    public class WindowsArgument : Argument
+    public class WindowsFlag : FlagArgument<Int32>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.WindowsArgument"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Windows.WindowsFlag"/> class.
         /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        public WindowsArgument(String tag, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(Prefix, tag, valueOptions, defaultValue) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.WindowsArgument"/> class.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
+        /// <param name="tag">The tag that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
+        /// <param name="flagOptions">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public WindowsArgument(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(Prefix, tag, description, valueOptions, defaultValue) { }
+        public WindowsFlag(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, Int32 defaultValue = default (Int32))
+            : base(new Key(Prefix, tag), description, valueOptions, flagOptions, defaultValue: defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.WindowsArgument"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.Windows.WindowsFlag"/> type.
         /// </summary>
         public static String Prefix
         {

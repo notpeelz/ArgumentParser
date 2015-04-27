@@ -18,7 +18,10 @@
 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using ArgumentParser.Arguments;
+using ArgumentParser.Arguments.POSIX;
+using ArgumentParser.Helpers;
 
 namespace ArgumentParser.Factory.POSIX
 {
@@ -50,7 +53,7 @@ namespace ArgumentParser.Factory.POSIX
         /// <summary>
         /// Gets or sets the tag that defines the argument.
         /// </summary>
-        public String Tag { get; set; }
+        public String Tag { get; private set; }
 
         /// <summary>
         /// Gets or sets the description of the argument.
@@ -83,7 +86,23 @@ namespace ArgumentParser.Factory.POSIX
         public virtual TypeConverter TypeConverter { get; private set; }
 
         /// <summary>
-        /// Gets the unique identifier for this <see cref="T:ArgumentParser.Factory.POSIX.POSIXOptionAttribute"/>.
+        /// Gets an argument definition using the supplied specifications.
+        /// </summary>
+        /// <param name="valueType">The expected value type to convert and bind to.</param>
+        /// <param name="formatProvider">The format provider to use.</param>
+        /// <returns>The newly created argument definition.</returns>
+        public virtual IArgument CreateArgument(Type valueType, IFormatProvider formatProvider)
+        {
+            var value = ValueConverter.GetDefaultValue(valueType, this.TypeConverter, this.DefaultValue);
+
+            if (this.IsShort)
+                return (IArgument) Activator.CreateInstance(typeof (POSIXShortArgument<>).MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.TypeConverter, value);
+
+            return  (IArgument) Activator.CreateInstance(typeof (POSIXLongArgument<>).MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.TypeConverter, value);
+        }
+
+        /// <summary>
+        /// Gets the unique identifier for this option attribute.
         /// </summary>
         public override Object TypeId
         {

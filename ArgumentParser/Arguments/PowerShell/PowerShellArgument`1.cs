@@ -19,7 +19,7 @@
 using System;
 using System.ComponentModel;
 
-namespace ArgumentParser.Arguments
+namespace ArgumentParser.Arguments.PowerShell
 {
     /// <summary>
     /// Represents a PowerShell-like argument of a defined value type.
@@ -28,28 +28,18 @@ namespace ArgumentParser.Arguments
     public class PowerShellArgument<T> : Argument<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.PowerShellArgument`1"/> class.
-        /// </summary>
-        /// <param name="tag">The tag that defines the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="typeConverter">The type converter to use for value conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        public PowerShellArgument(String tag, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : base(Prefix, tag, valueOptions, typeConverter, defaultValue) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.PowerShellArgument`1"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.PowerShell.PowerShellArgument`1"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public PowerShellArgument(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : base(Prefix, tag, description, valueOptions, typeConverter, defaultValue) { }
+        public PowerShellArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
+            : base(new Key(Prefix, tag), description, valueOptions, typeConverter, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.PowerShellArgument`1"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.PowerShell.PowerShellArgument`1"/> type.
         /// </summary>
         public static String Prefix
         {

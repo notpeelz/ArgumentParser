@@ -26,6 +26,6 @@ namespace ArgumentParser.Arguments
         /// <summary>
         /// Gets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
         /// </summary>
-        FlagOptions Options { get; }
+        FlagOptions FlagOptions { get; }
     }
 }

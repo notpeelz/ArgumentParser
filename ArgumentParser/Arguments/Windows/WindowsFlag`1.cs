@@ -18,6 +18,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Net.NetworkInformation;
 
 namespace ArgumentParser.Arguments
 {
@@ -25,40 +26,26 @@ namespace ArgumentParser.Arguments
     /// Represents a Windows-flavored flag that supports special value handling.
     /// </summary>
     /// <typeparam name="T">The type of the value.</typeparam>
-    public class WindowsFlag<T> : WindowsArgument<T>, IFlag
+    public class WindowsFlag<T> : FlagArgument<T>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.WindowsFlag`1"/> class.
-        /// </summary>
-        /// <param name="tag">The tag that defines the flag.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="options">The value conversion behavior.</param>
-        /// <param name="typeConverter">The type converter to use for value conversion.</param>
-        /// <param name="defaultValue">The default value of the argument.</param>
-        public WindowsFlag(String tag, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : base(tag, valueOptions, typeConverter, defaultValue)
-        {
-            this.Options = options;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.WindowsFlag`1"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="options">The value conversion behavior.</param>
+        /// <param name="flagOptions">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public WindowsFlag(String tag, String description, ValueOptions valueOptions = ValueOptions.Single, FlagOptions options = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
-            : base(tag, description, valueOptions, typeConverter, defaultValue)
-        {
-            this.Options = options;
-        }
+        public WindowsFlag(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+            : base(new Key(Prefix, tag), description, valueOptions, flagOptions, typeConverter, defaultValue) { }
 
         /// <summary>
-        /// Gets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.WindowsFlag`1"/> type.
         /// </summary>
-        public FlagOptions Options { get; private set; }
+        public static String Prefix
+        {
+            get { return Parser.PREFIX_WINDOWS; }
+        }
     }
 }

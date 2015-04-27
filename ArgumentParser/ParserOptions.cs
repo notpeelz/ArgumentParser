@@ -19,6 +19,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
+using ArgumentParser.Factory.PowerShell;
+using ArgumentParser.Factory.POSIX;
+using ArgumentParser.Factory.Windows;
 
 namespace ArgumentParser
 {
@@ -73,8 +77,37 @@ namespace ArgumentParser
         public Parser.DetokenizerDelegate Detokenizer { get; set; }
 
         /// <summary>
+        /// Gets or sets the <see cref="T:ArgumentParser.Factory.IOptionAttribute"/> predicate that is used to filter mapped arguments given a specific token style.
+        /// </summary>
+        public Parser.AttributeFilterDelegate OptionAttributeFilter { get; set; }
+
+        /// <summary>
         /// Gets or sets the exception handler predicate to use upon throwing an exception.
         /// </summary>
         public Func<ParsingException, Boolean> ExceptionHandler { get; set; }
+
+        private static readonly Parser.AttributeFilterDelegate posixAttributeFilter = a => a is IPOSIXOptionAttribute;
+        private static readonly Parser.AttributeFilterDelegate powerShellAttributeFilter = a => a is IPSOptionAttribute;
+        private static readonly Parser.AttributeFilterDelegate windowsAttributeFilter = a => a is IWindowsOptionAttribute;
+
+        internal Parser.AttributeFilterDelegate GetAttributeFilter()
+        {
+            if (this.OptionAttributeFilter != null)
+                return this.OptionAttributeFilter;
+
+            switch (this.TokenStyle)
+            {
+                case ParameterTokenStyle.POSIX:
+                    return posixAttributeFilter;
+                case ParameterTokenStyle.Windows:
+                case ParameterTokenStyle.WindowsColon:
+                case ParameterTokenStyle.WindowsEqual:
+                    return windowsAttributeFilter;
+                case ParameterTokenStyle.PowerShell:
+                    return powerShellAttributeFilter;
+                default:
+                    throw new ArgumentOutOfRangeException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+            }
+        }
     }
 }

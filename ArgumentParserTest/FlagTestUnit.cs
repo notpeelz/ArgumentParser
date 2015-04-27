@@ -76,7 +76,7 @@ namespace ArgumentParserTest
 
             public String Test { get; private set; }
 
-            [POSIXFlag('t', Options = FlagOptions.AggregateExplicit | FlagOptions.AggregateImplicit)]
+            [POSIXFlag('t', FlagOptions = FlagOptions.AggregateExplicit | FlagOptions.AggregateImplicit)]
             //[POSIXFlag("foobar", Options = FlagOptions.Aggregate | FlagOptions.AggregateExplicit)]
             //[POSIXFlag("foobar", Description = "Magic!", Options = FlagOptions.Aggregate | FlagOptions.AggregateExplicit)]
             public Int32 T { get; private set; }
