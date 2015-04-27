@@ -17,7 +17,7 @@
  */
 
 using System;
-using ArgumentParser.Factory;
+using ArgumentParser.Reflection;
 
 namespace ArgumentParser
 {

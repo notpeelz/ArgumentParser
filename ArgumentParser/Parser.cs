@@ -25,7 +25,7 @@ using System.Reflection;
 using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using ArgumentParser.Arguments;
-using ArgumentParser.Factory;
+using ArgumentParser.Reflection;
 using ArgumentParser.Helpers;
 
 namespace ArgumentParser

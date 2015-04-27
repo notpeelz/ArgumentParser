@@ -23,7 +23,7 @@ using ArgumentParser.Arguments;
 using ArgumentParser.Arguments.POSIX;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.POSIX
+namespace ArgumentParser.Reflection.POSIX
 {
     /// <summary>
     /// Represents a POSIX-flavored option attribute.
@@ -32,7 +32,7 @@ namespace ArgumentParser.Factory.POSIX
     public class POSIXOptionAttribute : Attribute, IPOSIXOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXOptionAttribute(String tag)
@@ -41,7 +41,7 @@ namespace ArgumentParser.Factory.POSIX
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXOptionAttribute(Char tag)

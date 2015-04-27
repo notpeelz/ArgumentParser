@@ -19,10 +19,9 @@
 using System;
 using System.ComponentModel;
 using ArgumentParser.Arguments;
-using ArgumentParser.Arguments.Windows;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.Windows
+namespace ArgumentParser.Reflection.Windows
 {
     /// <summary>
     /// Represents a Windows-flavored flag option attribute.
@@ -31,7 +30,7 @@ namespace ArgumentParser.Factory.Windows
     public class WindowsFlagAttribute : WindowsOptionAttribute, IFlagOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.Windows.WindowsFlagAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Windows.WindowsFlagAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public WindowsFlagAttribute(String tag) : base(tag) { }

@@ -18,7 +18,7 @@
 
 using System;
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Reflection
 {
     /// <summary>
     /// Represents a verb definition attribute.
@@ -27,7 +27,7 @@ namespace ArgumentParser.Factory
     public class VerbAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.VerbAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.VerbAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the verb.</param>
         public VerbAttribute(String tag)
@@ -46,7 +46,7 @@ namespace ArgumentParser.Factory
         public String Description { get; set; }
 
         /// <summary>
-        /// Gets a unique identifier for this <see cref="T:ArgumentParser.Factory.VerbAttribute"/>.
+        /// Gets a unique identifier for this <see cref="T:ArgumentParser.Reflection.VerbAttribute"/>.
         /// </summary>
         public override Object TypeId
         {

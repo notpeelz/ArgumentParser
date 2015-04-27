@@ -21,7 +21,7 @@ using System.ComponentModel;
 using ArgumentParser.Arguments;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.PowerShell
+namespace ArgumentParser.Reflection.PowerShell
 {
     /// <summary>
     /// Represents a PowerShell-like option attribute that supports splitting using spaces.
@@ -32,7 +32,7 @@ namespace ArgumentParser.Factory.PowerShell
         private static readonly StringArrayConverter typeConverter = new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.PowerShell.PSCompositeListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.PowerShell.PSCompositeListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public PSCompositeListOptionAttribute(String tag) : base(tag)

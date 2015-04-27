@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Reflection
 {
     /// <summary>
     /// Specifies the binding behavior upon multiple matches.

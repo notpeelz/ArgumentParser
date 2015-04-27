@@ -21,7 +21,7 @@ using System.ComponentModel;
 using ArgumentParser.Arguments;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.Windows
+namespace ArgumentParser.Reflection.Windows
 {
     /// <summary>
     /// Represents a Windows-flavored option attribute that supports splitting using spaces.
@@ -32,7 +32,7 @@ namespace ArgumentParser.Factory.Windows
         private static readonly StringArrayConverter typeConverter = new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.Windows.WindowsCompositeListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Windows.WindowsCompositeListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public WindowsCompositeListOptionAttribute(String tag) : base(tag)

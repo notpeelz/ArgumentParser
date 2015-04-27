@@ -19,10 +19,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.CompilerServices;
-using ArgumentParser.Factory.PowerShell;
-using ArgumentParser.Factory.POSIX;
-using ArgumentParser.Factory.Windows;
+using ArgumentParser.Reflection.PowerShell;
+using ArgumentParser.Reflection.POSIX;
+using ArgumentParser.Reflection.Windows;
 
 namespace ArgumentParser
 {
@@ -77,7 +76,7 @@ namespace ArgumentParser
         public Parser.DetokenizerDelegate Detokenizer { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="T:ArgumentParser.Factory.IOptionAttribute"/> predicate that is used to filter mapped arguments given a specific token style.
+        /// Gets or sets the <see cref="T:ArgumentParser.Reflection.IOptionAttribute"/> predicate that is used to filter mapped arguments given a specific token style.
         /// </summary>
         public Parser.AttributeFilterDelegate OptionAttributeFilter { get; set; }
 

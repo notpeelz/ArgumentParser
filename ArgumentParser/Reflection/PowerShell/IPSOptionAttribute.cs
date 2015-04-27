@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace ArgumentParser.Factory.PowerShell
+namespace ArgumentParser.Reflection.PowerShell
 {
     /// <summary>
     /// Represents an PowerShell-flavored argument definition attribute.

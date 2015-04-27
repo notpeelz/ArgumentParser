@@ -18,7 +18,7 @@
 
 using System;
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Reflection
 {
     /// <summary>
     /// Provides data for manually bound members upon passing the input.
@@ -26,12 +26,12 @@ namespace ArgumentParser.Factory
     public class BindingEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.BindingEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.BindingEventArgs"/> class.
         /// </summary>
         public BindingEventArgs() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.BindingEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.BindingEventArgs"/> class.
         /// </summary>
         /// <param name="pair">The matched parameter pair.</param>
         /// <param name="attribute">The attribute adorning the member.</param>

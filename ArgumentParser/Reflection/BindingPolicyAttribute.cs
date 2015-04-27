@@ -18,7 +18,7 @@
 
 using System;
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Reflection
 {
     /// <summary>
     /// Indicates how a member is meant to be be bound.
@@ -27,7 +27,7 @@ namespace ArgumentParser.Factory
     public sealed class BindingPolicyAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.BindingPolicyAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.BindingPolicyAttribute"/> class.
         /// </summary>
         /// <param name="policy">The binding policy to use for the adorned member.</param>
         public BindingPolicyAttribute(BindingPolicy policy)
@@ -36,7 +36,7 @@ namespace ArgumentParser.Factory
         }
 
         /// <summary>
-        /// Gets the specified <see cref="T:ArgumentParser.Factory.BindingPolicy"/>.
+        /// Gets the specified <see cref="T:ArgumentParser.Reflection.BindingPolicy"/>.
         /// </summary>
         public BindingPolicy BindingPolicy { get; private set; }
     }

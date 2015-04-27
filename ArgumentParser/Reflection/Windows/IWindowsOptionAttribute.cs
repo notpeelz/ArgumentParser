@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace ArgumentParser.Factory.Windows
+namespace ArgumentParser.Reflection.Windows
 {
     /// <summary>
     /// Represents a Windows-flavored argument definition attribute.

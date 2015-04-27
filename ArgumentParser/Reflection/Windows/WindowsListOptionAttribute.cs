@@ -20,7 +20,7 @@ using System;
 using System.ComponentModel;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.Windows
+namespace ArgumentParser.Reflection.Windows
 {
     /// <summary>
     /// Represents a Windows-flavored option attribute that supports splitting using a culture-dependent separator.
@@ -31,7 +31,7 @@ namespace ArgumentParser.Factory.Windows
         private static readonly StringArrayConverter typeConverter = new StringArrayConverter();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.Windows.WindowsListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Windows.WindowsListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public WindowsListOptionAttribute(String tag) : base(tag) { }

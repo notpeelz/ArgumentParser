@@ -18,7 +18,7 @@
 
 using System;
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Reflection
 {
     /// <summary>
     /// Represents a coupleable argument definition (or option) attribute.

@@ -21,7 +21,7 @@ using System.ComponentModel;
 using ArgumentParser.Arguments;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.Windows
+namespace ArgumentParser.Reflection.Windows
 {
     /// <summary>
     /// Represents a Windows-flavored option attribute.
@@ -30,7 +30,7 @@ namespace ArgumentParser.Factory.Windows
     public class WindowsOptionAttribute : Attribute, IWindowsOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.Windows.WindowsOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Windows.WindowsOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public WindowsOptionAttribute(String tag)

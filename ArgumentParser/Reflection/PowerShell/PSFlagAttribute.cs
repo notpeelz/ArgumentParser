@@ -22,7 +22,7 @@ using ArgumentParser.Arguments;
 using ArgumentParser.Arguments.PowerShell;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.PowerShell
+namespace ArgumentParser.Reflection.PowerShell
 {
     /// <summary>
     /// Represents a PowerShell-like flag option attribute.
@@ -31,7 +31,7 @@ namespace ArgumentParser.Factory.PowerShell
     public class PSFlagAttribute : PSOptionAttribute, IFlagOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.PowerShell.PSFlagAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.PowerShell.PSFlagAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public PSFlagAttribute(String tag) : base(tag) { }

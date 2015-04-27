@@ -20,7 +20,7 @@ using System;
 using System.ComponentModel;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.POSIX
+namespace ArgumentParser.Reflection.POSIX
 {
     /// <summary>
     /// Represents a POSIX-flavored option attribute that supports splitting using a culture-dependent separator.
@@ -31,13 +31,13 @@ namespace ArgumentParser.Factory.POSIX
         private static readonly StringArrayConverter typeConverter = new StringArrayConverter();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXListOptionAttribute(String tag) : base(tag) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.POSIX.POSIXListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public POSIXListOptionAttribute(Char tag) : base(tag) { }

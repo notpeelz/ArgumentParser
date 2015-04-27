@@ -18,7 +18,7 @@
 
 using ArgumentParser.Arguments;
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Reflection
 {
     /// <summary>
     /// Represents a flag definition attribute.

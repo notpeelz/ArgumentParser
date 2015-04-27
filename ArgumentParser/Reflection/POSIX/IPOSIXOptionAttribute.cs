@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace ArgumentParser.Factory.POSIX
+namespace ArgumentParser.Reflection.POSIX
 {
     /// <summary>
     /// Represents a POSIX-flavored argument definition attribute.

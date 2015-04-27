@@ -20,7 +20,7 @@ using System;
 using System.ComponentModel;
 using ArgumentParser.Arguments;
 
-namespace ArgumentParser.Factory
+namespace ArgumentParser.Reflection
 {
     /// <summary>
     /// Represents an argument definition attribute.

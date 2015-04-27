@@ -22,7 +22,7 @@ using ArgumentParser.Arguments;
 using ArgumentParser.Arguments.PowerShell;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Factory.PowerShell
+namespace ArgumentParser.Reflection.PowerShell
 {
     /// <summary>
     /// Represents a PowerShell-like option attribute.
@@ -31,7 +31,7 @@ namespace ArgumentParser.Factory.PowerShell
     public class PSOptionAttribute : Attribute, IPSOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Factory.PowerShell.PSOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.PowerShell.PSOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         public PSOptionAttribute(String tag)
