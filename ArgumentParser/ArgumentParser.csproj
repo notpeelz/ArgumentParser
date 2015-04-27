@@ -69,7 +69,7 @@
     <Compile Include="Reflection\BindingPolicy.cs" />
     <Compile Include="Reflection\BindingPolicyAttribute.cs" />
     <Compile Include="Arguments\FlagOptions.cs" />
-    <Compile Include="Arguments\POSIX\POSIXFlag`1.cs" />
+    <Compile Include="Arguments\POSIX\POSIXShortFlag`1.cs" />
     <Compile Include="Reflection\BindingEventArgs.cs" />
     <Compile Include="Reflection\IOptionAttribute.cs" />
     <Compile Include="Reflection\POSIX\POSIXCompositeListOptionAttribute.cs" />
@@ -101,7 +101,7 @@
     <Compile Include="Parser.cs" />
     <Compile Include="ParserOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Arguments\POSIX\POSIXFlag.cs" />
+    <Compile Include="Arguments\POSIX\POSIXShortFlag.cs" />
     <Compile Include="Arguments\POSIX\POSIXLongArgument.cs" />
     <Compile Include="Arguments\POSIX\POSIXLongArgument`1.cs" />
     <Compile Include="Arguments\POSIX\POSIXShortArgument.cs" />

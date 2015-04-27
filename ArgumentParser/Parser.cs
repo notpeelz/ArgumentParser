@@ -76,7 +76,7 @@ namespace ArgumentParser
         /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
-        /// Flags aren't decoupled; they are passed verbatim, as a single tag.
+        /// Flags couples aren't dissociated; they are passed verbatim, as a single tag.
         /// </remarks>
         public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle, CultureInfo culture = null)
         {
@@ -92,7 +92,7 @@ namespace ArgumentParser
         /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
-        /// Flags aren't decoupled; they are passed verbatim, as a single tag.
+        /// Flag couples aren't dissociated; they are passed verbatim, as a single tag.
         /// </remarks>
         public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle, DetokenizerDelegate detokenizer, CultureInfo culture = null)
         {
@@ -107,7 +107,7 @@ namespace ArgumentParser
         /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
-        /// Flags aren't decoupled; they are passed verbatim, as a single tag.
+        /// Flag couples aren't dissociated; they are passed verbatim, as a single tag.
         /// </remarks>
         public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, CultureInfo culture = null)
         {
@@ -123,7 +123,7 @@ namespace ArgumentParser
         /// <param name="culture">The culture to use for detokenization.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
-        /// Flags aren't decoupled; they are passed verbatim, as a single tag.
+        /// Flag couples aren't dissociated; they are passed verbatim, as a single tag.
         /// </remarks>
         public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, DetokenizerDelegate detokenizer, CultureInfo culture)
         {

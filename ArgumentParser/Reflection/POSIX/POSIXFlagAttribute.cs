@@ -59,7 +59,7 @@ namespace ArgumentParser.Factory.POSIX
             var value = ValueConverter.ConvertValue(this.DefaultValue, valueType, formatProvider);
 
             if (this.IsShort)
-                return (IArgument) Activator.CreateInstance(typeof (POSIXFlag<>).MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, value);
+                return (IArgument) Activator.CreateInstance(typeof (POSIXShortFlag<>).MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, value);
 
             return (IArgument) Activator.CreateInstance(typeof (POSIXLongFlag<>).MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, value);
         }

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="POSIXFlag`1.cs" company="LouisTakePILLz">
+// <copyright file="POSIXShortFlag`1.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -25,10 +25,10 @@ namespace ArgumentParser.Arguments.POSIX
     /// Represents a POSIX-flavored flag that supports special value handling and decoupling.
     /// </summary>
     /// <typeparam name="T">The type of the value.</typeparam>
-    public class POSIXFlag<T> : FlagArgument<T>
+    public class POSIXShortFlag<T> : FlagArgument<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXFlag`1"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXShortFlag`1"/> class.
         /// </summary>
         /// <param name="tag">The character that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
@@ -36,11 +36,11 @@ namespace ArgumentParser.Arguments.POSIX
         /// <param name="flagOptions">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXFlag(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
+        public POSIXShortFlag(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default (T))
             : base(new Key(Prefix, tag.ToString()), description, valueOptions, flagOptions, typeConverter, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXFlag`1"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXShortFlag`1"/> type.
         /// </summary>
         public static String Prefix
         {

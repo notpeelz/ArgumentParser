@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="POSIXFlag.cs" company="LouisTakePILLz">
+// <copyright file="POSIXShortFlag.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -23,21 +23,21 @@ namespace ArgumentParser.Arguments.POSIX
     /// <summary>
     /// Represents a POSIX-flavored flag that supports special value handling and decoupling.
     /// </summary>
-    public class POSIXFlag : FlagArgument<Int32>
+    public class POSIXShortFlag : FlagArgument<Int32>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXFlag"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXShortFlag"/> class.
         /// </summary>
         /// <param name="tag">The character that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="flagOptions">The value conversion behavior.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXFlag(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, Int32 defaultValue = default (Int32))
+        public POSIXShortFlag(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, Int32 defaultValue = default (Int32))
             : base(new Key(Prefix, tag.ToString()), description, valueOptions, flagOptions, defaultValue: defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXFlag"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXShortFlag"/> type.
         /// </summary>
         public static String Prefix
         {

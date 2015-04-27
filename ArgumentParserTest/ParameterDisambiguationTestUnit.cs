@@ -38,7 +38,7 @@ namespace ArgumentParserTest
         private static readonly IArgument windowsPortShortVerb = new WindowsArgument<UInt16>("p");
         private static readonly IArgument windowsPortLongVerb = new WindowsArgument<UInt16>("port");
         private static readonly IArgument posixCADirVerb = new POSIXLongArgument("CAdir", description: "The directory to retrieve the certificates authorities from.");
-        private static readonly IArgument posixVerboseShortVerb = new POSIXFlag('v', "The verbosity level.");
+        private static readonly IArgument posixVerboseShortVerb = new POSIXShortFlag('v', "The verbosity level.");
         private static readonly IArgument posixVerboseLongVerb = new POSIXLongArgument<Byte>("verbose", "The verbosity level.");
 
         private static readonly IArgument[] arguments =
