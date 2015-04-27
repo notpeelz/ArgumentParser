@@ -6,10 +6,8 @@ Please see our [contributing guidelines](./CONTRIBUTING.md) before reporting an 
 
 [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](./LICENSE)
 [![Release](https://img.shields.io/github/release/louistakepillz/argumentparser.svg)](../../releases)
-[![Tag](https://img.shields.io/github/tag/louistakepillz/argumentparser.svg)](../../tags)
 
 [![Issues](https://img.shields.io/github/issues/louistakepillz/argumentparser.svg)](../../issues)
-[![Forks](https://img.shields.io/github/forks/louistakepillz/argumentparser.svg)](../../network)
 [![Downloads](https://img.shields.io/nuget/dt/ArgumentParser.svg)](https://www.nuget.org/packages/ArgumentParser)
 
 ## Operative modes
