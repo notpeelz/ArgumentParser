@@ -23,7 +23,7 @@ namespace ArgumentParser
     public static partial class Parser
     {
         #if DEBUG
-        private const String VALUE_PATTERN = @"
+        internal const String VALUE_PATTERN = @"
             (?<=^|\s)
             (?<!\\\s)
             (
@@ -33,7 +33,7 @@ namespace ArgumentParser
             )
             (?=$|\s)";
         #else
-        private const String VALUE_PATTERN = @"(?<=^|\s)(?<!\\\s)(""(?<value>(?>\\.|[^""])*)""|'(?<value>(?>\\.|[^'])*)'|(?<value>(?>\\.|[^\s""'])*))(?=$|\s)";
+        internal const String VALUE_PATTERN = @"(?<=^|\s)(?<!\\\s)(""(?<value>(?>\\.|[^""])*)""|'(?<value>(?>\\.|[^'])*)'|(?<value>(?>\\.|[^\s""'])*))(?=$|\s)";
         #endif
     }
 }

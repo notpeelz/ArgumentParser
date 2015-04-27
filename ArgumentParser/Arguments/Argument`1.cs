@@ -17,8 +17,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using ArgumentParser.Helpers;
 
 namespace ArgumentParser.Arguments
@@ -90,45 +92,58 @@ namespace ArgumentParser.Arguments
         }
 
         /// <summary>
-        /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
+        /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
         /// </summary>
+        /// <param name="values">The input values to convert.</param>
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        public virtual T GetValue(CultureInfo culture, String value)
+        /// <returns>The converted values.</returns>
+        public virtual IEnumerable<Object> GetValues(IEnumerable<String> values, CultureInfo culture)
         {
-            return ValueConverter.GetValue<T>(culture, this.TypeConverter, value);
+            return values.Select(x => (Object) ValueConverter.GetValue<T>(culture, this.TypeConverter, x));
         }
 
         /// <summary>
-        /// Converts a value to the type of the argument.
+        /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
         /// </summary>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        public virtual T GetValue(String value)
-        {
-            return this.GetValue(null, value);
-        }
-
-        /// <summary>
-        /// Converts a value to the type of the argument.
-        /// </summary>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        Object IArgument.GetValue(String value)
-        {
-            return this.GetValue(value);
-        }
-
-        /// <summary>
-        /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
-        /// </summary>
+        /// <param name="values">The input values to convert.</param>
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        Object IArgument.GetValue(CultureInfo culture, String value)
+        /// <returns>The converted values.</returns>
+        IEnumerable<T> IArgument<T>.GetValues(IEnumerable<String> values, CultureInfo culture)
         {
-            return this.GetValue(culture, value);
+            return this.GetValues(values, culture).Cast<T>();
+        }
+
+        /// <summary>
+        /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
+        /// </summary>
+        /// <param name="parameters">The source parameters.</param>
+        /// <param name="detokenizer">The detokenizer to use to transform escaped sequences.</param>
+        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
+        /// <param name="trailingValues">The values that are to be interpreted as trailing.</param>
+        /// <returns>The converted values.</returns>
+        public virtual ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.DetokenizerDelegate detokenizer, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues)
+        {
+            switch (this.ValueOptions)
+            {
+                case ValueOptions.Composite:
+                    trailingValues = new String[0][];
+                    return new ParameterPair(
+                        argument: this,
+                        values: this.GetValues(parameters.Select(x => x.Value == null || x.CoupleCount > 1 ? null : x.Value), culture));
+                case ValueOptions.None:
+                    trailingValues = parameters.Select(x => ValueConverter.GetCompositeValueParts(x, detokenizer, culture));
+                    return new ParameterPair(this, new Object[0]);
+                default:
+                    var canonicalValues = parameters.ToDictionary(x => x, x => ValueConverter.GetCompositeValueParts(x, detokenizer, culture));
+                    trailingValues = canonicalValues.Select(x => x.Value.Any() ? x.Value.Skip(1) : x.Value);
+                    return new ParameterPair(
+                        argument: this,
+                        values: this.GetValues(canonicalValues.Select(x =>
+                        {
+                            var value = x.Value == null ? null : x.Value.FirstOrDefault();
+                            return value;
+                        }), culture));
+            }
         }
 
         /// <summary>

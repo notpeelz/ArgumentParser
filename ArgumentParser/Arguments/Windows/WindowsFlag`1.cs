@@ -19,7 +19,7 @@
 using System;
 using System.ComponentModel;
 
-namespace ArgumentParser.Arguments
+namespace ArgumentParser.Arguments.Windows
 {
     /// <summary>
     /// Represents a Windows-flavored flag that supports special value handling.
@@ -28,7 +28,7 @@ namespace ArgumentParser.Arguments
     public class WindowsFlag<T> : FlagArgument<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.WindowsFlag`1"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Windows.WindowsFlag`1"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
@@ -40,7 +40,7 @@ namespace ArgumentParser.Arguments
             : base(new Key(Prefix, tag), description, valueOptions, flagOptions, typeConverter, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.WindowsFlag`1"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.Windows.WindowsFlag`1"/> type.
         /// </summary>
         public static String Prefix
         {

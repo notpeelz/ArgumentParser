@@ -23,10 +23,10 @@ namespace ArgumentParser.Arguments.POSIX
     /// <summary>
     /// Represents a POSIX-flavored flag that supports special value handling and decoupling.
     /// </summary>
-    public class POSIXShortFlag : FlagArgument<Int32>
+    public class POSIXShortFlag : FlagArgument
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXShortFlag"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXShortFlag"/> class.
         /// </summary>
         /// <param name="tag">The character that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
@@ -37,7 +37,7 @@ namespace ArgumentParser.Arguments.POSIX
             : base(new Key(Prefix, tag.ToString()), description, valueOptions, flagOptions, defaultValue: defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXShortFlag"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXShortFlag"/> type.
         /// </summary>
         public static String Prefix
         {

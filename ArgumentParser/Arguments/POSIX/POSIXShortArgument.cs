@@ -26,7 +26,7 @@ namespace ArgumentParser.Arguments.POSIX
     public class POSIXShortArgument : Argument
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXShortArgument"/> class.
         /// </summary>
         /// <param name="tag">The character that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
@@ -36,7 +36,7 @@ namespace ArgumentParser.Arguments.POSIX
             : base(new Key(Prefix, tag.ToString()), description, valueOptions, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXShortArgument"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXShortArgument"/> type.
         /// </summary>
         public static String Prefix
         {

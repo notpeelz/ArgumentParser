@@ -23,6 +23,7 @@ using System.Threading;
 using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Arguments.POSIX;
+using ArgumentParser.Arguments.Windows;
 using ArgumentParser.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

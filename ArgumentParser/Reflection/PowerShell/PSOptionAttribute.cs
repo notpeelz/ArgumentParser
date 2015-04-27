@@ -40,9 +40,9 @@ namespace ArgumentParser.Reflection.PowerShell
         }
 
         /// <summary>
-        /// Gets or sets the tag that defines the argument.
+        /// Gets the tag that defines the argument.
         /// </summary>
-        public String Tag { get; set; }
+        public String Tag { get; private set; }
 
         /// <summary>
         /// Gets or sets the description of the argument.

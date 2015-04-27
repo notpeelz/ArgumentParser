@@ -17,14 +17,13 @@
  */
 
 using System;
-using System.Globalization;
 
 namespace ArgumentParser.Arguments
 {
     /// <summary>
     /// Represents an argument of an undefined value type.
     /// </summary>
-    public abstract class Argument : IArgument<String>
+    public abstract class Argument : Argument<String>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument"/> class.
@@ -39,107 +38,6 @@ namespace ArgumentParser.Arguments
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
         protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-        {
-            this.Key = key;
-            this.Description = description;
-            this.ValueOptions = valueOptions;
-            this.DefaultValue = defaultValue;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="T:ArgumentParser.Key"/> representing the argument.
-        /// </summary>
-        public Key Key { get; private set; }
-
-        /// <summary>
-        /// Gets the description of the argument.
-        /// </summary>
-        public String Description { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="T:ArgumentParser.Arguments.ValueOptions"/> value(s) that define how values should be interpreted.
-        /// </summary>
-        public ValueOptions ValueOptions { get; private set; }
-
-        /// <summary>
-        /// Gets the default value of the argument.
-        /// </summary>
-        public String DefaultValue { get; private set; }
-
-        /// <summary>
-        /// Gets the value type of the argument.
-        /// </summary>
-        public Type Type { get { return typeof (String); } }
-
-        /// <summary>
-        /// Gets the default value of the argument.
-        /// </summary>
-        Object IArgument.DefaultValue
-        {
-            get { return this.DefaultValue; }
-        }
-
-        /// <summary>
-        /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
-        /// </summary>
-        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        public virtual String GetValue(CultureInfo culture, String value)
-        {
-            return value;
-        }
-
-        /// <summary>
-        /// Converts a value to the type of the argument.
-        /// </summary>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        public virtual String GetValue(String value)
-        {
-            return value;
-        }
-
-        /// <summary>
-        /// Converts a value to the type of the argument.
-        /// </summary>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        Object IArgument.GetValue(String value)
-        {
-            return this.GetValue(value);
-        }
-
-        /// <summary>
-        /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
-        /// </summary>
-        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        Object IArgument.GetValue(CultureInfo culture, String value)
-        {
-            return this.GetValue(culture, value);
-        }
-
-        /// <summary>
-        /// Compares the current object with another object of the same type.
-        /// </summary>
-        /// <returns>A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public virtual Int32 CompareTo(IPairable other)
-        {
-            return this.Key.CompareTo(other.Key);
-        }
-
-        /// <summary>
-        /// Compares the current object with another object of the same type.
-        /// </summary>
-        /// <returns>A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        /// <param name="comparisonType">The comparison rule to use.</param>
-        public virtual Int32 CompareTo(IPairable other, StringComparison comparisonType)
-        {
-            return this.Key.CompareTo(other.Key, comparisonType);
-        }
+            : base(key, description, valueOptions, defaultValue: defaultValue) { }
     }
 }

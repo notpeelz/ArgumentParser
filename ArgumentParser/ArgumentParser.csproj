@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arguments\FlagArgument.cs" />
     <Compile Include="Arguments\FlagArgument`1.cs" />
     <Compile Include="Arguments\IArgument`1.cs" />
     <Compile Include="Arguments\IFlag.cs" />

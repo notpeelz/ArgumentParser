@@ -17,9 +17,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ArgumentParser.Helpers
 {
@@ -185,7 +187,66 @@ namespace ArgumentParser.Helpers
         /// <returns>A boolean value indicating whether the provided value is implicitly convertible.</returns>
         public static Boolean IsConvertible(Type type)
         {
-            return type.IsEnum || type.GetInterfaces().Any(x => x == typeof(IConvertible));
+            return type.IsEnum || type.GetInterfaces().Any(x => x == typeof (IConvertible));
+        }
+
+        /// <summary>
+        /// Extracts the parts out of a value compound from a parameter, representing individual value entries.
+        /// </summary>
+        /// <param name="parameter">The source parameter to extract from.</param>
+        /// <param name="detokenizer">The delegate to use for detokenization.</param>
+        /// <param name="culture">The culture to supply the detokenizer delegate.</param>
+        /// <returns>The value sub-entries.</returns>
+        public static IEnumerable<String> GetCompositeValueParts(RawParameter parameter, Parser.DetokenizerDelegate detokenizer = null, CultureInfo culture = null)
+        {
+            if (parameter == null)
+                throw new ArgumentNullException("parameter");
+
+            return parameter.Value == null || parameter.CoupleCount > 1
+                ? null
+                : Regex.Matches(
+                    input: parameter.Value,
+                    pattern: Parser.VALUE_PATTERN,
+                    options: RegexOptions.ExplicitCapture |
+                                RegexOptions.IgnorePatternWhitespace |
+                                RegexOptions.CultureInvariant |
+                                RegexOptions.Singleline)
+                    .OfType<Match>()
+                    .Select(m => DetokenizeValue(m.Groups["value"].Value, detokenizer, culture));
+        }
+
+        /// <summary>
+        /// Detokenizes a given value using a supplied delegate and culture.
+        /// </summary>
+        /// <param name="value">The input value to detokenize.</param>
+        /// <param name="detokenizer">The delegate to use for detokenization.</param>
+        /// <param name="culture">The culture to supply the delegate.</param>
+        /// <returns>The detokenized value.</returns>
+        public static String DetokenizeValue(String value, Parser.DetokenizerDelegate detokenizer = null, CultureInfo culture = null)
+        {
+            try
+            {
+                return detokenizer == null
+                    ? Parser.DefaultDetokenizer(value, culture)
+                    : detokenizer(value, culture);
+            }
+            catch (Exception ex)
+            {
+                throw new ValueParsingException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Transforms a supplied value into its bit-field equivalent.
+        /// </summary>
+        /// <param name="value">The value to use as level.</param>
+        /// <returns>The bit-field equivalent of the supplied value.</returns>
+        public static Int32 GetBitFieldValue(Int32 value)
+        {
+            if (value <= 0)
+                return 0;
+
+            return 1 << (value - 1);
         }
     }
 }

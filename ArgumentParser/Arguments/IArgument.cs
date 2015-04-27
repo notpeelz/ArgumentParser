@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace ArgumentParser.Arguments
@@ -47,18 +48,21 @@ namespace ArgumentParser.Arguments
         ValueOptions ValueOptions { get; }
 
         /// <summary>
-        /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
+        /// Converts a sequence of values to the type of the argument using the specified format.
         /// </summary>
-        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        Object GetValue(CultureInfo culture, String value);
+        /// <param name="values">The input values to convert.</param>
+        /// <param name="culture">The <see cref="T:System.FormatProvider"/> to use for format-sensitive operations.</param>
+        /// <returns>The converted values.</returns>
+        IEnumerable<Object> GetValues(IEnumerable<String> values, CultureInfo culture);
 
         /// <summary>
-        /// Converts a value to the type of the argument.
+        /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
         /// </summary>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        Object GetValue(String value);
+        /// <param name="parameters">The source parameters.</param>
+        /// <param name="detokenizer">The detokenizer to use to transform escaped sequences.</param>
+        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
+        /// <param name="trailingValues">The values that are to be interpreted as trailing.</param>
+        /// <returns>The converted values.</returns>
+        ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.DetokenizerDelegate detokenizer, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues);
     }
 }

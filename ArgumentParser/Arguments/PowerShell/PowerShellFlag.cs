@@ -23,7 +23,7 @@ namespace ArgumentParser.Arguments.PowerShell
     /// <summary>
     /// Represents a PowerShell-like flag that supports special value handling.
     /// </summary>
-    public class PowerShellFlag : FlagArgument<Int32>
+    public class PowerShellFlag : FlagArgument
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.PowerShell.PowerShellFlag"/> class.

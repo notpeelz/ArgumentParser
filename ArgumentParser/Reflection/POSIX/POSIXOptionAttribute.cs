@@ -51,7 +51,7 @@ namespace ArgumentParser.Reflection.POSIX
         }
 
         /// <summary>
-        /// Gets or sets the tag that defines the argument.
+        /// Gets the tag that defines the argument.
         /// </summary>
         public String Tag { get; private set; }
 
@@ -98,7 +98,7 @@ namespace ArgumentParser.Reflection.POSIX
             if (this.IsShort)
                 return (IArgument) Activator.CreateInstance(typeof (POSIXShortArgument<>).MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.TypeConverter, value);
 
-            return  (IArgument) Activator.CreateInstance(typeof (POSIXLongArgument<>).MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.TypeConverter, value);
+            return (IArgument) Activator.CreateInstance(typeof (POSIXLongArgument<>).MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.TypeConverter, value);
         }
 
         /// <summary>

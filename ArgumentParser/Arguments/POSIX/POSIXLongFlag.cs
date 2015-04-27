@@ -23,10 +23,10 @@ namespace ArgumentParser.Arguments.POSIX
     /// <summary>
     /// Represents a POSIX-flavored flag identified by a <see cref="T:System.String"/> tag.
     /// </summary>
-    public class POSIXLongFlag : FlagArgument<Int32>
+    public class POSIXLongFlag : FlagArgument
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXLongFlag"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXLongFlag"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
@@ -37,7 +37,7 @@ namespace ArgumentParser.Arguments.POSIX
             : base(new Key(Prefix, tag), description, valueOptions, flagOptions, defaultValue: defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXLongFlag"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXLongFlag"/> type.
         /// </summary>
         public static String Prefix
         {

@@ -19,6 +19,7 @@
 using System;
 using System.ComponentModel;
 using ArgumentParser.Arguments;
+using ArgumentParser.Arguments.Windows;
 using ArgumentParser.Helpers;
 
 namespace ArgumentParser.Reflection.Windows
@@ -39,9 +40,9 @@ namespace ArgumentParser.Reflection.Windows
         }
 
         /// <summary>
-        /// Gets or sets the tag that defines the argument.
+        /// Gets the tag that defines the argument.
         /// </summary>
-        public String Tag { get; set; }
+        public String Tag { get; private set; }
 
         /// <summary>
         /// Gets or sets the description of the argument.

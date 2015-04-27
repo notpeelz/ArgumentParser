@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="FlagArgument.cs" company="LouisTakePILLz">
+// <copyright file="FlagArgument`1.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -17,8 +17,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
+using ArgumentParser.Helpers;
 
 namespace ArgumentParser.Arguments
 {
@@ -34,7 +37,7 @@ namespace ArgumentParser.Arguments
         protected FlagArgument() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Argument`1"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.FlagArgument`1"/> class.
         /// </summary>
         /// <param name="key">The unique identifier to use to represent the argument.</param>
         /// <param name="description">The description of the argument.</param>
@@ -54,45 +57,118 @@ namespace ArgumentParser.Arguments
         public FlagOptions FlagOptions { get; private set; }
 
         /// <summary>
-        /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
+        /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
         /// </summary>
+        /// <param name="parameters">The source parameters.</param>
+        /// <param name="detokenizer">The detokenizer to use to transform escaped sequences.</param>
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        public override T GetValue(CultureInfo culture, String value)
+        /// <param name="trailingValues">The values that are to be interpreted as trailing.</param>
+        /// <returns>The converted values.</returns>
+        public override ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.DetokenizerDelegate detokenizer, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues)
         {
-            return base.GetValue(culture, value);
-        }
+            var rawParameters = parameters as RawParameter[] ?? parameters.ToArray();
 
-        /// <summary>
-        /// Converts a value to the type of the argument.
-        /// </summary>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        public override T GetValue(String value)
-        {
-            return base.GetValue(value);
-        }
+            if (!rawParameters.Any())
+            {
+                trailingValues = new String[0][];
+                return new FlagPair(this, new Object[0], 0);
+            }
 
-        /// <summary>
-        /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
-        /// </summary>
-        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        Object IArgument.GetValue(CultureInfo culture, String value)
-        {
-            return base.GetValue(culture, value);
-        }
+            bool isBoolean = this.Type == typeof (Boolean);
+            bool invertImplicit = (this.FlagOptions & FlagOptions.InvertBooleanImplicit) != 0;
+            bool invertExplicit = (this.FlagOptions & FlagOptions.InvertBooleanExplicit) != 0;
 
-        /// <summary>
-        /// Converts a value to the type of the argument.
-        /// </summary>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        Object IArgument.GetValue(String value)
-        {
-            return base.GetValue(value);
+            var canonicalValues = rawParameters.ToDictionary(x => x, x => ValueConverter.GetCompositeValueParts(x, detokenizer, culture));
+
+            var flagValues = canonicalValues.Select(x =>
+            {
+                int value;
+                var values = default (IEnumerable<String>);
+
+                // Determine whether the flag level should be implicitly computed (doesn't accept values, has no value or is coupled)
+                if (this.ValueOptions == ValueOptions.None || x.Key.Value == null || x.Key.CoupleCount > 1)
+                {
+                    value = invertImplicit ? 0 : 1;
+                    values = x.Value;
+                }
+                else if (this.ValueOptions == ValueOptions.Composite)
+                    value = ValueConverter.GetFlagValue(culture, isBoolean, String.Join("\x20", x.Value)) == 0 ^ invertExplicit ? 0 : 1;
+                else // flag.ValueOptions == ValueOptions.Single
+                {
+                    var rawValue = ValueConverter.GetFlagValue(culture, isBoolean, x.Value.FirstOrDefault());
+                    value = rawValue == 0 ^ invertExplicit ? 0 : 1;
+                    values = x.Value.Skip(1);
+                }
+
+                return new
+                {
+                    Parameter = x.Key,
+                    Value = value,
+                    TrailingValues = values
+                };
+            }).ToArray();
+
+            trailingValues = flagValues.Select(x => x.TrailingValues);
+
+            // Skip special flag logic for booleans, as such operations can not be done on single bits.
+            if (isBoolean)
+            {
+                var flagPair = new FlagPair(
+                    argument: this,
+                    values: flagValues.Select(x => (Object) x.Value),
+                    count: flagValues.Last().Value);
+
+                return flagPair;
+            }
+
+            bool aggregateImplicit = (this.FlagOptions & FlagOptions.AggregateImplicit) != 0,
+                 aggregateExplicit = (this.FlagOptions & FlagOptions.AggregateExplicit) != 0,
+                 aggregateCombine = (this.FlagOptions & FlagOptions.AggregateCombine) != 0,
+                 bitFieldImplicit = (this.FlagOptions & FlagOptions.BitFieldImplicit) != 0,
+                 bitFieldExplicit = (this.FlagOptions & FlagOptions.BitFieldExplicit) != 0;
+
+            int implicitCount = 0,
+                explicitCount = 0;
+
+            if (aggregateImplicit && !aggregateExplicit) // Implicit not explicit
+            {
+                implicitCount = bitFieldImplicit
+                    ? rawParameters.Aggregate(0, (c, x) => c + ValueConverter.GetBitFieldValue(x.Count))
+                    : rawParameters.Aggregate(0, (c, x) => c + x.Count);
+            }
+            else if (aggregateExplicit && !aggregateImplicit) // Explicit not implicit
+            {
+                explicitCount = bitFieldExplicit
+                    ? flagValues.Aggregate(0, (c, x) => c + ValueConverter.GetBitFieldValue(x.Value))
+                    : flagValues.Aggregate(0, (c, x) => c + x.Value);
+            }
+            else if (aggregateImplicit) // Explicit and implicit (both)
+            {
+                implicitCount = bitFieldImplicit // Count only value-less parameters
+                    ? rawParameters.Aggregate(0, (c, x) => c + (x.Value == null ? ValueConverter.GetBitFieldValue(x.Count) : 0))
+                    : rawParameters.Aggregate(0, (c, x) => c + (x.Value == null ? x.Count : 0));
+
+                if (aggregateCombine || implicitCount == 0)
+                    explicitCount = bitFieldExplicit
+                        ? flagValues.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : ValueConverter.GetBitFieldValue(x.Value)))
+                        : flagValues.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : x.Value));
+            }
+            else // None
+            {
+                var implicitParameter = flagValues.FirstOrDefault(x => x.Parameter.Value == null);
+                var explicitParameter = flagValues.FirstOrDefault(x => x.Parameter.Value != null);
+                implicitCount = implicitParameter != null
+                    ? (bitFieldImplicit ? ValueConverter.GetBitFieldValue(implicitParameter.Parameter.Count) : implicitParameter.Parameter.Count)
+                    : 0;
+
+                if (aggregateCombine && explicitParameter != null)
+                    explicitCount = bitFieldExplicit ? ValueConverter.GetBitFieldValue(explicitParameter.Parameter.Count) : explicitParameter.Parameter.Count;
+            }
+
+            {
+                var flagPair = new FlagPair(this, flagValues.Select(x => (Object) x.Value), implicitCount + explicitCount);
+                return flagPair;
+            }
         }
     }
 }

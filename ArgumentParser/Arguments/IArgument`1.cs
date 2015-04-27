@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace ArgumentParser.Arguments
@@ -33,18 +34,11 @@ namespace ArgumentParser.Arguments
         new T DefaultValue { get; }
 
         /// <summary>
-        /// Converts a value to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
+        /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
         /// </summary>
+        /// <param name="values">The input values to convert.</param>
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        new T GetValue(CultureInfo culture, String value);
-
-        /// <summary>
-        /// Converts a value to the type of the argument.
-        /// </summary>
-        /// <param name="value">The input value to convert from.</param>
-        /// <returns>The converted value.</returns>
-        new T GetValue(String value);
+        /// <returns>The converted values.</returns>
+        new IEnumerable<T> GetValues(IEnumerable<String> values, CultureInfo culture);
     }
 }

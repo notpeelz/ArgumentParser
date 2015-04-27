@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ArgumentParser;
 using ArgumentParser.Arguments;
-using ArgumentParser.Factory.POSIX;
+using ArgumentParser.Reflection.POSIX;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ArgumentParserTest

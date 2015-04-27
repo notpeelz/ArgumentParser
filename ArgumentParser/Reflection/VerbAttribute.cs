@@ -36,9 +36,9 @@ namespace ArgumentParser.Reflection
         }
 
         /// <summary>
-        /// Gets or sets the tag that defines the verb.
+        /// Gets the tag that defines the verb.
         /// </summary>
-        public String Tag { get; set; }
+        public String Tag { get; private set; }
 
         /// <summary>
         /// Gets or sets the description of the verb.

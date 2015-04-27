@@ -26,7 +26,7 @@ namespace ArgumentParser.Arguments.POSIX
     public class POSIXLongArgument : Argument
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXLongArgument"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
@@ -36,7 +36,7 @@ namespace ArgumentParser.Arguments.POSIX
             : base(new Key(Prefix, tag), description, valueOptions, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIXLongArgument"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXLongArgument"/> type.
         /// </summary>
         public static String Prefix
         {

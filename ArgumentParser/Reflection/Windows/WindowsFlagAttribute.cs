@@ -19,6 +19,7 @@
 using System;
 using System.ComponentModel;
 using ArgumentParser.Arguments;
+using ArgumentParser.Arguments.Windows;
 using ArgumentParser.Helpers;
 
 namespace ArgumentParser.Reflection.Windows

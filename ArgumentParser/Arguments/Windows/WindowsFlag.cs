@@ -23,7 +23,7 @@ namespace ArgumentParser.Arguments.Windows
     /// <summary>
     /// Represents a Windows-flavored flag that supports special value handling.
     /// </summary>
-    public class WindowsFlag : FlagArgument<Int32>
+    public class WindowsFlag : FlagArgument
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Windows.WindowsFlag"/> class.

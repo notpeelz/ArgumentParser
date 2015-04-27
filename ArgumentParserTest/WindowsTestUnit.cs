@@ -19,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using ArgumentParser;
+using ArgumentParser.Reflection.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ArgumentParser.Factory.Windows;
 
 namespace ArgumentParserTest
 {

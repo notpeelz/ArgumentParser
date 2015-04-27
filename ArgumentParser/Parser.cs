@@ -25,8 +25,8 @@ using System.Reflection;
 using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using ArgumentParser.Arguments;
-using ArgumentParser.Reflection;
 using ArgumentParser.Helpers;
+using ArgumentParser.Reflection;
 
 namespace ArgumentParser
 {
@@ -194,7 +194,7 @@ namespace ArgumentParser
             {
                 verbs = matches
                     .Where(x => x.Groups["verb"].Success)
-                    .Select(x => DetokenizeValue(x.Groups["verb"].Value, detokenizer, culture)).ToArray();
+                    .Select(x => ValueConverter.DetokenizeValue(x.Groups["verb"].Value, detokenizer, culture)).ToArray();
             }
 
             parameters = matches
@@ -392,6 +392,7 @@ namespace ArgumentParser
                 }).ToArray();
 
             List<UnboundValue> unboundValues = new List<UnboundValue>();
+            var detokenizer = options.Detokenize ? options.Detokenizer : (s, c) => s;
 
             var pairs = arguments
                 .GroupJoin(
@@ -400,13 +401,8 @@ namespace ArgumentParser
                     p => p,
                     (a, p) =>
                     {
-                        var parameters = p.ToArray();
-                        var flag = a as IFlag;
                         IEnumerable<IEnumerable<String>> values;
-
-                        var pair = flag != null
-                            ? GetFlagPair(options, flag, parameters, out values)
-                            : GetParameterPair(options, a, parameters, out values);
+                        var pair = a.GetPair(p, detokenizer, options.Culture, out values);
 
                         unboundValues.AddRange(values
                             .Where(x => x != null && x.Any())
@@ -463,204 +459,6 @@ namespace ArgumentParser
                 default:
                     throw new InvalidEnumArgumentException(INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
-        }
-
-        private static ParameterPair GetParameterPair(ParserOptions options, IArgument argument, RawParameter[] parameters, out IEnumerable<IEnumerable<String>> values)
-        {
-            switch (argument.ValueOptions)
-            {
-                case ValueOptions.Composite:
-                    values = new String[0][];
-                    return new ParameterPair(
-                        argument: argument,
-                        values: parameters
-                            .Where(x => x != null)
-                            .Select(x => x.Value == null || x.CoupleCount > 1
-                                ? null
-                                : ParseValue(options, argument, x.Value)));
-                case ValueOptions.None:
-                    values = GetCompositeValueParts(options, parameters).Select(x => x.Value);
-                    return new ParameterPair(argument, new Object[0]);
-                default:
-                    var canonicalValues = GetCompositeValueParts(options, parameters);
-                    values = canonicalValues.Select(x => x.Value.Any() ? x.Value.Skip(1) : x.Value);
-                    return new ParameterPair(
-                        argument: argument,
-                        values: canonicalValues.Select(x =>
-                        {
-                            var value = x.Value == null ? null : x.Value.FirstOrDefault();
-                            return value == null ? null : ParseValue(options, argument, value);
-                        }));
-            }
-        }
-
-        private static FlagPair GetFlagPair(ParserOptions options, IFlag flag, RawParameter[] parameters, out IEnumerable<IEnumerable<String>> values)
-        {
-            if (!parameters.Any())
-            {
-                values = new String[0][];
-                return new FlagPair(flag, new Object[0], 0);
-            }
-
-            bool isBoolean = flag.Type == typeof (Boolean);
-            bool invertImplicit = (flag.FlagOptions & FlagOptions.InvertBooleanImplicit) != 0;
-            bool invertExplicit = (flag.FlagOptions & FlagOptions.InvertBooleanExplicit) != 0;
-
-            var canonicalValues = GetCompositeValueParts(options, parameters);
-
-            var flagValues = canonicalValues.Select(x =>
-            {
-                int value;
-                var trailingValues = default (IEnumerable<String>);
-
-                // Determine whether the flag level should be implicitly computed (doesn't accept values, has no value or is coupled)
-                if (flag.ValueOptions == ValueOptions.None || x.Key.Value == null || x.Key.CoupleCount > 1)
-                {
-                    value = invertImplicit ? 0 : 1;
-                    trailingValues = x.Value;
-                }
-                else if (flag.ValueOptions == ValueOptions.Composite)
-                    value = ValueConverter.GetFlagValue(options.Culture, isBoolean, String.Join("\x20", x.Value)) == 0 ^ invertExplicit ? 0 : 1;
-                else // flag.ValueOptions == ValueOptions.Single
-                {
-                    var rawValue = ValueConverter.GetFlagValue(options.Culture, isBoolean, x.Value.FirstOrDefault());
-                    value = rawValue == 0 ^ invertExplicit ? 0 : 1;
-                    trailingValues = x.Value.Skip(1);
-                }
-
-                return new
-                {
-                    Parameter = x.Key,
-                    Value = value,
-                    TrailingValues = trailingValues
-                };
-            }).ToArray();
-
-            values = flagValues.Select(x => x.TrailingValues);
-
-            // Skip special flag logic for booleans, as such operations can not be done on single bits.
-            if (isBoolean)
-            {
-                var flagPair = new FlagPair(
-                    argument: flag,
-                    values: flagValues.Select(x => (Object) x.Value),
-                    count: flagValues.Last().Value);
-
-                return flagPair;
-            }
-
-            bool aggregateImplicit = (flag.FlagOptions & FlagOptions.AggregateImplicit) != 0,
-                 aggregateExplicit = (flag.FlagOptions & FlagOptions.AggregateExplicit) != 0,
-                 aggregateCombine = (flag.FlagOptions & FlagOptions.AggregateCombine) != 0,
-                 bitFieldImplicit = (flag.FlagOptions & FlagOptions.BitFieldImplicit) != 0,
-                 bitFieldExplicit = (flag.FlagOptions & FlagOptions.BitFieldExplicit) != 0;
-
-            int implicitCount = 0,
-                explicitCount = 0;
-
-            if (aggregateImplicit && !aggregateExplicit) // Implicit not explicit
-            {
-                implicitCount = bitFieldImplicit
-                    ? parameters.Aggregate(0, (c, x) => c + GetBitFieldValue(x.Count))
-                    : parameters.Aggregate(0, (c, x) => c + x.Count);
-            }
-            else if (aggregateExplicit && !aggregateImplicit) // Explicit not implicit
-            {
-                explicitCount = bitFieldExplicit
-                    ? flagValues.Aggregate(0, (c, x) => c + GetBitFieldValue(x.Value))
-                    : flagValues.Aggregate(0, (c, x) => c + x.Value);
-            }
-            else if (aggregateImplicit) // Explicit and implicit (both)
-            {
-                implicitCount = bitFieldImplicit // Count only value-less parameters
-                    ? parameters.Aggregate(0, (c, x) => c + (x.Value == null ? GetBitFieldValue(x.Count) : 0))
-                    : parameters.Aggregate(0, (c, x) => c + (x.Value == null ? x.Count : 0));
-
-                if (aggregateCombine || implicitCount == 0)
-                    explicitCount = bitFieldExplicit
-                        ? flagValues.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : GetBitFieldValue(x.Value)))
-                        : flagValues.Aggregate(0, (c, x) => c + (x.Parameter.Value == null ? 0 : x.Value));
-            }
-            else // None
-            {
-                var implicitParameter = flagValues.FirstOrDefault(x => x.Parameter.Value == null);
-                var explicitParameter = flagValues.FirstOrDefault(x => x.Parameter.Value != null);
-                implicitCount = implicitParameter != null
-                    ? (bitFieldImplicit ? GetBitFieldValue(implicitParameter.Parameter.Count) : implicitParameter.Parameter.Count)
-                    : 0;
-
-                if (aggregateCombine && explicitParameter != null)
-                    explicitCount = bitFieldExplicit ? GetBitFieldValue(explicitParameter.Parameter.Count) : explicitParameter.Parameter.Count;
-            }
-
-            {
-                var flagPair = new FlagPair(flag, flagValues.Select(x => (Object) x.Value), implicitCount + explicitCount);
-                return flagPair;
-            }
-        }
-
-        private static Int32 GetBitFieldValue(Int32 value)
-        {
-            if (value <= 0)
-                return 0;
-
-            return 1 << (value - 1);
-        }
-
-        private static Dictionary<RawParameter, IEnumerable<String>> GetCompositeValueParts(ParserOptions options, RawParameter[] parameters)
-        {
-            var values = parameters
-                .Where(x => x != null)
-                .ToDictionary(
-                    keySelector: x => x,
-                    elementSelector: x => x.Value == null || x.CoupleCount > 1
-                        ? null
-                        : Regex.Matches(
-                            input: x.Value,
-                            pattern: VALUE_PATTERN,
-                            options: RegexOptions.ExplicitCapture |
-                                     RegexOptions.IgnorePatternWhitespace |
-                                     RegexOptions.CultureInvariant |
-                                     RegexOptions.Singleline)
-                            .OfType<Match>()
-                            .Select(m => (options.Detokenize
-                                ? DetokenizeValue(m.Groups["value"].Value, options.Detokenizer, options.Culture)
-                                : m.Groups["value"].Value)));
-
-            return values;
-        }
-
-        private static String DetokenizeValue(String value, DetokenizerDelegate detokenizer, CultureInfo culture)
-        {
-            try
-            {
-                return detokenizer == null
-                    ? DefaultDetokenizer(value, culture)
-                    : detokenizer(value, culture);
-            }
-            catch (Exception ex)
-            {
-                throw new ValueParsingException(ex);
-            }
-        }
-
-        private static Object ParseValue(ParserOptions options, IArgument argument, String value)
-        {
-            try
-            {
-                return options.Detokenize
-                    ? argument.GetValue(options.Culture, DetokenizeValue(value, options.Detokenizer, options.Culture))
-                    : argument.GetValue(options.Culture, value);
-            }
-            catch (Exception ex)
-            {
-                var parsingException = ex as ValueParsingException ?? new ValueParsingException(ex);
-
-                if (options.ExceptionHandler == null || !options.ExceptionHandler.Invoke(parsingException))
-                    throw parsingException;
-            }
-
-            return null;
         }
 
         private static IDictionary<IArgument, MemberBinding> GetArgumentMap(ParserOptions options, IEnumerable<Object> members)
