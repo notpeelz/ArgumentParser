@@ -1,4 +1,3 @@
-[![Stories in Ready](https://badge.waffle.io/LouisTakePILLz/ArgumentParser.png?label=ready&title=Ready)](https://waffle.io/LouisTakePILLz/ArgumentParser)
 ![Logo](./img/logo.png)
 
 This library was made in an attempt to simplify the handling and parsing of parameters, be it in the \*nix, Windows style or any of their variants.
@@ -34,4 +33,6 @@ See the [wiki pages](../../wiki).
 
 ## Contributing
 
-See [Contributing](./CONTRIBUTING.md).
+Watch our [Waffle Kanban Board](https://waffle.io/LouisTakePILLz/ArgumentParser) if you're looking for anything to work on: [![Stories in Ready](https://badge.waffle.io/LouisTakePILLz/ArgumentParser.png?label=ready&title=Ready)](https://waffle.io/LouisTakePILLz/ArgumentParser)
+
+For the guidelines, see [Contributing](./CONTRIBUTING.md).
