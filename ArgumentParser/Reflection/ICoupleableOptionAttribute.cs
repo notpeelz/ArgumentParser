@@ -21,7 +21,7 @@ using System;
 namespace ArgumentParser.Reflection
 {
     /// <summary>
-    /// Represents a coupleable argument definition (or option) attribute.
+    /// Represents a coupleable argument definition attribute.
     /// </summary>
     public interface ICoupleableOptionAttribute : IOptionAttribute
     {

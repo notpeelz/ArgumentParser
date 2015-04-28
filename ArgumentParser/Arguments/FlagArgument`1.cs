@@ -54,7 +54,7 @@ namespace ArgumentParser.Arguments
         /// <summary>
         /// Gets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
         /// </summary>
-        public FlagOptions FlagOptions { get; private set; }
+        public FlagOptions FlagOptions { get; set; }
 
         /// <summary>
         /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.

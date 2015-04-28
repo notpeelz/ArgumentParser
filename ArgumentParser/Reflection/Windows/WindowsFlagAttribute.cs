@@ -39,7 +39,7 @@ namespace ArgumentParser.Reflection.Windows
         /// <summary>
         /// Gets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
         /// </summary>
-        public FlagOptions FlagOptions { get; private set; }
+        public FlagOptions FlagOptions { get; set; }
 
         /// <summary>
         /// Gets an argument definition using the supplied specifications.

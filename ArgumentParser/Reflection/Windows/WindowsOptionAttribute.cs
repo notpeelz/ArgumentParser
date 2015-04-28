@@ -67,7 +67,7 @@ namespace ArgumentParser.Reflection.Windows
         /// <summary>
         /// Gets the type converter used for value conversion.
         /// </summary>
-        public virtual TypeConverter TypeConverter { get; private set; }
+        public virtual TypeConverter TypeConverter { get; protected set; }
 
         /// <summary>
         /// Gets an argument definition using the supplied specifications.

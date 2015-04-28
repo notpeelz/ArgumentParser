@@ -81,7 +81,7 @@ namespace ArgumentParser.Arguments
         /// <summary>
         /// Gets the <see cref="T:System.ComponentModel.TypeConverter"/> to use for conversion.
         /// </summary>
-        protected TypeConverter TypeConverter { get; private set; }
+        public virtual TypeConverter TypeConverter { get; protected set; }
 
         /// <summary>
         /// Gets the default value of the argument.
