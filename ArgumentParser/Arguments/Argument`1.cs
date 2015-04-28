@@ -49,7 +49,7 @@ namespace ArgumentParser.Arguments
             this.Key = key;
             this.Description = description;
             this.ValueOptions = valueOptions;
-            this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof(T));
+            this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof (T));
             this.DefaultValue = defaultValue;
         }
 

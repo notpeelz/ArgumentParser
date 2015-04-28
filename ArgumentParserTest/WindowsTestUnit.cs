@@ -36,18 +36,15 @@ namespace ArgumentParserTest
         public sealed class Main : IParserContext
         {
             #region Singleton Declaration
-
             private static readonly Main instance = new Main();
 
             public static Main Instance
             {
                 get { return instance; }
             }
-
             #endregion
 
             #region IParserContext Members
-
             private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.Windows)
             {
                 Detokenize = true
