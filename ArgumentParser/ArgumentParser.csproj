@@ -52,6 +52,7 @@
     <Compile Include="Arguments\PowerShell\PowerShellFlag.cs" />
     <Compile Include="Arguments\PowerShell\PowerShellFlag`1.cs" />
     <Compile Include="Arguments\ValueOptions.cs" />
+    <Compile Include="ParserBindingException.cs" />
     <Compile Include="Reflection\IFlagOptionAttribute.cs" />
     <Compile Include="Reflection\ICoupleableOptionAttribute.cs" />
     <Compile Include="Reflection\POSIX\IPOSIXOptionAttribute.cs" />

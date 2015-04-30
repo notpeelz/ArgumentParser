@@ -37,6 +37,8 @@ namespace ArgumentParser
     public static partial class Parser
     {
         internal const String INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE = "The token style is not within the valid range of values.";
+        internal const String INVALID_MEMBER_TYPE_EXCEPTION_MESSAGE = "The provided object is neither a PropertyInfo nor a MethodInfo.";
+        internal const String UNWRITABLE_PROPERTY_EXCEPTION_MESSAGE = "The mapped property does not support writing.";
         internal const String PREFIX_POSIX_LONG = "--";
         internal const String PREFIX_POSIX_SHORT = "-";
         internal const String PREFIX_WINDOWS = "/";
@@ -209,6 +211,9 @@ namespace ArgumentParser
         /// <param name="context">The context use for binding.</param>
         /// <param name="input">The input string array to parse.</param>
         /// <param name="options">The configuration to use for parsing.</param>
+        /// <exception cref="T:ArgumentParser.ValueBindingException">An issue occured while binding parsing results.</exception>
+        /// <exception cref="T:ArgumentParser.ValueParsingException">An issue occured while parsing a value.</exception>
+        /// <exception cref="T:ArgumentParser.ParsingException">An issue occured while parsing parameters.</exception>
         public static void Parse(this IVerbContext context, String[] input, ParserOptions options)
         {
             Parse(context, String.Join("\x20", input), options);
@@ -219,6 +224,9 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="context">The context use for binding.</param>
         /// <param name="input">The input string array to parse.</param>
+        /// <exception cref="T:ArgumentParser.ValueBindingException">An issue occured while binding parsing results.</exception>
+        /// <exception cref="T:ArgumentParser.ValueParsingException">An issue occured while parsing a value.</exception>
+        /// <exception cref="T:ArgumentParser.ParsingException">An issue occured while parsing parameters.</exception>
         public static void Parse(this IParserContext context, String[] input)
         {
             Parse(context, String.Join("\x20", input));
@@ -229,6 +237,9 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="context">The context use for binding.</param>
         /// <param name="input">The input string to parse.</param>
+        /// <exception cref="T:ArgumentParser.ValueBindingException">An issue occured while binding parsing results.</exception>
+        /// <exception cref="T:ArgumentParser.ValueParsingException">An issue occured while parsing a value.</exception>
+        /// <exception cref="T:ArgumentParser.ParsingException">An issue occured while parsing parameters.</exception>
         public static void Parse(this IParserContext context, String input)
         {
             if (context == null)
@@ -246,6 +257,9 @@ namespace ArgumentParser
         /// <param name="context">The context use for binding.</param>
         /// <param name="input">The input string to parse.</param>
         /// <param name="options">The configuration to use for parsing.</param>
+        /// <exception cref="T:ArgumentParser.ValueBindingException">An issue occured while binding parsing results.</exception>
+        /// <exception cref="T:ArgumentParser.ValueParsingException">An issue occured while parsing a value.</exception>
+        /// <exception cref="T:ArgumentParser.ParsingException">An issue occured while parsing parameters.</exception>
         public static void Parse(this IVerbContext context, String input, ParserOptions options)
         {
             if (context == null)
@@ -285,6 +299,9 @@ namespace ArgumentParser
         /// <param name="context">The context to use for binding.</param>
         /// <param name="input">The input string array to parse.</param>
         /// <param name="options">The configuration to use for parsing.</param>
+        /// <exception cref="T:ArgumentParser.ValueBindingException">An issue occured while binding parsing results.</exception>
+        /// <exception cref="T:ArgumentParser.ValueParsingException">An issue occured while parsing a value.</exception>
+        /// <exception cref="T:ArgumentParser.ParsingException">An issue occured while parsing parameters.</exception>
         public static void ParseArguments(this IVerbContext context, String[] input, ParserOptions options)
         {
             ParseArguments(context, String.Join("\x20", input), options);
@@ -296,6 +313,10 @@ namespace ArgumentParser
         /// <param name="context">The context to use for binding.</param>
         /// <param name="input">The input string to parse.</param>
         /// <param name="options">The configuration to use for parsing.</param>
+        /// <exception cref="T:System.ArgumentNullException">The value of 'context' cannot be null.-or-The value of 'options' cannot be null.</exception>
+        /// <exception cref="T:ArgumentParser.ValueBindingException">An issue occured while binding parsing results.</exception>
+        /// <exception cref="T:ArgumentParser.ValueParsingException">An issue occured while parsing a value.</exception>
+        /// <exception cref="T:ArgumentParser.ParsingException">An issue occured while parsing parameters.</exception>
         public static void ParseArguments(this IVerbContext context, String input, ParserOptions options)
         {
             if (context == null)
@@ -332,6 +353,8 @@ namespace ArgumentParser
         /// <param name="options">The configuration to use for parsing.</param>
         /// <param name="arguments">The known argument definitions to match.</param>
         /// <returns>The paired results of the parsing operation.</returns>
+        /// <exception cref="T:ArgumentParser.ValueParsingException">An issue occured while parsing a value.</exception>
+        /// <exception cref="T:ArgumentParser.ParsingException">An issue occured while parsing parameters.</exception>
         public static IEnumerable<IPairable> GetParameters(String[] input, ParserOptions options, params IArgument[] arguments)
         {
             return GetParameters(String.Join("\x20", input), options, arguments);
@@ -344,6 +367,8 @@ namespace ArgumentParser
         /// <param name="options">The configuration to use for parsing.</param>
         /// <param name="arguments">The known argument definitions to match.</param>
         /// <returns>The paired results of the parsing operation.</returns>
+        /// <exception cref="T:ArgumentParser.ValueParsingException">An issue occured while parsing a value.</exception>
+        /// <exception cref="T:ArgumentParser.ParsingException">An issue occured while parsing parameters.</exception>
         public static IEnumerable<IPairable> GetParameters(String input, ParserOptions options, params IArgument[] arguments)
         {
             return GetParameters(input, options, (IEnumerable<IArgument>) arguments);
@@ -356,6 +381,8 @@ namespace ArgumentParser
         /// <param name="options">The configuration to use for parsing.</param>
         /// <param name="arguments">The known argument definitions to match.</param>
         /// <returns>The paired results of the parsing operation.</returns>
+        /// <exception cref="T:ArgumentParser.ValueParsingException">An issue occured while parsing a value.</exception>
+        /// <exception cref="T:ArgumentParser.ParsingException">An issue occured while parsing parameters.</exception>
         public static IEnumerable<IPairable> GetParameters(String input, ParserOptions options, IEnumerable<IArgument> arguments)
         {
             if (input == null)
@@ -530,6 +557,11 @@ namespace ArgumentParser
                             BindDefaultValue(options, instance, pair, member, attribute);
                         }
                     }
+                    catch (ParsingException ex)
+                    {
+                        if (options.ExceptionHandler == null || !options.ExceptionHandler.Invoke(ex))
+                            throw;
+                    }
                     catch (Exception ex)
                     {
                         var parsingException = new ParsingException(ex, member: member, context: instance, pair: pair);
@@ -553,7 +585,7 @@ namespace ArgumentParser
                 BindValue(instance, property, pair, pair.Argument.DefaultValue, options.Culture);
             else if (methodInfo != null)
                 BindValue(instance, methodInfo, pair, attribute, attribute.ManualBinding, pair.Argument.DefaultValue, options.Culture);
-            else throw new ArgumentException("The provided object is neither a PropertyInfo nor a MethodInfo.", "member");
+            else throw new ArgumentException(INVALID_MEMBER_TYPE_EXCEPTION_MESSAGE, "member");
         }
 
         private static void BindArgument(ParserOptions options, Object instance, ParameterPair pair, Object member, IOptionAttribute attribute)
@@ -573,7 +605,7 @@ namespace ArgumentParser
                 else foreach (var value in pair.Values)
                     BindValue(instance, methodInfo, pair, attribute, false, value, options.Culture);
             }
-            else throw new ArgumentException("The provided object is neither a PropertyInfo nor a MethodInfo.", "member");
+            else throw new ArgumentException(INVALID_MEMBER_TYPE_EXCEPTION_MESSAGE, "member");
         }
 
         private static void BindFlag(ParserOptions options, Object instance, FlagPair flagPair, Object member, IFlagOptionAttribute attribute)
@@ -600,12 +632,16 @@ namespace ArgumentParser
                 else foreach (var value in flagPair.Values)
                     BindValue(instance, methodInfo, flagPair, attribute, false, value, options.Culture);
             }
-            else throw new ArgumentException("The provided object is neither a PropertyInfo nor a MethodInfo.", "member");
+            else throw new ArgumentException(INVALID_MEMBER_TYPE_EXCEPTION_MESSAGE, "member");
         }
 
         private static void BindValue(Object instance, PropertyInfo property, ParameterPair pair, Object value, CultureInfo culture)
         {
             var convertedValue = ValueConverter.ConvertValue(value, pair.Argument.Type, culture);
+
+            if (!property.CanWrite)
+                throw new ParserBindingException(UNWRITABLE_PROPERTY_EXCEPTION_MESSAGE, pair: pair, member: property, context: instance);
+
             property.SetValue(instance, convertedValue);
         }
 
