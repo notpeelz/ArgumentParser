@@ -62,7 +62,7 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
-        /// /// <param name="member">The member used upon failing.</param>
+        /// <param name="member">The member used upon failing.</param>
         /// <param name="context">The context throwing the exception (if applicable).</param>
         /// <param name="pair">The parameter pair being parsed upon failing.</param>
         public ValueParsingException(String message, Exception innerException, Object member = null, Object context = null, ParameterPair pair = null)

@@ -44,9 +44,10 @@ namespace ArgumentParser.Arguments
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="flagOptions">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
+        /// <param name="detokenizer">The delegate to use for detokenization.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected FlagArgument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, T defaultValue = default(T))
-            : base(key, description, valueOptions, typeConverter, defaultValue)
+        protected FlagArgument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, Parser.DetokenizerDelegate detokenizer = null, T defaultValue = default(T))
+            : base(key, description, valueOptions, typeConverter, detokenizer, defaultValue)
         {
             this.FlagOptions = flagOptions;
         }

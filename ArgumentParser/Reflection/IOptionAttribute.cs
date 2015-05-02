@@ -58,6 +58,11 @@ namespace ArgumentParser.Reflection
         TypeConverter TypeConverter { get; }
 
         /// <summary>
+        /// Gets the delegate used for detokenization.
+        /// </summary>
+        Parser.DetokenizerDelegate Detokenizer { get; }
+
+        /// <summary>
         /// Gets an argument definition using the supplied specifications.
         /// </summary>
         /// <param name="valueType">The expected value type to convert and bind to.</param>

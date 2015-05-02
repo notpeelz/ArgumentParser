@@ -86,6 +86,11 @@ namespace ArgumentParser.Reflection.POSIX
         public virtual TypeConverter TypeConverter { get; protected set; }
 
         /// <summary>
+        /// Gets the delegate used for detokenization.
+        /// </summary>
+        public virtual Parser.DetokenizerDelegate Detokenizer { get; protected set; }
+
+        /// <summary>
         /// Gets an argument definition using the supplied specifications.
         /// </summary>
         /// <param name="valueType">The expected value type to convert and bind to.</param>
@@ -96,9 +101,11 @@ namespace ArgumentParser.Reflection.POSIX
             var value = ValueConverter.GetDefaultValue(valueType, this.TypeConverter, this.DefaultValue);
 
             if (this.IsShort)
-                return (IArgument) Activator.CreateInstance(typeof (POSIXShortArgument<>).MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.TypeConverter, value);
+                return (IArgument) Activator.CreateInstance(typeof (POSIXShortArgument<>)
+                    .MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.TypeConverter, this.Detokenizer, value);
 
-            return (IArgument) Activator.CreateInstance(typeof (POSIXLongArgument<>).MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.TypeConverter, value);
+            return (IArgument) Activator.CreateInstance(typeof (POSIXLongArgument<>)
+                .MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Detokenizer, value);
         }
 
         /// <summary>

@@ -43,13 +43,15 @@ namespace ArgumentParser.Arguments
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
+        /// <param name="detokenizer">The delegate to use for detokenization.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, T defaultValue = default (T))
+        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Parser.DetokenizerDelegate detokenizer = null, T defaultValue = default (T))
         {
             this.Key = key;
             this.Description = description;
             this.ValueOptions = valueOptions;
             this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof (T));
+            this.Detokenizer = detokenizer;
             this.DefaultValue = defaultValue;
         }
 
@@ -81,7 +83,12 @@ namespace ArgumentParser.Arguments
         /// <summary>
         /// Gets the <see cref="T:System.ComponentModel.TypeConverter"/> to use for conversion.
         /// </summary>
-        public virtual TypeConverter TypeConverter { get; protected set; }
+        public TypeConverter TypeConverter { get; private set; }
+
+        /// <summary>
+        /// Gets the delegate to use for detokenization.
+        /// </summary>
+        public Parser.DetokenizerDelegate Detokenizer { get; private set; }
 
         /// <summary>
         /// Gets the default value of the argument.
@@ -131,10 +138,10 @@ namespace ArgumentParser.Arguments
                         argument: this,
                         values: this.GetValues(parameters.Select(x => x.Value == null || x.CoupleCount > 1 ? null : x.Value), culture));
                 case ValueOptions.None:
-                    trailingValues = parameters.Select(x => ValueConverter.GetCompositeValueParts(x, detokenizer, culture));
+                    trailingValues = parameters.Select(x => ValueConverter.GetCompositeValueParts(x, this.Detokenizer ?? detokenizer, culture));
                     return new ParameterPair(this, new Object[0]);
                 default:
-                    var canonicalValues = parameters.ToDictionary(x => x, x => ValueConverter.GetCompositeValueParts(x, detokenizer, culture));
+                    var canonicalValues = parameters.ToDictionary(x => x, x => ValueConverter.GetCompositeValueParts(x, this.Detokenizer ?? detokenizer, culture));
                     trailingValues = canonicalValues.Select(x => x.Value.Any() ? x.Value.Skip(1) : x.Value);
                     return new ParameterPair(
                         argument: this,

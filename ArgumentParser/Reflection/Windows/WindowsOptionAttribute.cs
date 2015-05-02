@@ -70,6 +70,11 @@ namespace ArgumentParser.Reflection.Windows
         public virtual TypeConverter TypeConverter { get; protected set; }
 
         /// <summary>
+        /// Gets the delegate used for detokenization.
+        /// </summary>
+        public virtual Parser.DetokenizerDelegate Detokenizer { get; protected set; }
+
+        /// <summary>
         /// Gets an argument definition using the supplied specifications.
         /// </summary>
         /// <param name="valueType">The expected value type to convert and bind to.</param>
@@ -80,7 +85,7 @@ namespace ArgumentParser.Reflection.Windows
             var value = ValueConverter.GetDefaultValue(valueType, this.TypeConverter, this.DefaultValue);
             var type = typeof (WindowsArgument<>).MakeGenericType(valueType);
 
-            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, value);
+            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Detokenizer, value);
         }
 
         /// <summary>
