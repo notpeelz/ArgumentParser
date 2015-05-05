@@ -44,10 +44,10 @@ namespace ArgumentParser.Arguments
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="flagOptions">The value conversion behavior.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="detokenizer">The delegate to use for detokenization.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected FlagArgument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, Parser.DetokenizerDelegate detokenizer = null, T defaultValue = default(T))
-            : base(key, description, valueOptions, typeConverter, detokenizer, defaultValue)
+        protected FlagArgument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, Parser.PreprocessorDelegate preprocessor = null, T defaultValue = default(T))
+            : base(key, description, valueOptions, typeConverter, preprocessor, defaultValue)
         {
             this.FlagOptions = flagOptions;
         }
@@ -61,11 +61,11 @@ namespace ArgumentParser.Arguments
         /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
         /// </summary>
         /// <param name="parameters">The source parameters.</param>
-        /// <param name="detokenizer">The detokenizer to use to transform escaped sequences.</param>
+        /// <param name="preprocessor">The preprocessor to use to transform raw inputs.</param>
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
         /// <param name="trailingValues">The values that are to be interpreted as trailing.</param>
         /// <returns>The converted values.</returns>
-        public override ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.DetokenizerDelegate detokenizer, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues)
+        public override ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.PreprocessorDelegate preprocessor, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues)
         {
             var rawParameters = parameters as RawParameter[] ?? parameters.ToArray();
 
@@ -79,7 +79,7 @@ namespace ArgumentParser.Arguments
             bool invertImplicit = (this.FlagOptions & FlagOptions.InvertBooleanImplicit) != 0;
             bool invertExplicit = (this.FlagOptions & FlagOptions.InvertBooleanExplicit) != 0;
 
-            var canonicalValues = rawParameters.ToDictionary(x => x, x => ValueConverter.GetCompositeValueParts(x, detokenizer, culture));
+            var canonicalValues = rawParameters.ToDictionary(x => x, x => ValueConverter.GetCompositeValueParts(x, preprocessor, culture));
 
             var flagValues = canonicalValues.Select(x =>
             {

@@ -194,10 +194,10 @@ namespace ArgumentParser.Helpers
         /// Extracts the parts out of a value compound from a parameter, representing individual value entries.
         /// </summary>
         /// <param name="parameter">The source parameter to extract from.</param>
-        /// <param name="detokenizer">The delegate to use for detokenization.</param>
-        /// <param name="culture">The culture to supply the detokenizer delegate.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
+        /// <param name="culture">The culture to supply the preprocessor delegate.</param>
         /// <returns>The value sub-entries.</returns>
-        public static IEnumerable<String> GetCompositeValueParts(RawParameter parameter, Parser.DetokenizerDelegate detokenizer = null, CultureInfo culture = null)
+        public static IEnumerable<String> GetCompositeValueParts(RawParameter parameter, Parser.PreprocessorDelegate preprocessor = null, CultureInfo culture = null)
         {
             if (parameter == null)
                 throw new ArgumentNullException("parameter");
@@ -212,23 +212,23 @@ namespace ArgumentParser.Helpers
                                 RegexOptions.CultureInvariant |
                                 RegexOptions.Singleline)
                     .OfType<Match>()
-                    .Select(m => DetokenizeValue(m.Groups["value"].Value, detokenizer, culture));
+                    .Select(m => PreprocessValue(m.Groups["value"].Value, preprocessor, culture));
         }
 
         /// <summary>
-        /// Detokenizes a given value using a supplied delegate and culture.
+        /// Preprocesses a given value using a supplied delegate and culture.
         /// </summary>
-        /// <param name="value">The input value to detokenize.</param>
-        /// <param name="detokenizer">The delegate to use for detokenization.</param>
+        /// <param name="value">The input value to preprocess.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="culture">The culture to supply the delegate.</param>
-        /// <returns>The detokenized value.</returns>
-        public static String DetokenizeValue(String value, Parser.DetokenizerDelegate detokenizer = null, CultureInfo culture = null)
+        /// <returns>The preprocessed value.</returns>
+        public static String PreprocessValue(String value, Parser.PreprocessorDelegate preprocessor = null, CultureInfo culture = null)
         {
             try
             {
-                return detokenizer == null
-                    ? Parser.DefaultDetokenizer(value, culture)
-                    : detokenizer(value, culture);
+                return preprocessor == null
+                    ? Parser.DefaultPreprocessor(value, culture)
+                    : preprocessor(value, culture);
             }
             catch (Exception ex)
             {

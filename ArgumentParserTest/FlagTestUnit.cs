@@ -48,10 +48,7 @@ namespace ArgumentParserTest
             #endregion
 
             #region IParserContext Members
-            private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX)
-            {
-                Detokenize = true
-            };
+            private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX);
 
             ParserOptions IParserContext.Options
             {

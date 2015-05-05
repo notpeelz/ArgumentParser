@@ -52,7 +52,7 @@ namespace ArgumentParser.Reflection.Windows
             var value = ValueConverter.ConvertValue(this.DefaultValue, valueType, formatProvider);
             var type = typeof (WindowsFlag<>).MakeGenericType(valueType);
 
-            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Detokenizer, value);
+            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Preprocessor, value);
         }
 
         /// <summary>
@@ -64,9 +64,9 @@ namespace ArgumentParser.Reflection.Windows
         }
 
         /// <summary>
-        /// Gets the delegate used for detokenization.
+        /// Gets the delegate used for preprocessing.
         /// </summary>
-        Parser.DetokenizerDelegate IOptionAttribute.Detokenizer
+        Parser.PreprocessorDelegate IOptionAttribute.Preprocessor
         {
             get { return null; }
         }

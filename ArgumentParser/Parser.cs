@@ -45,12 +45,12 @@ namespace ArgumentParser
         internal const String PREFIX_POWERSHELL = "-";
 
         /// <summary>
-        /// Removes tokens from an input string.
+        /// Preprocesses and perform various operations on an input string, such as escaped token substitution.
         /// </summary>
-        /// <param name="input">The input string to detokenize.</param>
-        /// <param name="culture">The culture to use for detokenization.</param>
-        /// <returns>The detokenized input string.</returns>
-        public delegate String DetokenizerDelegate(String input, CultureInfo culture);
+        /// <param name="input">The input string to format.</param>
+        /// <param name="culture">The culture to use for preprocessing.</param>
+        /// <returns>The preprocessed input string.</returns>
+        public delegate String PreprocessorDelegate(String input, CultureInfo culture);
 
         /// <summary>
         /// Determines whether a given attribute should be filtered in for argument creation.
@@ -60,9 +60,9 @@ namespace ArgumentParser
         public delegate Boolean AttributeFilterDelegate(IOptionAttribute attribute);
 
         /// <summary>
-        /// Represents the default value detokenizer predicate.
+        /// Represents the default value preprocessor delegate.
         /// </summary>
-        public static readonly DetokenizerDelegate DefaultDetokenizer = (x, c) => Regex.Unescape(x);
+        public static readonly PreprocessorDelegate DefaultPreprocessor = (x, c) => Regex.Unescape(x);
 
         /// <summary>
         /// Represents the default <see cref="T:ArgumentParser.IPairable"/> equality comparer.
@@ -75,7 +75,7 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string array to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
-        /// <param name="culture">The culture to use for detokenization.</param>
+        /// <param name="culture">The culture to use for preprocessing.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flags couples aren't dissociated; they are passed verbatim, as a single tag.
@@ -90,15 +90,15 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string array to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
-        /// <param name="detokenizer">The predicate to use for detokenization.</param>
-        /// <param name="culture">The culture to use for detokenization.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
+        /// <param name="culture">The culture to use for preprocessing.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flag couples aren't dissociated; they are passed verbatim, as a single tag.
         /// </remarks>
-        public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle, DetokenizerDelegate detokenizer, CultureInfo culture = null)
+        public static IEnumerable<RawParameter> GetRawParameters(String[] input, ParameterTokenStyle tokenStyle, PreprocessorDelegate preprocessor, CultureInfo culture = null)
         {
-            return GetRawParameters(String.Join("\x20", input), tokenStyle, detokenizer, culture);
+            return GetRawParameters(String.Join("\x20", input), tokenStyle, preprocessor, culture);
         }
 
         /// <summary>
@@ -106,14 +106,14 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
-        /// <param name="culture">The culture to use for detokenization.</param>
+        /// <param name="culture">The culture to use for preprocessing.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flag couples aren't dissociated; they are passed verbatim, as a single tag.
         /// </remarks>
         public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, CultureInfo culture = null)
         {
-            return GetRawParameters(input, tokenStyle, DefaultDetokenizer, culture);
+            return GetRawParameters(input, tokenStyle, DefaultPreprocessor, culture);
         }
 
         /// <summary>
@@ -121,13 +121,13 @@ namespace ArgumentParser
         /// </summary>
         /// <param name="input">The input string to parse.</param>
         /// <param name="tokenStyle">The parameter syntax to use.</param>
-        /// <param name="detokenizer">The predicate to use for detokenization.</param>
-        /// <param name="culture">The culture to use for detokenization.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
+        /// <param name="culture">The culture to use for preprocessing.</param>
         /// <returns>A sequence of raw parameters extracted from the original sequence.</returns>
         /// <remarks>
         /// Flag couples aren't dissociated; they are passed verbatim, as a single tag.
         /// </remarks>
-        public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, DetokenizerDelegate detokenizer, CultureInfo culture)
+        public static IEnumerable<RawParameter> GetRawParameters(String input, ParameterTokenStyle tokenStyle, PreprocessorDelegate preprocessor, CultureInfo culture)
         {
             MatchCollection matches = Regex.Matches(
                 input: input,
@@ -141,7 +141,7 @@ namespace ArgumentParser
                 new RawParameter(
                     x.Groups["prefix"].Value,
                     x.Groups["tag"].Value,
-                    detokenizer == null ? x.Groups["value"].Value : detokenizer(x.Groups["value"].Value, culture)));
+                    preprocessor == null ? x.Groups["value"].Value : preprocessor(x.Groups["value"].Value, culture)));
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace ArgumentParser
         /// <param name="parameters">The remainder of the input string.</param>
         public static void GetParts(ParserOptions options, String input, out String[] verbs, out String parameters)
         {
-            GetParts(input, out verbs, out parameters, options.Detokenize ? options.Detokenizer : null, options.Culture);
+            GetParts(input, out verbs, out parameters, options.Preprocessor, options.Culture);
         }
 
         /// <summary>
@@ -174,9 +174,9 @@ namespace ArgumentParser
         /// <param name="input">The input string array to parse.</param>
         /// <param name="verbs">The extracted verb tags.</param>
         /// <param name="parameters">The remainder of the input string.</param>
-        /// <param name="detokenizer">The predicate to use for detokenization.</param>
-        /// <param name="culture">The culture to use for detokenization.</param>
-        public static void GetParts(String input, out String[] verbs, out String parameters, DetokenizerDelegate detokenizer, CultureInfo culture = null)
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
+        /// <param name="culture">The culture to use for preprocessing.</param>
+        public static void GetParts(String input, out String[] verbs, out String parameters, PreprocessorDelegate preprocessor, CultureInfo culture = null)
         {
             var matches = Regex.Matches(
                 input: input,
@@ -186,7 +186,7 @@ namespace ArgumentParser
                          RegexOptions.CultureInvariant |
                          RegexOptions.Singleline).OfType<Match>().ToArray();
 
-            if (detokenizer == null)
+            if (preprocessor == null)
             {
                 verbs = matches
                     .Where(x => x.Groups["verb"].Success)
@@ -196,7 +196,7 @@ namespace ArgumentParser
             {
                 verbs = matches
                     .Where(x => x.Groups["verb"].Success)
-                    .Select(x => ValueConverter.DetokenizeValue(x.Groups["verb"].Value, detokenizer, culture)).ToArray();
+                    .Select(x => ValueConverter.PreprocessValue(x.Groups["verb"].Value, preprocessor, culture)).ToArray();
             }
 
             parameters = matches
@@ -419,7 +419,7 @@ namespace ArgumentParser
                 }).ToArray();
 
             List<UnboundValue> unboundValues = new List<UnboundValue>();
-            var detokenizer = options.Detokenize ? options.Detokenizer : (s, c) => s;
+            var preprocessor = options.Preprocessor;
 
             var pairs = arguments
                 .GroupJoin(
@@ -429,7 +429,7 @@ namespace ArgumentParser
                     (a, p) =>
                     {
                         IEnumerable<IEnumerable<String>> values;
-                        var pair = a.GetPair(p, detokenizer, options.Culture, out values);
+                        var pair = a.GetPair(p, preprocessor, options.Culture, out values);
 
                         unboundValues.AddRange(values
                             .Where(x => x != null && x.Any())

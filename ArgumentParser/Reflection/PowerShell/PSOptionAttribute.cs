@@ -70,9 +70,9 @@ namespace ArgumentParser.Reflection.PowerShell
         public virtual TypeConverter TypeConverter { get; protected set; }
 
         /// <summary>
-        /// Gets the delegate used for detokenization.
+        /// Gets the delegate used for preprocessing.
         /// </summary>
-        public virtual Parser.DetokenizerDelegate Detokenizer { get; protected set; }
+        public virtual Parser.PreprocessorDelegate Preprocessor { get; protected set; }
 
         /// <summary>
         /// Gets an argument definition using the supplied specifications.
@@ -85,7 +85,7 @@ namespace ArgumentParser.Reflection.PowerShell
             var value = ValueConverter.ConvertValue(this.DefaultValue, valueType, formatProvider);
             var type = typeof (PowerShellArgument<>).MakeGenericType(valueType);
 
-            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Detokenizer, value);
+            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, value);
         }
 
         /// <summary>

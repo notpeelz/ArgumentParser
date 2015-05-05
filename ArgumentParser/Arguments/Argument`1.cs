@@ -43,15 +43,15 @@ namespace ArgumentParser.Arguments
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="typeConverter">The type converter to use for conversion.</param>
-        /// <param name="detokenizer">The delegate to use for detokenization.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Parser.DetokenizerDelegate detokenizer = null, T defaultValue = default (T))
+        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Parser.PreprocessorDelegate preprocessor = null, T defaultValue = default (T))
         {
             this.Key = key;
             this.Description = description;
             this.ValueOptions = valueOptions;
             this.TypeConverter = typeConverter ?? TypeDescriptor.GetConverter(typeof (T));
-            this.Detokenizer = detokenizer;
+            this.Preprocessor = preprocessor;
             this.DefaultValue = defaultValue;
         }
 
@@ -86,9 +86,9 @@ namespace ArgumentParser.Arguments
         public TypeConverter TypeConverter { get; private set; }
 
         /// <summary>
-        /// Gets the delegate to use for detokenization.
+        /// Gets the delegate to use for preprocessing.
         /// </summary>
-        public Parser.DetokenizerDelegate Detokenizer { get; private set; }
+        public Parser.PreprocessorDelegate Preprocessor { get; private set; }
 
         /// <summary>
         /// Gets the default value of the argument.
@@ -124,11 +124,11 @@ namespace ArgumentParser.Arguments
         /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
         /// </summary>
         /// <param name="parameters">The source parameters.</param>
-        /// <param name="detokenizer">The detokenizer to use to transform escaped sequences.</param>
+        /// <param name="preprocessor">The preprocessor to use to transform raw inputs.</param>
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
         /// <param name="trailingValues">The values that are to be interpreted as trailing.</param>
         /// <returns>The converted values.</returns>
-        public virtual ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.DetokenizerDelegate detokenizer, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues)
+        public virtual ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.PreprocessorDelegate preprocessor, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues)
         {
             switch (this.ValueOptions)
             {
@@ -138,10 +138,10 @@ namespace ArgumentParser.Arguments
                         argument: this,
                         values: this.GetValues(parameters.Select(x => x.Value == null || x.CoupleCount > 1 ? null : x.Value), culture));
                 case ValueOptions.None:
-                    trailingValues = parameters.Select(x => ValueConverter.GetCompositeValueParts(x, this.Detokenizer ?? detokenizer, culture));
+                    trailingValues = parameters.Select(x => ValueConverter.GetCompositeValueParts(x, this.Preprocessor ?? preprocessor, culture));
                     return new ParameterPair(this, new Object[0]);
                 default:
-                    var canonicalValues = parameters.ToDictionary(x => x, x => ValueConverter.GetCompositeValueParts(x, this.Detokenizer ?? detokenizer, culture));
+                    var canonicalValues = parameters.ToDictionary(x => x, x => ValueConverter.GetCompositeValueParts(x, this.Preprocessor ?? preprocessor, culture));
                     trailingValues = canonicalValues.Select(x => x.Value.Any() ? x.Value.Skip(1) : x.Value);
                     return new ParameterPair(
                         argument: this,

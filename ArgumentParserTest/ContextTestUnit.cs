@@ -101,7 +101,6 @@ namespace ArgumentParserTest
             #region IParserContext members
             private readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX)
             {
-                Detokenize = true,
                 ExceptionHandler = ExceptionHandler
             };
 

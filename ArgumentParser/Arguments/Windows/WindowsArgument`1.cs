@@ -34,10 +34,10 @@ namespace ArgumentParser.Arguments.Windows
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
-        /// <param name="detokenizer">The delegate to use for detokenization.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public WindowsArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Parser.DetokenizerDelegate detokenizer = null, T defaultValue = default (T))
-            : base(new Key(Prefix, tag), description, valueOptions, typeConverter, detokenizer, defaultValue) { }
+        public WindowsArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Parser.PreprocessorDelegate preprocessor = null, T defaultValue = default (T))
+            : base(new Key(Prefix, tag), description, valueOptions, typeConverter, preprocessor, defaultValue) { }
 
         /// <summary>
         /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.Windows.WindowsArgument`1"/> type.

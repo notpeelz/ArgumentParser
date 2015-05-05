@@ -60,10 +60,10 @@ namespace ArgumentParser.Reflection.POSIX
 
             if (this.IsShort)
                 return (IArgument) Activator.CreateInstance(typeof (POSIXShortFlag<>)
-                    .MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Detokenizer, value);
+                    .MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Preprocessor, value);
 
             return (IArgument) Activator.CreateInstance(typeof (POSIXLongFlag<>)
-                .MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Detokenizer, value);
+                .MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Preprocessor, value);
         }
 
         /// <summary>

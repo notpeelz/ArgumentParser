@@ -59,10 +59,10 @@ namespace ArgumentParser.Arguments
         /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.
         /// </summary>
         /// <param name="parameters">The source parameters.</param>
-        /// <param name="detokenizer">The detokenizer to use to transform escaped sequences.</param>
+        /// <param name="preprocessor">The preprocessor to use to transform raw inputs.</param>
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
         /// <param name="trailingValues">The values that are to be interpreted as trailing.</param>
         /// <returns>The converted values.</returns>
-        ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.DetokenizerDelegate detokenizer, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues);
+        ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.PreprocessorDelegate preprocessor, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues);
     }
 }

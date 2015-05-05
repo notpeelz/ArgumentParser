@@ -37,8 +37,7 @@ namespace ArgumentParser
         public ParserOptions()
         {
             this.PairEqualityComparer = Parser.DefaultPairEqualityComparer;
-            this.Detokenizer = Parser.DefaultDetokenizer;
-            this.Detokenize = true;
+            this.Preprocessor = Parser.DefaultPreprocessor;
         }
 
         /// <summary>
@@ -66,14 +65,9 @@ namespace ArgumentParser
         public IEqualityComparer<IPairable> PairEqualityComparer { get; set; }
 
         /// <summary>
-        /// Gets or sets a boolean value indicating whether parsed values should be detokenized.
+        /// Gets or sets the preprocessor delegate to use upon parsing values.
         /// </summary>
-        public Boolean Detokenize { get; set; }
-
-        /// <summary>
-        /// Gets or sets the detokenizer predicate to use upon parsing values.
-        /// </summary>
-        public Parser.DetokenizerDelegate Detokenizer { get; set; }
+        public Parser.PreprocessorDelegate Preprocessor { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="T:ArgumentParser.Reflection.IOptionAttribute"/> predicate that is used to filter mapped arguments given a specific token style.
@@ -81,7 +75,7 @@ namespace ArgumentParser
         public Parser.AttributeFilterDelegate OptionAttributeFilter { get; set; }
 
         /// <summary>
-        /// Gets or sets the exception handler predicate to use upon throwing an exception.
+        /// Gets or sets the exception handler delegate to use upon throwing an exception.
         /// </summary>
         public Func<ParsingException, Boolean> ExceptionHandler { get; set; }
 

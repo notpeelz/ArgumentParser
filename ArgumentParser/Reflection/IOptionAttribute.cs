@@ -58,9 +58,9 @@ namespace ArgumentParser.Reflection
         TypeConverter TypeConverter { get; }
 
         /// <summary>
-        /// Gets the delegate used for detokenization.
+        /// Gets the delegate used for preprocessing.
         /// </summary>
-        Parser.DetokenizerDelegate Detokenizer { get; }
+        Parser.PreprocessorDelegate Preprocessor { get; }
 
         /// <summary>
         /// Gets an argument definition using the supplied specifications.
