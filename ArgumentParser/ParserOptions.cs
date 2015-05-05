@@ -19,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using ArgumentParser.Reflection.POSIX;
 using ArgumentParser.Reflection.PowerShell;
+using ArgumentParser.Reflection.POSIX;
 using ArgumentParser.Reflection.Windows;
 
 namespace ArgumentParser

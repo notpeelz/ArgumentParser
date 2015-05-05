@@ -52,6 +52,8 @@
     <Compile Include="Arguments\PowerShell\PowerShellFlag.cs" />
     <Compile Include="Arguments\PowerShell\PowerShellFlag`1.cs" />
     <Compile Include="Arguments\ValueOptions.cs" />
+    <Compile Include="Helpers\ProjectionEqualityComparer.cs" />
+    <Compile Include="Helpers\ProjectionEqualityComparer`1.cs" />
     <Compile Include="ParserBindingException.cs" />
     <Compile Include="Reflection\IFlagOptionAttribute.cs" />
     <Compile Include="Reflection\ICoupleableOptionAttribute.cs" />
@@ -94,7 +96,7 @@
     <Compile Include="Reflection\POSIX\POSIXOptionAttribute.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="ParameterPair.cs" />
-    <Compile Include="Helpers\ProjectionEqualityComparer.cs" />
+    <Compile Include="Helpers\ProjectionEqualityComparer`2.cs" />
     <Compile Include="Helpers\StringArrayConverter.cs" />
     <Compile Include="ParserExtension.cs" />
     <Compile Include="ParsingException.cs" />
