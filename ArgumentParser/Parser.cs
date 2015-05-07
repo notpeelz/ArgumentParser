@@ -45,21 +45,6 @@ namespace ArgumentParser
         internal const String PREFIX_POWERSHELL = "-";
 
         /// <summary>
-        /// Preprocesses and perform various operations on an input string, such as escaped token substitution.
-        /// </summary>
-        /// <param name="input">The input string to format.</param>
-        /// <param name="culture">The culture to use for preprocessing.</param>
-        /// <returns>The preprocessed input string.</returns>
-        public delegate String PreprocessorDelegate(String input, CultureInfo culture);
-
-        /// <summary>
-        /// Determines whether a given attribute should be filtered in for argument creation.
-        /// </summary>
-        /// <param name="attribute">The attribute to test.</param>
-        /// <returns>A boolean value indicating whether the member should be filtered in.</returns>
-        public delegate Boolean AttributeFilterDelegate(IOptionAttribute attribute);
-
-        /// <summary>
         /// Represents the default value preprocessor delegate.
         /// </summary>
         public static readonly PreprocessorDelegate DefaultPreprocessor = (x, c) => Regex.Unescape(x);

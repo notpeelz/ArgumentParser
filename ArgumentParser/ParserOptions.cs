@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using ArgumentParser.Reflection;
 using ArgumentParser.Reflection.PowerShell;
 using ArgumentParser.Reflection.POSIX;
 using ArgumentParser.Reflection.Windows;
@@ -67,23 +68,23 @@ namespace ArgumentParser
         /// <summary>
         /// Gets or sets the preprocessor delegate to use upon parsing values.
         /// </summary>
-        public Parser.PreprocessorDelegate Preprocessor { get; set; }
+        public PreprocessorDelegate Preprocessor { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="T:ArgumentParser.Reflection.IOptionAttribute"/> predicate that is used to filter mapped arguments given a specific token style.
         /// </summary>
-        public Parser.AttributeFilterDelegate OptionAttributeFilter { get; set; }
+        public AttributeFilterDelegate OptionAttributeFilter { get; set; }
 
         /// <summary>
         /// Gets or sets the exception handler delegate to use upon throwing an exception.
         /// </summary>
         public Func<ParsingException, Boolean> ExceptionHandler { get; set; }
 
-        private static readonly Parser.AttributeFilterDelegate posixAttributeFilter = a => a is IPOSIXOptionAttribute;
-        private static readonly Parser.AttributeFilterDelegate powerShellAttributeFilter = a => a is IPSOptionAttribute;
-        private static readonly Parser.AttributeFilterDelegate windowsAttributeFilter = a => a is IWindowsOptionAttribute;
+        private static readonly AttributeFilterDelegate posixAttributeFilter = a => a is IPOSIXOptionAttribute;
+        private static readonly AttributeFilterDelegate powerShellAttributeFilter = a => a is IPSOptionAttribute;
+        private static readonly AttributeFilterDelegate windowsAttributeFilter = a => a is IWindowsOptionAttribute;
 
-        internal Parser.AttributeFilterDelegate GetAttributeFilter()
+        internal AttributeFilterDelegate GetAttributeFilter()
         {
             if (this.OptionAttributeFilter != null)
                 return this.OptionAttributeFilter;

@@ -45,7 +45,7 @@ namespace ArgumentParser.Arguments
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, Parser.PreprocessorDelegate preprocessor = null, T defaultValue = default (T))
+        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, T defaultValue = default (T))
         {
             this.Key = key;
             this.Description = description;
@@ -88,7 +88,7 @@ namespace ArgumentParser.Arguments
         /// <summary>
         /// Gets the delegate to use for preprocessing.
         /// </summary>
-        public Parser.PreprocessorDelegate Preprocessor { get; private set; }
+        public PreprocessorDelegate Preprocessor { get; private set; }
 
         /// <summary>
         /// Gets the default value of the argument.
@@ -128,7 +128,7 @@ namespace ArgumentParser.Arguments
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
         /// <param name="trailingValues">The values that are to be interpreted as trailing.</param>
         /// <returns>The converted values.</returns>
-        public virtual ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.PreprocessorDelegate preprocessor, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues)
+        public virtual ParameterPair GetPair(IEnumerable<RawParameter> parameters, PreprocessorDelegate preprocessor, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues)
         {
             switch (this.ValueOptions)
             {

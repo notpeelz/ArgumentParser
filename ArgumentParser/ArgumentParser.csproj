@@ -52,6 +52,8 @@
     <Compile Include="Arguments\PowerShell\PowerShellFlag.cs" />
     <Compile Include="Arguments\PowerShell\PowerShellFlag`1.cs" />
     <Compile Include="Arguments\ValueOptions.cs" />
+    <Compile Include="PreprocessorDelegate.cs" />
+    <Compile Include="Reflection\AttributeFilterDelegate.cs" />
     <Compile Include="Helpers\ProjectionEqualityComparer.cs" />
     <Compile Include="Helpers\ProjectionEqualityComparer`1.cs" />
     <Compile Include="ParserBindingException.cs" />

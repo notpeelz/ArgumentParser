@@ -66,7 +66,7 @@ namespace ArgumentParser.Reflection.PowerShell
         /// <summary>
         /// Gets the delegate used for preprocessing.
         /// </summary>
-        Parser.PreprocessorDelegate IOptionAttribute.Preprocessor
+        PreprocessorDelegate IOptionAttribute.Preprocessor
         {
             get { return null; }
         }

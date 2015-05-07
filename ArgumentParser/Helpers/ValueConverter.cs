@@ -197,7 +197,7 @@ namespace ArgumentParser.Helpers
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="culture">The culture to supply the preprocessor delegate.</param>
         /// <returns>The value sub-entries.</returns>
-        public static IEnumerable<String> GetCompositeValueParts(RawParameter parameter, Parser.PreprocessorDelegate preprocessor = null, CultureInfo culture = null)
+        public static IEnumerable<String> GetCompositeValueParts(RawParameter parameter, PreprocessorDelegate preprocessor = null, CultureInfo culture = null)
         {
             if (parameter == null)
                 throw new ArgumentNullException("parameter");
@@ -222,7 +222,7 @@ namespace ArgumentParser.Helpers
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="culture">The culture to supply the delegate.</param>
         /// <returns>The preprocessed value.</returns>
-        public static String PreprocessValue(String value, Parser.PreprocessorDelegate preprocessor = null, CultureInfo culture = null)
+        public static String PreprocessValue(String value, PreprocessorDelegate preprocessor = null, CultureInfo culture = null)
         {
             try
             {

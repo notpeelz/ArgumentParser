@@ -72,7 +72,7 @@ namespace ArgumentParser.Reflection.PowerShell
         /// <summary>
         /// Gets the delegate used for preprocessing.
         /// </summary>
-        public virtual Parser.PreprocessorDelegate Preprocessor { get; protected set; }
+        public virtual PreprocessorDelegate Preprocessor { get; protected set; }
 
         /// <summary>
         /// Gets an argument definition using the supplied specifications.

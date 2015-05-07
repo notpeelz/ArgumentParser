@@ -63,6 +63,6 @@ namespace ArgumentParser.Arguments
         /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use for culture-sensitive operations.</param>
         /// <param name="trailingValues">The values that are to be interpreted as trailing.</param>
         /// <returns>The converted values.</returns>
-        ParameterPair GetPair(IEnumerable<RawParameter> parameters, Parser.PreprocessorDelegate preprocessor, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues);
+        ParameterPair GetPair(IEnumerable<RawParameter> parameters, PreprocessorDelegate preprocessor, CultureInfo culture, out IEnumerable<IEnumerable<String>> trailingValues);
     }
 }

@@ -60,7 +60,7 @@ namespace ArgumentParser.Reflection
         /// <summary>
         /// Gets the delegate used for preprocessing.
         /// </summary>
-        Parser.PreprocessorDelegate Preprocessor { get; }
+        PreprocessorDelegate Preprocessor { get; }
 
         /// <summary>
         /// Gets an argument definition using the supplied specifications.

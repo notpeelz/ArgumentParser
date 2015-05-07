@@ -37,7 +37,7 @@ namespace ArgumentParser.Arguments.POSIX
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXShortFlag(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, Parser.PreprocessorDelegate preprocessor = null, T defaultValue = default (T))
+        public POSIXShortFlag(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, T defaultValue = default (T))
             : base(new Key(Prefix, tag.ToString()), description, valueOptions, flagOptions, typeConverter, preprocessor, defaultValue) { }
 
         /// <summary>
