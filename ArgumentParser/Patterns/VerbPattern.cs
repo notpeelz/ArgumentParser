@@ -31,12 +31,12 @@ namespace ArgumentParser
                 (
                     "" (?<verb> (?> \\.  | [^""] )*) ""|
                     '  (?<verb> (?> \\.  | [^'] )*) '|
-                       (?<verb> (?> \\.  | [^\s""']  )*)
+                       (?<verb> (?> \\.  | [^\s""']  )+)
                 )
                 (?=\s|$)
             )";
         #else
-        private const String VERB_PATTERN = @"(?<=\s|^)((?<args>[\-/]+\b.*)|(?<!\\\s)(""(?<verb>(?>\\.|[^""])*)""|'(?<verb>(?>\\.|[^'])*)'|(?<verb>(?>\\.|[^\s""'])*))(?=\s|$))";
+        private const String VERB_PATTERN = @"(?<=\s|^)((?<args>[\-/]+\b.*)|(?<!\\\s)(""(?<verb>(?>\\.|[^""])*)""|'(?<verb>(?>\\.|[^'])*)'|(?<verb>(?>\\.|[^\s""'])+))(?=\s|$))";
         #endif
     }
 }

@@ -29,11 +29,11 @@ namespace ArgumentParser
             (
                 "" (?<value> (?> \\.  | [^""] )*) ""|
                 '  (?<value> (?> \\.  | [^'] )*) '|
-                   (?<value> (?> \\.  | [^\s""']  )*)
+                   (?<value> (?> \\.  | [^\s""']  )+)
             )
             (?=$|\s)";
         #else
-        internal const String VALUE_PATTERN = @"(?<=^|\s)(?<!\\\s)(""(?<value>(?>\\.|[^""])*)""|'(?<value>(?>\\.|[^'])*)'|(?<value>(?>\\.|[^\s""'])*))(?=$|\s)";
+        internal const String VALUE_PATTERN = @"(?<=^|\s)(?<!\\\s)(""(?<value>(?>\\.|[^""])*)""|'(?<value>(?>\\.|[^'])*)'|(?<value>(?>\\.|[^\s""'])+))(?=$|\s)";
         #endif
     }
 }
