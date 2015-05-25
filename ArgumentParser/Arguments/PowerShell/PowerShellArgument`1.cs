@@ -36,7 +36,7 @@ namespace ArgumentParser.Arguments.PowerShell
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public PowerShellArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, T defaultValue = default (T))
+        public PowerShellArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, Object defaultValue = null)
             : base(new Key(Prefix, tag), description, valueOptions, typeConverter, preprocessor, defaultValue) { }
 
         /// <summary>

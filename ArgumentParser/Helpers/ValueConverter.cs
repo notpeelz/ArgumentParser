@@ -78,22 +78,22 @@ namespace ArgumentParser.Helpers
         /// <summary>
         /// Converts a value to a native equivalent.
         /// </summary>
-        /// <param name="value">The value to convert.</param>
         /// <param name="type">The type to convert the value to.</param>
+        /// <param name="value">The value to convert.</param>
         /// <returns>The converted value.</returns>
-        public static Object ConvertValue(Object value, Type type)
+        public static Object ConvertValue(Type type, Object value)
         {
-            return ConvertValue(value, type, null);
+            return ConvertValue(type, null, value);
         }
 
         /// <summary>
         /// Converts a value to a native equivalent using the the specified <see cref="T:System.IFormatProvider"/>.
         /// </summary>
-        /// <param name="value">The value to convert.</param>
         /// <param name="type">The type to convert the value to.</param>
         /// <param name="formatProvider">The format provider to use.</param>
+        /// <param name="value">The value to convert.</param>
         /// <returns>The converted value.</returns>
-        public static Object ConvertValue(Object value, Type type, IFormatProvider formatProvider)
+        public static Object ConvertValue(Type type, IFormatProvider formatProvider, Object value)
         {
             if (value == null)
                 return null;

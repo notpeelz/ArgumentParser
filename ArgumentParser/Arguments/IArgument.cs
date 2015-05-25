@@ -48,6 +48,13 @@ namespace ArgumentParser.Arguments
         ValueOptions ValueOptions { get; }
 
         /// <summary>
+        /// Gets the default value of the argument.
+        /// </summary>
+        /// <param name="value">The default value.</param>
+        /// <returns>A boolean value indicating whether the conversion succeeded.</returns>
+        Boolean TryGetDefaultValue(out Object value);
+
+        /// <summary>
         /// Converts a sequence of values to the type of the argument using the specified format.
         /// </summary>
         /// <param name="values">The input values to convert.</param>

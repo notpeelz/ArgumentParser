@@ -26,12 +26,19 @@ namespace ArgumentParser.Arguments
     /// Represents an argument definition of a defined value type.
     /// </summary>
     /// <typeparam name="T">The type of the value.</typeparam>
-    public interface IArgument<out T> : IArgument
+    public interface IArgument<T> : IArgument
     {
         /// <summary>
         /// Gets the default value of the argument.
         /// </summary>
         new T DefaultValue { get; }
+
+        /// <summary>
+        /// Gets the default value of the argument.
+        /// </summary>
+        /// <param name="value">The default value.</param>
+        /// <returns>A boolean value indicating whether the conversion succeeded.</returns>
+        Boolean TryGetDefaultValue(out T value);
 
         /// <summary>
         /// Converts a sequence of values to the type of the argument using the specified <see cref="T:System.Globalization.CultureInfo"/>.

@@ -31,9 +31,10 @@ namespace ArgumentParser.Arguments.Windows
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public WindowsArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(new Key(Prefix, tag), description, valueOptions, defaultValue) { }
+        public WindowsArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, PreprocessorDelegate preprocessor = null, String defaultValue = null)
+            : base(new Key(Prefix, tag), description, valueOptions, preprocessor, defaultValue) { }
 
         /// <summary>
         /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.Windows.WindowsArgument"/> type.

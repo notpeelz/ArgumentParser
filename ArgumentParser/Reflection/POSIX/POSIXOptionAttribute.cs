@@ -98,14 +98,14 @@ namespace ArgumentParser.Reflection.POSIX
         /// <returns>The newly created argument definition.</returns>
         public virtual IArgument CreateArgument(Type valueType, IFormatProvider formatProvider)
         {
-            var value = ValueConverter.GetDefaultValue(valueType, this.TypeConverter, this.DefaultValue);
+            var defaultValue = ValueConverter.ConvertValue(valueType, formatProvider, this.DefaultValue);
 
             if (this.IsShort)
                 return (IArgument) Activator.CreateInstance(typeof (POSIXShortArgument<>)
-                    .MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, value);
+                    .MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, defaultValue);
 
             return (IArgument) Activator.CreateInstance(typeof (POSIXLongArgument<>)
-                .MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, value);
+                .MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, defaultValue);
         }
 
         /// <summary>

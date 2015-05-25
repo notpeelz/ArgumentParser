@@ -46,7 +46,7 @@ namespace ArgumentParser.Arguments
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected FlagArgument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, T defaultValue = default(T))
+        protected FlagArgument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, Object defaultValue = null)
             : base(key, description, valueOptions, typeConverter, preprocessor, defaultValue)
         {
             this.FlagOptions = flagOptions;

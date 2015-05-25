@@ -45,7 +45,7 @@ namespace ArgumentParser.Arguments
         /// <param name="typeConverter">The type converter to use for conversion.</param>
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, T defaultValue = default (T))
+        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, Object defaultValue = null)
         {
             this.Key = key;
             this.Description = description;
@@ -73,7 +73,7 @@ namespace ArgumentParser.Arguments
         /// <summary>
         /// Gets the default value of the argument.
         /// </summary>
-        public T DefaultValue { get; private set; }
+        public Object DefaultValue { get; private set; }
 
         /// <summary>
         /// Gets the value type of the argument.
@@ -93,9 +93,48 @@ namespace ArgumentParser.Arguments
         /// <summary>
         /// Gets the default value of the argument.
         /// </summary>
-        Object IArgument.DefaultValue
+        T IArgument<T>.DefaultValue
         {
-            get { return this.DefaultValue; }
+            get
+            {
+                return this.DefaultValue is T
+                    ? (T) this.DefaultValue
+                    : (T) ValueConverter.GetDefaultValue(this.Type, this.TypeConverter, this.DefaultValue);
+            }
+        }
+
+        /// <summary>
+        /// Gets the default value of the argument.
+        /// </summary>
+        /// <param name="value">The default value.</param>
+        /// <returns>A boolean value indicating whether the conversion succeeded.</returns>
+        Boolean IArgument.TryGetDefaultValue(out Object value)
+        {
+            T defaultValue;
+            bool returnValue = this.TryGetDefaultValue(out defaultValue);
+            value = defaultValue;
+
+            return returnValue;
+        }
+
+        /// <summary>
+        /// Gets the default value of the argument.
+        /// </summary>
+        /// <param name="value">The default value.</param>
+        /// <returns>A boolean value indicating whether the conversion succeeded.</returns>
+        public virtual Boolean TryGetDefaultValue(out T value)
+        {
+            try
+            {
+                value = ((IArgument<T>) this).DefaultValue;
+            }
+            catch
+            {
+                value = default (T);
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -142,7 +181,7 @@ namespace ArgumentParser.Arguments
                     return new ParameterPair(this, new Object[0]);
                 default:
                     var canonicalValues = parameters.ToDictionary(x => x, x => ValueConverter.GetCompositeValueParts(x, this.Preprocessor ?? preprocessor, culture));
-                    trailingValues = canonicalValues.Select(x => x.Value.Any() ? x.Value.Skip(1) : x.Value);
+                    trailingValues = canonicalValues.Select(x => x.Value != null && x.Value.Any() ? x.Value.Skip(1) : x.Value);
                     return new ParameterPair(
                         argument: this,
                         values: this.GetValues(canonicalValues.Select(x =>

@@ -82,10 +82,10 @@ namespace ArgumentParser.Reflection.PowerShell
         /// <returns>The newly created argument definition.</returns>
         public virtual IArgument CreateArgument(Type valueType, IFormatProvider formatProvider)
         {
-            var value = ValueConverter.ConvertValue(this.DefaultValue, valueType, formatProvider);
+            var defaultValue = ValueConverter.ConvertValue(valueType, formatProvider, this.DefaultValue);
             var type = typeof (PowerShellArgument<>).MakeGenericType(valueType);
 
-            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, value);
+            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, defaultValue);
         }
 
         /// <summary>

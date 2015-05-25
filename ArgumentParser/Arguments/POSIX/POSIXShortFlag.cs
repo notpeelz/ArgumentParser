@@ -32,9 +32,10 @@ namespace ArgumentParser.Arguments.POSIX
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="flagOptions">The value conversion behavior.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXShortFlag(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, Int32 defaultValue = default (Int32))
-            : base(new Key(Prefix, tag.ToString()), description, valueOptions, flagOptions, defaultValue: defaultValue) { }
+        public POSIXShortFlag(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, PreprocessorDelegate preprocessor = null, Int32 defaultValue = default (Int32))
+            : base(new Key(Prefix, tag.ToString()), description, valueOptions, flagOptions, preprocessor: preprocessor, defaultValue: defaultValue) { }
 
         /// <summary>
         /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXShortFlag"/> type.

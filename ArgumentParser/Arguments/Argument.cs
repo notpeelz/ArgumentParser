@@ -36,8 +36,9 @@ namespace ArgumentParser.Arguments
         /// <param name="key">The unique identifier to use to represent the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
+        /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, String defaultValue = null)
-            : base(key, description, valueOptions, defaultValue: defaultValue) { }
+        protected Argument(Key key, String description = null, ValueOptions valueOptions = ValueOptions.Single, PreprocessorDelegate preprocessor = null, String defaultValue = null)
+            : base(key, description, valueOptions, preprocessor: preprocessor, defaultValue: defaultValue) { }
     }
 }

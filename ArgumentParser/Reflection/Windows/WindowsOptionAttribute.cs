@@ -82,10 +82,10 @@ namespace ArgumentParser.Reflection.Windows
         /// <returns>The newly created argument definition.</returns>
         public virtual IArgument CreateArgument(Type valueType, IFormatProvider formatProvider)
         {
-            var value = ValueConverter.GetDefaultValue(valueType, this.TypeConverter, this.DefaultValue);
+            var defaultValue = ValueConverter.ConvertValue(valueType, formatProvider, this.DefaultValue);
             var type = typeof (WindowsArgument<>).MakeGenericType(valueType);
 
-            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, value);
+            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, defaultValue);
         }
 
         /// <summary>

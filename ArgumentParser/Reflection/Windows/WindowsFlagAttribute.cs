@@ -49,10 +49,10 @@ namespace ArgumentParser.Reflection.Windows
         /// <returns>The newly created argument definition.</returns>
         public override IArgument CreateArgument(Type valueType, IFormatProvider formatProvider)
         {
-            var value = ValueConverter.ConvertValue(this.DefaultValue, valueType, formatProvider);
+            var defaultValue = ValueConverter.ConvertValue(valueType, formatProvider, this.DefaultValue);
             var type = typeof (WindowsFlag<>).MakeGenericType(valueType);
 
-            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Preprocessor, value);
+            return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Preprocessor, defaultValue);
         }
 
         /// <summary>

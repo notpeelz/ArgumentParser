@@ -566,10 +566,13 @@ namespace ArgumentParser
             var property = member as PropertyInfo;
             var methodInfo = member as MethodInfo;
 
+            Object defaultValue;
+            pair.Argument.TryGetDefaultValue(out defaultValue);
+
             if (property != null)
-                BindValue(instance, property, pair, pair.Argument.DefaultValue, options.Culture);
+                BindValue(instance, property, pair, defaultValue, options.Culture);
             else if (methodInfo != null)
-                BindValue(instance, methodInfo, pair, attribute, attribute.ManualBinding, pair.Argument.DefaultValue, options.Culture);
+                BindValue(instance, methodInfo, pair, attribute, attribute.ManualBinding, defaultValue, options.Culture);
             else throw new ArgumentException(INVALID_MEMBER_TYPE_EXCEPTION_MESSAGE, "member");
         }
 
@@ -622,7 +625,7 @@ namespace ArgumentParser
 
         private static void BindValue(Object instance, PropertyInfo property, ParameterPair pair, Object value, CultureInfo culture)
         {
-            var convertedValue = ValueConverter.ConvertValue(value, pair.Argument.Type, culture);
+            var convertedValue = ValueConverter.ConvertValue(pair.Argument.Type, culture, value);
 
             if (!property.CanWrite)
                 throw new ParserBindingException(UNWRITABLE_PROPERTY_EXCEPTION_MESSAGE, pair: pair, member: property, context: instance);
@@ -632,7 +635,7 @@ namespace ArgumentParser
 
         private static void BindValue(Object instance, MethodInfo method, ParameterPair pair, IOptionAttribute attribute, Boolean manualBinding, Object value, CultureInfo culture)
         {
-            var convertedValue = ValueConverter.ConvertValue(value, pair.Argument.Type, culture);
+            var convertedValue = ValueConverter.ConvertValue(pair.Argument.Type, culture, value);
             method.Invoke(instance, manualBinding
                 ? new[] { convertedValue, new BindingEventArgs(pair, attribute) }
                 : new[] { convertedValue });
