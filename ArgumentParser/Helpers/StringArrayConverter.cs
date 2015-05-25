@@ -30,12 +30,16 @@ namespace ArgumentParser.Helpers
     public class StringArrayConverter : TypeConverter
     {
         private readonly String separator;
-        private readonly StringSplitOptions splitOptions = StringSplitOptions.None;
+        private readonly StringSplitOptions splitOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Helpers.StringArrayConverter"/> class.
         /// </summary>
-        public StringArrayConverter() { }
+        /// <param name="options">The <see cref="T:System.StringSplitOptions"/> policy to use for splitting strings.</param>
+        public StringArrayConverter(StringSplitOptions options = StringSplitOptions.None)
+        {
+            this.splitOptions = options;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ArgumentParser.Helpers.StringArrayConverter"/> class.
