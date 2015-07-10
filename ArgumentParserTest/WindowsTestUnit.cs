@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="WindowsTestUnit.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
@@ -20,14 +20,14 @@ using System;
 using System.Collections.Generic;
 using ArgumentParser;
 using ArgumentParser.Reflection.Windows;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ArgumentParserTest
 {
-    [TestClass]
+    [TestFixture]
     public class WindowsTestUnit
     {
-        [TestMethod]
+        [Test]
         public void TestFlag()
         {
             Main.Instance.Parse("/test");

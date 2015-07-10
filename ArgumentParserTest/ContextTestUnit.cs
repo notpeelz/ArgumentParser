@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ContextTestUnit.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
@@ -24,27 +24,27 @@ using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Reflection;
 using ArgumentParser.Reflection.POSIX;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ArgumentParserTest
 {
-    [TestClass]
+    [TestFixture]
     public class ContextTestUnit
     {
-        [TestInitialize]
+        [TestFixtureSetUp]
         public void Init()
         {
             //Main.Instance.Parse("install global - test-app atom \"test --test --blah \" --test -f -b");
             Main.Instance.Parse("-u Test1,Test2 --test -t -a 'short' --ambiguous \"long\" -vvvv -eeee -hhhh -hhh -hh -h -i 15 -i 1 -i 0 -i");
         }
 
-        [TestMethod]
+        [Test]
         public void TestPropertyAttribute()
         {
             Assert.IsTrue(Main.Instance.AmbiguousValue == "short" || Main.Instance.AmbiguousValue == "long");
         }
 
-        [TestMethod]
+        [Test]
         public void TestListSeparation()
         {
             Assert.AreEqual(2, Main.Instance.Usernames.Length);
@@ -52,37 +52,37 @@ namespace ArgumentParserTest
             Assert.AreEqual("Test2", Main.Instance.Usernames.Last());
         }
 
-        [TestMethod]
+        [Test]
         public void TestUnboundFlagDefault()
         {
             Assert.IsTrue(Main.Instance.UnaffectedDefault);
         }
 
-        [TestMethod]
+        [Test]
         public void TestFlagInversion()
         {
             Assert.AreEqual(1, Main.Instance.InvertedValue);
         }
 
-        [TestMethod]
+        [Test]
         public void TestImplicitConversion()
         {
             Assert.IsTrue(!Main.Instance.ImplicitlyConvertedValue);
         }
 
-        [TestMethod]
+        [Test]
         public void TestValuedFlagAggregation()
         {
             Assert.AreEqual(4, Main.Instance.VerbosityLevel);
         }
 
-        [TestMethod]
+        [Test]
         public void TestFlagAggregation()
         {
             Assert.AreEqual(4, Main.Instance.SecondVerbosityLevel);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEnumFlag()
         {
             Assert.AreEqual((VerbosityLevel) (1 << 4) - 1, Main.Instance.ThirdVerbosityLevel);

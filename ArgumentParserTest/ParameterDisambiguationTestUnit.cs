@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ParameterDisambiguationTestUnit.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
@@ -25,11 +25,11 @@ using ArgumentParser.Arguments;
 using ArgumentParser.Arguments.POSIX;
 using ArgumentParser.Arguments.Windows;
 using ArgumentParser.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ArgumentParserTest
 {
-    [TestClass]
+    [TestFixture]
     public class ParameterDisambiguationTestUnit
     {
         private static readonly IArgument interfaceLongVerb = new POSIXLongArgument("interface", description: "The network interface(s) to use.");
@@ -65,7 +65,7 @@ namespace ArgumentParserTest
             Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE")
         };
 
-        [TestMethod]
+        [Test]
         public void TestCollisionDetection()
         {
             //Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE");
@@ -85,7 +85,7 @@ namespace ArgumentParserTest
             Assert.Fail();
         }
 
-        [TestMethod]
+        [Test]
         public void TestWindowsParameters()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;

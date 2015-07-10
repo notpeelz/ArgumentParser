@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ParameterTokenStyle.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
@@ -44,8 +44,8 @@ namespace ArgumentParser
         WindowsEqual,
 
         /// <summary>
-        /// Parse PowerShell-like input parameters.
+        /// Parse minimalism-flavored input parameters.
         /// </summary>
-        PowerShell
+        Simple
     }
 }

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="CompositeParameterValueTestUnit.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
@@ -21,11 +21,11 @@ using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Arguments.POSIX;
 using ArgumentParser.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ArgumentParserTest
 {
-    [TestClass]
+    [TestFixture]
     public class CompositeParameterValueTestUnit
     {
         private static readonly IArgument<String[]> pushShortArgument = new POSIXShortArgument<String[]>(
@@ -35,7 +35,7 @@ namespace ArgumentParserTest
 
         private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX);
 
-        [TestMethod]
+        [Test]
         public void TestCompositeValues()
         {
             var args = Parser.GetParameters("-p origin    master  ", options, pushShortArgument);

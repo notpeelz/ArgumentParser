@@ -1,0 +1,42 @@
+{
+  "configurations": {
+    "Debug": {
+      "compilationOptions": {
+        "define": [
+          "DEBUG",
+          "TRACE"
+        ]
+      }
+    },
+    "Release": {
+      "compilationOptions": {
+        "define": [
+          "RELEASE",
+          "TRACE"
+        ],
+        "optimize": true
+      }
+    }
+  },
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Drawing": "",
+        "System.Xml.Linq": "",
+        "System.Data.DataSetExtensions": "",
+        "Microsoft.CSharp": "",
+        "System.Xml": ""
+      },
+      "bin": {
+        "ArgumentParser": "../ArgumentParser/bin/Debug/ArgumentParser.dll"
+      }
+    }
+  },
+  "compile": "*.cs",
+  "dependencies": {
+    "ArgumentParser": "",
+    "nunit": "3.0.0-beta-2"
+  }
+}

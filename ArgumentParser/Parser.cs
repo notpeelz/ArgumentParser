@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="Parser.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
@@ -42,7 +42,7 @@ namespace ArgumentParser
         internal const String PREFIX_POSIX_LONG = "--";
         internal const String PREFIX_POSIX_SHORT = "-";
         internal const String PREFIX_WINDOWS = "/";
-        internal const String PREFIX_POWERSHELL = "-";
+        internal const String PREFIX_SIMPLE = "-";
 
         /// <summary>
         /// Represents the default value preprocessor delegate.
@@ -466,8 +466,8 @@ namespace ArgumentParser
                     return WINDOWS_EQUAL_PARAMETER_PATTERN;
                 case ParameterTokenStyle.POSIX:
                     return POSIX_PARAMETER_PATTERN;
-                case ParameterTokenStyle.PowerShell:
-                    return POWERSHELL_PARAMETER_PATTERN;
+                case ParameterTokenStyle.Simple:
+                    return SIMPLE_PARAMETER_PATTERN;
                 default:
                     throw new InvalidEnumArgumentException(INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }

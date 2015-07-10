@@ -1,0 +1,54 @@
+{
+  "locked": false,
+  "version": 1,
+  "targets": {
+    "DNX,Version=v4.5.1": {
+      "nunit/3.0.0-beta-2": {
+        "compile": {
+          "lib/net45/nunit.framework.dll": {}
+        },
+        "runtime": {
+          "lib/net45/nunit.framework.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "nunit/3.0.0-beta-2": {
+      "sha512": "sbWgLQ3yoHRV438nnuCijhEpynSKurZecWDNk1eG3Qne37Az1rWj53f3TD5LIOMrK+rT1VRA4niuyVqa8jprSg==",
+      "files": [
+        "CHANGES.txt",
+        "lib/net20/nunit.framework.dll",
+        "lib/net20/nunit.framework.xml",
+        "lib/net40/nunit.framework.dll",
+        "lib/net40/nunit.framework.xml",
+        "lib/net45/nunit.framework.dll",
+        "lib/net45/nunit.framework.xml",
+        "lib/portable-net45+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/nunit.framework.dll",
+        "lib/portable-net45+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/nunit.framework.xml",
+        "lib/sl50/nunit.framework.dll",
+        "lib/sl50/nunit.framework.xml",
+        "LICENSE.txt",
+        "NOTICES.txt",
+        "nunit.3.0.0-beta-2.nupkg",
+        "nunit.3.0.0-beta-2.nupkg.sha512",
+        "nunit.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "ArgumentParser ",
+      "nunit >= 3.0.0-beta-2"
+    ],
+    "DNX,Version=v4.5.1": [
+      "fx/System ",
+      "fx/System.Core ",
+      "fx/System.Drawing ",
+      "fx/System.Xml.Linq ",
+      "fx/System.Data.DataSetExtensions ",
+      "fx/Microsoft.CSharp ",
+      "fx/System.Xml "
+    ]
+  }
+}

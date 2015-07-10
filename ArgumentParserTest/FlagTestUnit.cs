@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="FlagTestUnit.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
@@ -22,14 +22,14 @@ using System.Linq;
 using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Reflection.POSIX;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ArgumentParserTest
 {
-    [TestClass]
+    [TestFixture]
     public class FlagTestUnit
     {
-        [TestMethod]
+        [Test]
         public void TestFlag()
         {
             var a = Parser.GetRawParameters("--test t es t 123 456", ParameterTokenStyle.POSIX);

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ParserOptions.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using ArgumentParser.Reflection;
-using ArgumentParser.Reflection.PowerShell;
+using ArgumentParser.Reflection.Simple;
 using ArgumentParser.Reflection.POSIX;
 using ArgumentParser.Reflection.Windows;
 
@@ -81,7 +81,7 @@ namespace ArgumentParser
         public Func<ParsingException, Boolean> ExceptionHandler { get; set; }
 
         private static readonly AttributeFilterDelegate posixAttributeFilter = a => a is IPOSIXOptionAttribute;
-        private static readonly AttributeFilterDelegate powerShellAttributeFilter = a => a is IPSOptionAttribute;
+        private static readonly AttributeFilterDelegate simpleAttributeFilter = a => a is ISimpleOptionAttribute;
         private static readonly AttributeFilterDelegate windowsAttributeFilter = a => a is IWindowsOptionAttribute;
 
         internal AttributeFilterDelegate GetAttributeFilter()
@@ -97,8 +97,8 @@ namespace ArgumentParser
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.WindowsEqual:
                     return windowsAttributeFilter;
-                case ParameterTokenStyle.PowerShell:
-                    return powerShellAttributeFilter;
+                case ParameterTokenStyle.Simple:
+                    return simpleAttributeFilter;
                 default:
                     throw new ArgumentOutOfRangeException(Parser.INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
