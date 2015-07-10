@@ -1,5 +1,5 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="PSCompositeListOptionAttribute.cs" company="LouisTakePILLz">
+//-----------------------------------------------------------------------
+// <copyright file="SimpleListOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -18,27 +18,23 @@
 
 using System;
 using System.ComponentModel;
-using ArgumentParser.Arguments;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Reflection.PowerShell
+namespace ArgumentParser.Reflection.Simple
 {
     /// <summary>
-    /// Represents a PowerShell-like option attribute that supports splitting using spaces.
+    /// Represents a minimalism-flavored option attribute that supports splitting using a culture-dependent separator.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class PSCompositeListOptionAttribute : PSOptionAttribute
+    public class SimpleListOptionAttribute : SimpleOptionAttribute
     {
-        private static readonly StringArrayConverter typeConverter = new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries);
+        private static readonly StringArrayConverter typeConverter = new StringArrayConverter();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.PowerShell.PSCompositeListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Simple.SimpleListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public PSCompositeListOptionAttribute(String tag) : base(tag)
-        {
-            this.ValueOptions = ValueOptions.Composite;
-        }
+        public SimpleListOptionAttribute(String tag) : base(tag) { }
 
         /// <summary>
         /// Gets the type converter used for value conversion.

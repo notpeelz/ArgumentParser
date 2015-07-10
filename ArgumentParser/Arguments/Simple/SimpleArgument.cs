@@ -1,5 +1,5 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="PowerShellArgument.cs" company="LouisTakePILLz">
+//-----------------------------------------------------------------------
+// <copyright file="SimpleArgument.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -18,30 +18,30 @@
 
 using System;
 
-namespace ArgumentParser.Arguments.PowerShell
+namespace ArgumentParser.Arguments.Simple
 {
     /// <summary>
-    /// Represents a PowerShell-like argument of an undefined value type.
+    /// Represents a minimalism-flavored argument of an undefined value type.
     /// </summary>
-    public class PowerShellArgument : Argument
+    public class SimpleArgument : Argument
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.PowerShell.PowerShellArgument"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Simple.SimpleArgument"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public PowerShellArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, PreprocessorDelegate preprocessor = null, String defaultValue = null)
+        public SimpleArgument(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, PreprocessorDelegate preprocessor = null, String defaultValue = null)
             : base(new Key(Prefix, tag), description, valueOptions, preprocessor, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.PowerShell.PowerShellArgument"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.Simple.SimpleArgument"/> type.
         /// </summary>
         public static String Prefix
         {
-            get { return Parser.PREFIX_POWERSHELL; }
+            get { return Parser.PREFIX_SIMPLE; }
         }
     }
 }

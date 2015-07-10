@@ -1,5 +1,5 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="PSFlagAttribute.cs" company="LouisTakePILLz">
+//-----------------------------------------------------------------------
+// <copyright file="SimpleFlagAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -19,22 +19,22 @@
 using System;
 using System.ComponentModel;
 using ArgumentParser.Arguments;
-using ArgumentParser.Arguments.PowerShell;
+using ArgumentParser.Arguments.Simple;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Reflection.PowerShell
+namespace ArgumentParser.Reflection.Simple
 {
     /// <summary>
-    /// Represents a PowerShell-like flag option attribute.
+    /// Represents a minimalism-flavored flag option attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class PSFlagAttribute : PSOptionAttribute, IFlagOptionAttribute
+    public class SimpleFlagAttribute : SimpleOptionAttribute, IFlagOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.PowerShell.PSFlagAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Simple.SimpleFlagAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public PSFlagAttribute(String tag) : base(tag) { }
+        public SimpleFlagAttribute(String tag) : base(tag) { }
 
         /// <summary>
         /// Gets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
@@ -50,7 +50,7 @@ namespace ArgumentParser.Reflection.PowerShell
         public override IArgument CreateArgument(Type valueType, IFormatProvider formatProvider)
         {
             var defaultValue = ValueConverter.ConvertValue(valueType, formatProvider, this.DefaultValue);
-            var type = typeof (PowerShellFlag<>).MakeGenericType(valueType);
+            var type = typeof (SimpleFlag<>).MakeGenericType(valueType);
 
             return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Preprocessor, defaultValue);
         }

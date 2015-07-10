@@ -1,5 +1,5 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="IPSOptionAttribute.cs" company="LouisTakePILLz">
+//-----------------------------------------------------------------------
+// <copyright file="ISimpleOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -16,10 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace ArgumentParser.Reflection.PowerShell
+namespace ArgumentParser.Reflection.Simple
 {
     /// <summary>
-    /// Represents an PowerShell-flavored argument definition attribute.
+    /// Represents a minimalism-flavored argument definition attribute.
     /// </summary>
-    public interface IPSOptionAttribute : IOptionAttribute { }
+    public interface ISimpleOptionAttribute : IOptionAttribute { }
 }

@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -47,10 +47,10 @@
     <Compile Include="Arguments\IFlag.cs" />
     <Compile Include="Arguments\POSIX\POSIXLongFlag.cs" />
     <Compile Include="Arguments\POSIX\POSIXLongFlag`1.cs" />
-    <Compile Include="Arguments\PowerShell\PowerShellArgument.cs" />
-    <Compile Include="Arguments\PowerShell\PowerShellArgument`1.cs" />
-    <Compile Include="Arguments\PowerShell\PowerShellFlag.cs" />
-    <Compile Include="Arguments\PowerShell\PowerShellFlag`1.cs" />
+    <Compile Include="Arguments\Simple\SimpleArgument.cs" />
+    <Compile Include="Arguments\Simple\SimpleArgument`1.cs" />
+    <Compile Include="Arguments\Simple\SimpleFlag.cs" />
+    <Compile Include="Arguments\Simple\SimpleFlag`1.cs" />
     <Compile Include="Arguments\ValueOptions.cs" />
     <Compile Include="PreprocessorDelegate.cs" />
     <Compile Include="Reflection\AttributeFilterDelegate.cs" />
@@ -60,11 +60,11 @@
     <Compile Include="Reflection\IFlagOptionAttribute.cs" />
     <Compile Include="Reflection\ICoupleableOptionAttribute.cs" />
     <Compile Include="Reflection\POSIX\IPOSIXOptionAttribute.cs" />
-    <Compile Include="Reflection\PowerShell\IPSOptionAttribute.cs" />
-    <Compile Include="Reflection\PowerShell\PSCompositeListOptionAttribute.cs" />
-    <Compile Include="Reflection\PowerShell\PSListOptionAttribute.cs" />
-    <Compile Include="Reflection\PowerShell\PSFlagAttribute.cs" />
-    <Compile Include="Reflection\PowerShell\PSOptionAttribute.cs" />
+    <Compile Include="Reflection\Simple\ISimpleOptionAttribute.cs" />
+    <Compile Include="Reflection\Simple\SimpleCompositeListOptionAttribute.cs" />
+    <Compile Include="Reflection\Simple\SimpleListOptionAttribute.cs" />
+    <Compile Include="Reflection\Simple\SimpleFlagAttribute.cs" />
+    <Compile Include="Reflection\Simple\SimpleOptionAttribute.cs" />
     <Compile Include="Reflection\Windows\IWindowsOptionAttribute.cs" />
     <Compile Include="Reflection\Windows\WindowsCompositeListOptionAttribute.cs" />
     <Compile Include="Reflection\Windows\WindowsListOptionAttribute.cs" />
@@ -86,7 +86,7 @@
     <Compile Include="IParserContext.cs" />
     <Compile Include="IVerbContext.cs" />
     <Compile Include="Patterns\POSIXParameterPattern.cs" />
-    <Compile Include="Patterns\PSParameterPattern.cs" />
+    <Compile Include="Patterns\SimpleParameterPattern.cs" />
     <Compile Include="Patterns\ValuePattern.cs" />
     <Compile Include="Patterns\VerbPattern.cs" />
     <Compile Include="Patterns\WindowsColonParameterPattern.cs" />

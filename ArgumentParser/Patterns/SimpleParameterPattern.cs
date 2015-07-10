@@ -1,5 +1,5 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="PSParameterPattern.cs" company="LouisTakePILLz">
+//-----------------------------------------------------------------------
+// <copyright file="SimpleParameterPattern.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -23,7 +23,7 @@ namespace ArgumentParser
     public static partial class Parser
     {
         #if DEBUG
-        private const String POWERSHELL_PARAMETER_PATTERN = @"
+        private const String SIMPLE_PARAMETER_PATTERN = @"
             (?<=^|\s)
             (
                 (?<prefix>-)
@@ -41,7 +41,7 @@ namespace ArgumentParser
             )?
             (?=\s|$)";
         #else
-        private const String POWERSHELL_PARAMETER_PATTERN = @"(?<=^|\s)((?<prefix>-)(?<tag>(?!-)[\w\-]+(?<!\-)))(\s+(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\.-?|[^\-""']|(?<!\s)\-+|\-+(?=\d|[^\-\w\""]|$))+)+))?(?=\s|$)";
+        private const String SIMPLE_PARAMETER_PATTERN = @"(?<=^|\s)((?<prefix>-)(?<tag>(?!-)[\w\-]+(?<!\-)))(\s+(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\.-?|[^\-""']|(?<!\s)\-+|\-+(?=\d|[^\-\w\""]|$))+)+))?(?=\s|$)";
         #endif
     }
 }

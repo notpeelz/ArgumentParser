@@ -1,5 +1,5 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="PSOptionAttribute.cs" company="LouisTakePILLz">
+//-----------------------------------------------------------------------
+// <copyright file="SimpleOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -19,22 +19,22 @@
 using System;
 using System.ComponentModel;
 using ArgumentParser.Arguments;
-using ArgumentParser.Arguments.PowerShell;
+using ArgumentParser.Arguments.Simple;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Reflection.PowerShell
+namespace ArgumentParser.Reflection.Simple
 {
     /// <summary>
-    /// Represents a PowerShell-like option attribute.
+    /// Represents a minimalism-flavored option attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class PSOptionAttribute : Attribute, IPSOptionAttribute
+    public class SimpleOptionAttribute : Attribute, ISimpleOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.PowerShell.PSOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Simple.SimpleOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public PSOptionAttribute(String tag)
+        public SimpleOptionAttribute(String tag)
         {
             this.Tag = tag;
         }
@@ -83,7 +83,7 @@ namespace ArgumentParser.Reflection.PowerShell
         public virtual IArgument CreateArgument(Type valueType, IFormatProvider formatProvider)
         {
             var defaultValue = ValueConverter.ConvertValue(valueType, formatProvider, this.DefaultValue);
-            var type = typeof (PowerShellArgument<>).MakeGenericType(valueType);
+            var type = typeof (SimpleArgument<>).MakeGenericType(valueType);
 
             return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, defaultValue);
         }
