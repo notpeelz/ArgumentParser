@@ -4,7 +4,7 @@ This library was made in an attempt to simplify the handling and parsing of para
 
 Please see our [contributing guidelines](./CONTRIBUTING.md) before reporting an issue.
 
-[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](./LICENSE)
+[![License](https://img.shields.io/badge/license-GPLv2-blue.svg)](./LICENSE)
 [![Release](https://img.shields.io/github/release/louistakepillz/argumentparser.svg)](../../releases)
 
 [![Issues](https://img.shields.io/github/issues/louistakepillz/argumentparser.svg)](../../issues)
