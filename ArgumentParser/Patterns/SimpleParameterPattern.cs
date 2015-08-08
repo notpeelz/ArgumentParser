@@ -28,7 +28,7 @@ namespace ArgumentParser
             (?<=^|\s)
             (
                 (?<prefix>-|\+)
-                (?<tag>(?!-)[\w\-\+]+(?<!\-))
+                (?<tag>[\w\-\+]+(?<!\-))
             )
             (
                 \s+
