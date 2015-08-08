@@ -72,10 +72,12 @@ namespace ArgumentParser.Something
   * Use **camelCase** for **local** variables and `private` fields
   * Do **not** prefix your `private` fields with underscores
   * Use **PascalCase** for (non-private) `static readonly` fields:
+
     ```cs
     public static readonly PreprocessorDelegate DefaultPreprocessor = (x, c) => Regex.Unescape(x);
     ```
   * Use C-Style constant naming:
+
     ```cs
     internal const String INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE = "The token style is not within the valid range of values.";
     internal const String PREFIX_GETOPT_LONG = "--";
@@ -83,15 +85,19 @@ namespace ArgumentParser.Something
     internal const String PREFIX_WINDOWS = "/";
     internal const String PREFIX_SIMPLE = "-";
     ```
+
   * Enumerated types (`enum`) always use **PascalCase**
 
 ### XML Documentation Comments
 
-  * Favor in-line over wrapping (except for `<remarks>` sections and the like):
+  * Favor *in-lining* over *wrapping* (except for `<remarks>` sections and the like):
+
     ```xml
     <summary>The quick brown fox jumps over the lazy dog.</summary>
     ```
+
     as opposed to
+
     ```xml
     <summary>
       The quick brown fox jumps
