@@ -40,7 +40,7 @@ The coding style used in this project is slightly different than most; some of t
 ### Indent style
 
 * Always use 4-wide spaces indent with open braces.
-* Empty constructor overloads should be in-lined.
+* Empty constructor should be in-lined.
 * Automatic properties (and smaller ones) are, however, always in-line (except when adorned with attributes).
 
 ```cs
