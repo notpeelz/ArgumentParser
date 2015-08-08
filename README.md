@@ -33,4 +33,4 @@ See the [wiki pages](../../wiki).
 
 Watch our [Waffle Kanban Board](https://waffle.io/LouisTakePILLz/ArgumentParser) if you're looking for anything to work on: [![Stories in Ready](https://badge.waffle.io/LouisTakePILLz/ArgumentParser.png?label=ready&title=Ready)](https://waffle.io/LouisTakePILLz/ArgumentParser)
 
-For the guidelines, see [Contributing](./CONTRIBUTING.md).
+Any contribution is welcome, just make sure to adhere to the guidelines; see [Contributing](./CONTRIBUTING.md).
