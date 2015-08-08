@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ArgumentParser;
 using ArgumentParser.Arguments;
-using ArgumentParser.Reflection.POSIX;
+using ArgumentParser.Reflection.Getopt;
 using NUnit.Framework;
 
 namespace ArgumentParserTest
@@ -33,7 +33,7 @@ namespace ArgumentParserTest
         [Test]
         public void TestFlag()
         {
-            var a = Parser.GetRawParameters("--test t es t 123 456", ParameterTokenStyle.POSIX);
+            var a = Parser.GetRawParameters("--test t es t 123 456", ParameterTokenStyle.Getopt);
             //Main.Instance.Parse(@"--foobar 20 --foobar 19 --foobar 20 -bbbb -b -b 2");
             Main.Instance.Parse(@"-ttt -t 39 -tt -t");
             //Assert.AreEqual("blahssetest", Main.Instance.Test);
@@ -49,7 +49,7 @@ namespace ArgumentParserTest
             #endregion
 
             #region IParserContext Members
-            private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX);
+            private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.Getopt);
 
             ParserOptions IParserContext.Options
             {
@@ -74,12 +74,12 @@ namespace ArgumentParserTest
 
             public String Test { get; private set; }
 
-            [POSIXFlag('t', FlagOptions = FlagOptions.AggregateExplicit | FlagOptions.AggregateImplicit)]
-            //[POSIXFlag("foobar", Options = FlagOptions.Aggregate | FlagOptions.AggregateExplicit)]
-            //[POSIXFlag("foobar", Description = "Magic!", Options = FlagOptions.Aggregate | FlagOptions.AggregateExplicit)]
+            [GetoptFlag('t', FlagOptions = FlagOptions.AggregateExplicit | FlagOptions.AggregateImplicit)]
+            //[GetoptFlag("foobar", Options = FlagOptions.Aggregate | FlagOptions.AggregateExplicit)]
+            //[GetoptFlag("foobar", Description = "Magic!", Options = FlagOptions.Aggregate | FlagOptions.AggregateExplicit)]
             public Int32 T { get; private set; }
 
-            [POSIXFlag('b')]
+            [GetoptFlag('b')]
             public TestEnum B { get; private set; }
 
             public enum TestEnum

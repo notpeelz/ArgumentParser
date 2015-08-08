@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="POSIXOptionAttribute.cs" company="LouisTakePILLz">
+// <copyright file="GetoptOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -21,31 +21,31 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using ArgumentParser.Arguments;
-using ArgumentParser.Arguments.POSIX;
+using ArgumentParser.Arguments.Getopt;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Reflection.POSIX
+namespace ArgumentParser.Reflection.Getopt
 {
     /// <summary>
-    /// Represents a POSIX-flavored option attribute.
+    /// Represents a getopt-flavored option attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class POSIXOptionAttribute : Attribute, IPOSIXOptionAttribute
+    public class GetoptOptionAttribute : Attribute, IGetoptOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Getopt.GetoptOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public POSIXOptionAttribute(String tag)
+        public GetoptOptionAttribute(String tag)
         {
             this.Tag = tag;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Getopt.GetoptOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public POSIXOptionAttribute(Char tag)
+        public GetoptOptionAttribute(Char tag)
         {
             this.Tag = tag.ToString();
             this.IsShort = true;
@@ -102,10 +102,10 @@ namespace ArgumentParser.Reflection.POSIX
             var defaultValue = ValueConverter.ConvertValue(valueType, formatProvider, this.DefaultValue);
 
             if (this.IsShort)
-                return (IArgument) Activator.CreateInstance(typeof (POSIXShortArgument<>)
+                return (IArgument) Activator.CreateInstance(typeof (GetoptShortArgument<>)
                     .MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, defaultValue);
 
-            return (IArgument) Activator.CreateInstance(typeof (POSIXLongArgument<>)
+            return (IArgument) Activator.CreateInstance(typeof (GetoptLongArgument<>)
                 .MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, defaultValue);
         }
 

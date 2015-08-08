@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="POSIXParameterPattern.cs" company="LouisTakePILLz">
+// <copyright file="GetoptParameterPattern.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -24,7 +24,7 @@ namespace ArgumentParser
     public static partial class Parser
     {
         #if DEBUG
-        private const String POSIX_PARAMETER_PATTERN = @"
+        private const String GETOPT_PARAMETER_PATTERN = @"
             (?<=^|\s)
             (
                 (?<prefix>-)
@@ -61,7 +61,7 @@ namespace ArgumentParser
             )
             (?=\s|$)";
         #else
-        private const String POSIX_PARAMETER_PATTERN = @"(?<=^|\s)((?<prefix>-)(?<tag>[\w-[\d]]){2,}($|(?=\s+)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\.-?|[^\-]|(?<!\s)\-|\-{3,}|\-{1,2}(?=\d|[^\-\w]|$)))+)?)|((?<prefix>--)(?<tag>(?!-)[\w\-]+(?<!\-))|(?<prefix>-)(?<tag>[\w-[\d]]))((\s*|=)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*'))+)|(\s+|=)(?<value>(\\.-?|[^\-]|(?<!\s)\-|\-{3,}|\-{1,2}(?=\d|[^\-\w]|$))*))?)(?=\s|$)";
+        private const String GETOPT_PARAMETER_PATTERN = @"(?<=^|\s)((?<prefix>-)(?<tag>[\w-[\d]]){2,}($|(?=\s+)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*')|(\\.-?|[^\-]|(?<!\s)\-|\-{3,}|\-{1,2}(?=\d|[^\-\w]|$)))+)?)|((?<prefix>--)(?<tag>(?!-)[\w\-]+(?<!\-))|(?<prefix>-)(?<tag>[\w-[\d]]))((\s*|=)(?<value>((""(?>\\.|[^""])*"")|('(?>\\.|[^'])*'))+)|(\s+|=)(?<value>(\\.-?|[^\-]|(?<!\s)\-|\-{3,}|\-{1,2}(?=\d|[^\-\w]|$))*))?)(?=\s|$)";
         #endif
     }
 }

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="POSIXFlagAttribute.cs" company="LouisTakePILLz">
+// <copyright file="GetoptFlagAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -21,28 +21,28 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using ArgumentParser.Arguments;
-using ArgumentParser.Arguments.POSIX;
+using ArgumentParser.Arguments.Getopt;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Reflection.POSIX
+namespace ArgumentParser.Reflection.Getopt
 {
     /// <summary>
-    /// Represents a POSIX-flavored flag option attribute.
+    /// Represents a getopt-flavored flag option attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class POSIXFlagAttribute : POSIXOptionAttribute, IFlagOptionAttribute
+    public class GetoptFlagAttribute : GetoptOptionAttribute, IFlagOptionAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXFlagAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Getopt.GetoptFlagAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public POSIXFlagAttribute(String tag) : base(tag) { }
+        public GetoptFlagAttribute(String tag) : base(tag) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXFlagAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Getopt.GetoptFlagAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public POSIXFlagAttribute(Char tag) : base(tag) { }
+        public GetoptFlagAttribute(Char tag) : base(tag) { }
 
         /// <summary>
         /// Gets or sets the <see cref="T:ArgumentParser.Arguments.FlagOptions"/> value(s) that define the behavior of the flag.
@@ -60,10 +60,10 @@ namespace ArgumentParser.Reflection.POSIX
             var defaultValue = ValueConverter.ConvertValue(valueType, formatProvider, this.DefaultValue);
 
             if (this.IsShort)
-                return (IArgument) Activator.CreateInstance(typeof (POSIXShortFlag<>)
+                return (IArgument) Activator.CreateInstance(typeof (GetoptShortFlag<>)
                     .MakeGenericType(valueType), this.Tag.First(), this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Preprocessor, defaultValue);
 
-            return (IArgument) Activator.CreateInstance(typeof (POSIXLongFlag<>)
+            return (IArgument) Activator.CreateInstance(typeof (GetoptLongFlag<>)
                 .MakeGenericType(valueType), this.Tag, this.Description, this.ValueOptions, this.FlagOptions, this.TypeConverter, this.Preprocessor, defaultValue);
         }
 

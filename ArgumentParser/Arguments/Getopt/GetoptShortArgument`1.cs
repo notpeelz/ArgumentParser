@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="POSIXShortFlag`1.cs" company="LouisTakePILLz">
+// <copyright file="GetoptShortArgument`1.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -20,33 +20,32 @@
 using System;
 using System.ComponentModel;
 
-namespace ArgumentParser.Arguments.POSIX
+namespace ArgumentParser.Arguments.Getopt
 {
     /// <summary>
-    /// Represents a POSIX-flavored flag that supports special value handling and decoupling.
+    /// Represents a getopt-flavored argument identified by a <see cref="T:System.Char"/> tag.
     /// </summary>
     /// <typeparam name="T">The type of the value.</typeparam>
-    public class POSIXShortFlag<T> : FlagArgument<T>
+    public class GetoptShortArgument<T> : Argument<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXShortFlag`1"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Getopt.GetoptShortArgument`1"/> class.
         /// </summary>
-        /// <param name="tag">The character that defines the flag.</param>
+        /// <param name="tag">The character that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
-        /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="flagOptions">The value conversion behavior.</param>
+        /// <param name="valueOptions">The value parsing behavior  of the argument.</param>
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public POSIXShortFlag(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, Object defaultValue = null)
-            : base(new Key(Prefix, tag.ToString()), description, valueOptions, flagOptions, typeConverter, preprocessor, defaultValue) { }
+        public GetoptShortArgument(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, Object defaultValue = null)
+            : base(new Key(Prefix, tag.ToString()), description, valueOptions, typeConverter, preprocessor, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXShortFlag`1"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.Getopt.GetoptShortArgument`1"/> type.
         /// </summary>
         public static String Prefix
         {
-            get { return Parser.PREFIX_POSIX_SHORT; }
+            get { return Parser.PREFIX_GETOPT_SHORT; }
         }
     }
 }

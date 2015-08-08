@@ -24,7 +24,7 @@ using System.Linq;
 using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Reflection;
-using ArgumentParser.Reflection.POSIX;
+using ArgumentParser.Reflection.Getopt;
 using NUnit.Framework;
 
 namespace ArgumentParserTest
@@ -100,7 +100,7 @@ namespace ArgumentParserTest
             #endregion
 
             #region IParserContext members
-            private readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX)
+            private readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.Getopt)
             {
                 ExceptionHandler = ExceptionHandler
             };
@@ -137,16 +137,16 @@ namespace ArgumentParserTest
             #endregion
 
             #region Main options
-            [POSIXFlag('f', DefaultValue = true)]
+            [GetoptFlag('f', DefaultValue = true)]
             public Boolean UnaffectedDefault { get; set; }
 
-            [POSIXFlag('i', DefaultValue = true, FlagOptions = FlagOptions.InvertBoolean)]
+            [GetoptFlag('i', DefaultValue = true, FlagOptions = FlagOptions.InvertBoolean)]
             public Boolean ImplicitlyConvertedValue { get; set; }
 
-            [POSIXFlag('t', DefaultValue = 1)]
+            [GetoptFlag('t', DefaultValue = 1)]
             public Int32 InvertedValue { get; set; }
 
-            [POSIXListOption('u', ManualBinding = true, DefaultValue = "anonymous", Description = "The username used to authenticate against the server.")]
+            [GetoptListOption('u', ManualBinding = true, DefaultValue = "anonymous", Description = "The username used to authenticate against the server.")]
             private void AddUsernames(String[] usernames, BindingEventArgs eventArgs)
             {
                 this.Usernames = (String[]) (usernames ?? eventArgs.Pair.Values.First());
@@ -154,17 +154,17 @@ namespace ArgumentParserTest
 
             public String[] Usernames { get; private set; }
 
-            [POSIXOption('a')]
-            [POSIXOption("ambiguous")]
+            [GetoptOption('a')]
+            [GetoptOption("ambiguous")]
             public String AmbiguousValue { get; set; }
 
-            [POSIXFlag('v')]
+            [GetoptFlag('v')]
             public Int32 VerbosityLevel { get; set; }
 
-            [POSIXFlag('e')]
+            [GetoptFlag('e')]
             public Int32 SecondVerbosityLevel { get; set; }
 
-            /*[POSIXFlag('h', ManualBinding = true)]
+            /*[GetoptFlag('h', ManualBinding = true)]
             public void SetVerbosityLevel(VerbosityLevel level, BindingEventArgs eventArgs)
             {
                 var values = eventArgs.Pair.Values.ToArray();
@@ -173,7 +173,7 @@ namespace ArgumentParserTest
                     : level;
             }*/
 
-            [POSIXFlag('h', ManualBinding = true, FlagOptions = FlagOptions.BitFieldImplicit | FlagOptions.AggregateImplicit | FlagOptions.AggregateCombine)]
+            [GetoptFlag('h', ManualBinding = true, FlagOptions = FlagOptions.BitFieldImplicit | FlagOptions.AggregateImplicit | FlagOptions.AggregateCombine)]
             public VerbosityLevel ThirdVerbosityLevel { get; set; }
             #endregion
 
@@ -238,7 +238,7 @@ namespace ArgumentParserTest
 
                     }
 
-                    [POSIXFlag('f')]
+                    [GetoptFlag('f')]
                     public Boolean ForceInstall { get; set; }
 
                     public String[] Names { get; set; }
@@ -265,7 +265,7 @@ namespace ArgumentParserTest
 
                     }
 
-                    [POSIXFlag('f')]
+                    [GetoptFlag('f')]
                     public Boolean ForceInstall { get; set; }
 
                     public String[] Names { get; set; }

@@ -20,7 +20,7 @@
 using System;
 using ArgumentParser;
 using ArgumentParser.Arguments;
-using ArgumentParser.Arguments.POSIX;
+using ArgumentParser.Arguments.Getopt;
 using ArgumentParser.Helpers;
 using NUnit.Framework;
 
@@ -29,12 +29,12 @@ namespace ArgumentParserTest
     [TestFixture]
     public class CompositeParameterValueTestUnit
     {
-        private static readonly IArgument<String[]> pushShortArgument = new POSIXShortArgument<String[]>(
+        private static readonly IArgument<String[]> pushShortArgument = new GetoptShortArgument<String[]>(
             tag: 'p',
             valueOptions: ValueOptions.Composite,
             typeConverter: new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries));
 
-        private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX);
+        private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.Getopt);
 
         [Test]
         public void TestCompositeValues()
