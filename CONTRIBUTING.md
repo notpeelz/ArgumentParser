@@ -9,10 +9,10 @@ Please take a moment to read this document and ensure that you're not going agai
 1. **Use the GitHub issue search**&mdash;check if the issue has already been reported.
 2. **Ensure that the issued hasn't already been fixed**&mdash;try to reproduce the issue using a fresh build from the `master` branch.
 2. Ensure that your issue report includes:
-  * the framework (and version) used
-  * the programming language used (C#, VB, F#, ...)
-  * as many details as possible
-  * screenshots/GIFs if deemed appropriate
+  * the framework (and version) used;
+  * the programming language used (C#, VB, F#, ...);
+  * as many details as possible; and
+  * screenshots/GIFs if deemed appropriate.
 3. If possible, isolate the problem and explain how to reproduce it.
 
 ## Git Commit Messages
@@ -25,13 +25,13 @@ Please take a moment to read this document and ensure that you're not going agai
 * Use the body to explain what and why vs. how.
 * Reference issues and pull requests liberally.
 * Consider prepending an *emoji-tag* when applicable:
-  * :bug: `:bug:` when fixing a bug
-  * :art: `:art:` when refactoring or altering the code structure w/o significant behavioral changes (e.g. renaming variables, splitting a class into multiple files)
-  * :memo: `:memo:` when altering documentation, comments or anything of the like
-  * :racehorse: `:racehorse:` when improving performance
-  * :white_check_mark: `:white_check_mark:` when dealing with the test suite
-  * :anger: `:anger:` when the committed changes stem from a mistake in a previous commit (i.e. when forgetting something)
-  * :boom: `:boom:` when bringing significant changes and/or breaking API backward-compatibility
+  * :bug: `:bug:` when fixing a bug;
+  * :art: `:art:` when refactoring or altering the code structure w/o significant behavioral changes (e.g. renaming variables, splitting a class into multiple files);
+  * :memo: `:memo:` when altering documentation, comments or anything of the like;
+  * :racehorse: `:racehorse:` when improving performance;
+  * :white_check_mark: `:white_check_mark:` when dealing with the test suite;
+  * :anger: `:anger:` when the committed changes stem from a mistake in a previous commit (i.e. when forgetting something);
+  * :boom: `:boom:` when bringing significant changes and/or breaking API backward-compatibility.
 
 ## Coding Style
 
@@ -120,10 +120,10 @@ var charIdentifier = (UInt32) someString.FirstOrDefault(); // Explicit cast
 #### CLR Types vs. C# Types
 
 Granted, this one might strike you as odd, but the author prefers to use CLR types over the C# specs-defined ones, but this is merely a matter of personal preference. There are, however, a few exceptions:
-  * types used in a local scope may use either the "short" form (e.g. `uint`) or the "long" form (`UInt32`)
-  * the `String` type is always written as such, regardless of the context
-  * explicit casts always use the "long" form
+  * Types used in a local scope may use either the "short" form (e.g. `uint`) or the "long" form (`UInt32`).
+  * The `String` type is always written as such, regardless of the context.
+  * Explicit casts always use the "long" form.
 
 ### Spacing
 
-* `typeof` and explicit casts are always followed by a space (e.g. `typeof (String)`, `(Char) myVar`)
+* `typeof` and explicit casts are always followed by a space (e.g. `typeof (String)`, `(Char) myVar`).
