@@ -2,12 +2,12 @@
 
 :thumbsup: First off, big thumbs-up for contributing!
 
-Please take a moment and read this document and ensure that you're not going against any guideline.
+Please take a moment to read this document and ensure that you're not going against any guideline.
 
 ## Submitting Issues
 
 1. **Use the GitHub issue search**&mdash;check if the issue has already been reported.
-2. **Ensure that the issued hasn't already been fixed**&mdash;try to reproduce the issue using a freshly compiled build from the `master` branch.
+2. **Ensure that the issued hasn't already been fixed**&mdash;try to reproduce the issue using a fresh build from the `master` branch.
 2. Ensure that your issue report includes:
   * the framework (and version) used
   * the programming language used (C#, VB, F#, ...)
@@ -17,13 +17,13 @@ Please take a moment and read this document and ensure that you're not going aga
 
 ## Git Commit Messages
 
-* Use the present tense (`Add support for [...]` as opposed to `Added support for [...]`)
-* Separate subject from body with a blank line (if applicable)
-* Use sentence case in body and subject line
-* Do not end the subject line with a period
-* Limit the subject line to 72 characters
-* Use the body to explain what and why vs. how
-* Reference issues and pull requests liberally
+* Use the present tense (`Add support for [...]` as opposed to `Added support for [...]`).
+* Separate subject from body with a blank line (if applicable).
+* Use sentence case in body and subject line.
+* Do not end the subject line with a period.
+* Limit the subject line to 72 characters.
+* Use the body to explain what and why vs. how.
+* Reference issues and pull requests liberally.
 * Consider prepending an *emoji-tag* when applicable:
   * :bug: `:bug:` when fixing a bug
   * :art: `:art:` when refactoring or altering the code structure w/o significant behavioral changes (e.g. renaming variables, splitting a class into multiple files)
@@ -31,7 +31,7 @@ Please take a moment and read this document and ensure that you're not going aga
   * :racehorse: `:racehorse:` when improving performance
   * :white_check_mark: `:white_check_mark:` when dealing with the test suite
   * :anger: `:anger:` when the committed changes stem from a mistake in a previous commit (i.e. when forgetting something)
-  * :boom: `:boom:` when bringing significant changes and/or breaking the API backward-compatibility
+  * :boom: `:boom:` when bringing significant changes and/or breaking API backward-compatibility
 
 ## Coding Style
 
@@ -39,9 +39,9 @@ The coding style used in this project is slightly different than most; some of t
 
 ### Indent style
 
-* Always use 4-wide spaces indent with open braces.
+* Always use 4-spaces indent with open braces.
 * Empty constructor should be in-lined.
-* Automatic properties (and smaller ones) are, however, always in-line (except when adorned with attributes).
+* Properties with a body of &le; 50~ chars. (including automatic properties) are preferably in-lined (except when adorned with attributes). *Note:* non-trivial operations should always be spanned over multiple lines.
 
 ```cs
 namespace ArgumentParser.Something
@@ -69,13 +69,14 @@ namespace ArgumentParser.Something
 
 ### Naming
 
-  * Use **camelCase** for **local** variables and `private` fields
-  * Do **not** prefix your `private` fields with underscores
+  * Use **camelCase** for **local** variables and `private` fields.
+  * Do **not** prefix `private` fields with underscores.
   * Use **PascalCase** for (non-private) `static readonly` fields:
 
     ```cs
     public static readonly PreprocessorDelegate DefaultPreprocessor = (x, c) => Regex.Unescape(x);
     ```
+
   * Use C-Style constant naming:
 
     ```cs
@@ -118,7 +119,7 @@ var charIdentifier = (UInt32) someString.FirstOrDefault(); // Explicit cast
 
 #### CLR Types vs. C# Types
 
-Granted, this one might strike you as odd, but the author prefers using CLR types over the C# specs-defined ones, but this is merely a matter of personal preference. There are, however, a few exceptions to this "rule":
+Granted, this one might strike you as odd, but the author prefers to use CLR types over the C# specs-defined ones, but this is merely a matter of personal preference. There are, however, a few exceptions:
   * types used in a local scope may use either the "short" form (e.g. `uint`) or the "long" form (`UInt32`)
   * the `String` type is always written as such, regardless of the context
   * explicit casts always use the "long" form
