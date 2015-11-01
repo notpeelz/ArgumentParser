@@ -25,9 +25,9 @@ namespace ArgumentParser
     public enum ParameterTokenStyle
     {
         /// <summary>
-        /// Parse getopt-flavored input parameters.
+        /// Parse POSIX-flavored input parameters.
         /// </summary>
-        Getopt = 1,
+        POSIX = 1,
 
         /// <summary>
         /// Parse Windows-flavored input parameters.

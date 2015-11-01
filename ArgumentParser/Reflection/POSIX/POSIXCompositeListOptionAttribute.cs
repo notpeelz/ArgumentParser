@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="GetoptListOptionAttribute.cs" company="LouisTakePILLz">
+// <copyright file="POSIXCompositeListOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -19,29 +19,36 @@
 
 using System;
 using System.ComponentModel;
+using ArgumentParser.Arguments;
 using ArgumentParser.Helpers;
 
-namespace ArgumentParser.Reflection.Getopt
+namespace ArgumentParser.Reflection.POSIX
 {
     /// <summary>
-    /// Represents a getopt-flavored option attribute that supports splitting using a culture-dependent separator.
+    /// Represents a POSIX-flavored option attribute that supports splitting using spaces.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class GetoptListOptionAttribute : GetoptOptionAttribute
+    public class POSIXCompositeListOptionAttribute : POSIXOptionAttribute
     {
-        private static readonly StringArrayConverter typeConverter = new StringArrayConverter();
+        private static readonly StringArrayConverter typeConverter = new StringArrayConverter('\x20', StringSplitOptions.RemoveEmptyEntries);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Getopt.GetoptListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXCompositeListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public GetoptListOptionAttribute(String tag) : base(tag) { }
+        public POSIXCompositeListOptionAttribute(String tag) : base(tag)
+        {
+            this.ValueOptions = ValueOptions.Composite;
+        }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.Getopt.GetoptListOptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Reflection.POSIX.POSIXCompositeListOptionAttribute"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the argument.</param>
-        public GetoptListOptionAttribute(Char tag) : base(tag) { }
+        public POSIXCompositeListOptionAttribute(Char tag) : base(tag)
+        {
+            this.ValueOptions = ValueOptions.Composite;
+        }
 
         /// <summary>
         /// Gets the type converter used for value conversion.

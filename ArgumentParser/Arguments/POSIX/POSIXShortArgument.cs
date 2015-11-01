@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="GetoptLongFlag.cs" company="LouisTakePILLz">
+// <copyright file="POSIXShortArgument.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -19,31 +19,30 @@
 
 using System;
 
-namespace ArgumentParser.Arguments.Getopt
+namespace ArgumentParser.Arguments.POSIX
 {
     /// <summary>
-    /// Represents a getopt-flavored flag identified by a <see cref="T:System.String"/> tag.
+    /// Represents a POSIX-flavored argument identified by a <see cref="T:System.Char"/> tag.
     /// </summary>
-    public class GetoptLongFlag : FlagArgument
+    public class POSIXShortArgument : Argument
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Getopt.GetoptLongFlag"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXShortArgument"/> class.
         /// </summary>
-        /// <param name="tag">The tag that defines the flag.</param>
+        /// <param name="tag">The character that defines the argument.</param>
         /// <param name="description">The description of the argument.</param>
         /// <param name="valueOptions">The value parsing behavior of the argument.</param>
-        /// <param name="flagOptions">The value conversion behavior.</param>
         /// <param name="preprocessor">The delegate to use for preprocessing.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public GetoptLongFlag(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, PreprocessorDelegate preprocessor = null, Int32 defaultValue = default (Int32))
-            : base(new Key(Prefix, tag), description, valueOptions, flagOptions, preprocessor: preprocessor, defaultValue: defaultValue) { }
+        public POSIXShortArgument(Char tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, PreprocessorDelegate preprocessor = null, String defaultValue = null)
+            : base(new Key(Prefix, tag.ToString()), description, valueOptions, preprocessor, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.Getopt.GetoptLongFlag"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXShortArgument"/> type.
         /// </summary>
         public static String Prefix
         {
-            get { return Parser.PREFIX_GETOPT_LONG; }
+            get { return Parser.PREFIX_POSIX_SHORT; }
         }
     }
 }

@@ -40,8 +40,8 @@ namespace ArgumentParser
         internal const String INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE = "The token style is not within the valid range of values.";
         internal const String INVALID_MEMBER_TYPE_EXCEPTION_MESSAGE = "The provided object is neither a PropertyInfo nor a MethodInfo.";
         internal const String UNWRITABLE_PROPERTY_EXCEPTION_MESSAGE = "The mapped property does not support writing.";
-        internal const String PREFIX_GETOPT_LONG = "--";
-        internal const String PREFIX_GETOPT_SHORT = "-";
+        internal const String PREFIX_POSIX_LONG = "--";
+        internal const String PREFIX_POSIX_SHORT = "-";
         internal const String PREFIX_WINDOWS = "/";
         internal const String PREFIX_SIMPLE = "-";
 
@@ -465,8 +465,8 @@ namespace ArgumentParser
                     return WINDOWS_COLON_PARAMETER_PATTERN;
                 case ParameterTokenStyle.WindowsEqual:
                     return WINDOWS_EQUAL_PARAMETER_PATTERN;
-                case ParameterTokenStyle.Getopt:
-                    return GETOPT_PARAMETER_PATTERN;
+                case ParameterTokenStyle.POSIX:
+                    return POSIX_PARAMETER_PATTERN;
                 case ParameterTokenStyle.Simple:
                     return SIMPLE_PARAMETER_PATTERN;
                 default:

@@ -23,7 +23,7 @@ using System.Linq;
 using System.Threading;
 using ArgumentParser;
 using ArgumentParser.Arguments;
-using ArgumentParser.Arguments.Getopt;
+using ArgumentParser.Arguments.POSIX;
 using ArgumentParser.Arguments.Windows;
 using ArgumentParser.Helpers;
 using NUnit.Framework;
@@ -33,30 +33,30 @@ namespace ArgumentParserTest
     [TestFixture]
     public class ParameterDisambiguationTestUnit
     {
-        private static readonly IArgument interfaceLongVerb = new GetoptLongArgument("interface", description: "The network interface(s) to use.");
-        private static readonly IArgument interfaceShortVerb = new GetoptShortArgument<String[]>('i', "The network interface(s) to use.", typeConverter: new StringArrayConverter());
-        private static readonly IArgument getoptPortShortVerb = new GetoptShortArgument<UInt16>('p', "The port to listen to.");
-        private static readonly IArgument getoptPortLongVerb = new GetoptLongArgument<UInt16>("port", "The port to listen to.");
+        private static readonly IArgument interfaceLongVerb = new POSIXLongArgument("interface", description: "The network interface(s) to use.");
+        private static readonly IArgument interfaceShortVerb = new POSIXShortArgument<String[]>('i', "The network interface(s) to use.", typeConverter: new StringArrayConverter());
+        private static readonly IArgument posixPortShortVerb = new POSIXShortArgument<UInt16>('p', "The port to listen to.");
+        private static readonly IArgument posixPortLongVerb = new POSIXLongArgument<UInt16>("port", "The port to listen to.");
         private static readonly IArgument windowsPortShortVerb = new WindowsArgument<UInt16>("p");
         private static readonly IArgument windowsPortLongVerb = new WindowsArgument<UInt16>("port");
-        private static readonly IArgument getoptCADirVerb = new GetoptLongArgument("CAdir", description: "The directory to retrieve the certificates authorities from.");
-        private static readonly IArgument getoptVerboseShortVerb = new GetoptShortFlag('v', "The verbosity level.");
-        private static readonly IArgument getoptVerboseLongVerb = new GetoptLongArgument<Byte>("verbose", "The verbosity level.");
+        private static readonly IArgument posixCADirVerb = new POSIXLongArgument("CAdir", description: "The directory to retrieve the certificates authorities from.");
+        private static readonly IArgument posixVerboseShortVerb = new POSIXShortFlag('v', "The verbosity level.");
+        private static readonly IArgument posixVerboseLongVerb = new POSIXLongArgument<Byte>("verbose", "The verbosity level.");
 
         private static readonly IArgument[] arguments =
         {
             interfaceShortVerb,
             interfaceLongVerb,
-            getoptPortShortVerb,
-            getoptPortLongVerb,
-            getoptCADirVerb,
-            getoptVerboseShortVerb,
-            getoptVerboseLongVerb,
+            posixPortShortVerb,
+            posixPortLongVerb,
+            posixCADirVerb,
+            posixVerboseShortVerb,
+            posixVerboseLongVerb,
             windowsPortLongVerb,
             windowsPortShortVerb
         };
 
-        private static readonly ParserOptions getoptOptions = new ParserOptions(ParameterTokenStyle.Getopt)
+        private static readonly ParserOptions posixOptions = new ParserOptions(ParameterTokenStyle.POSIX)
         {
             Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE")
         };
@@ -71,13 +71,13 @@ namespace ArgumentParserTest
         {
             //Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE");
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            var args = Parser.GetParameters("--CAdir ..\\ca -i eth0,lo -h 127.0.0.1 -p 20327 -p 15 --port 3030 -1111 -vvv 5342642 -vvvvvv 5", getoptOptions, arguments).ToArray();
+            var args = Parser.GetParameters("--CAdir ..\\ca -i eth0,lo -h 127.0.0.1 -p 20327 -p 15 --port 3030 -1111 -vvv 5342642 -vvvvvv 5", posixOptions, arguments).ToArray();
             var matchedParameters = args.OfType<ParameterPair>();
             var unmatchedParameters = args.OfType<RawParameter>();
 
             try
             {
-                var port = matchedParameters.GetValue<UInt16>(getoptPortShortVerb, getoptPortLongVerb);
+                var port = matchedParameters.GetValue<UInt16>(posixPortShortVerb, posixPortLongVerb);
             }
             catch (ParsingException)
             {

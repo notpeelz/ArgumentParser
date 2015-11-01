@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="GetoptLongFlag`1.cs" company="LouisTakePILLz">
+// <copyright file="POSIXLongFlag`1.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -20,16 +20,16 @@
 using System;
 using System.ComponentModel;
 
-namespace ArgumentParser.Arguments.Getopt
+namespace ArgumentParser.Arguments.POSIX
 {
     /// <summary>
-    /// Represents a getopt-flavored flag identified by a <see cref="T:System.String"/> tag.
+    /// Represents a POSIX-flavored flag identified by a <see cref="T:System.String"/> tag.
     /// </summary>
     /// <typeparam name="T">The type of the value.</typeparam>
-    public class GetoptLongFlag<T> : FlagArgument<T>
+    public class POSIXLongFlag<T> : FlagArgument<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.Getopt.GetoptLongFlag`1"/> class.
+        /// Initializes a new instance of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXLongFlag`1"/> class.
         /// </summary>
         /// <param name="tag">The tag that defines the flag.</param>
         /// <param name="description">The description of the argument.</param>
@@ -38,15 +38,15 @@ namespace ArgumentParser.Arguments.Getopt
         /// <param name="typeConverter">The type converter to use for value conversion.</param>
         /// <param name="preprocessor">The delegate to use for preprocessor.</param>
         /// <param name="defaultValue">The default value of the argument.</param>
-        public GetoptLongFlag(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, Object defaultValue = null)
+        public POSIXLongFlag(String tag, String description = null, ValueOptions valueOptions = ValueOptions.Single, FlagOptions flagOptions = FlagOptions.None, TypeConverter typeConverter = null, PreprocessorDelegate preprocessor = null, Object defaultValue = null)
             : base(new Key(Prefix, tag), description, valueOptions, flagOptions, typeConverter, preprocessor, defaultValue) { }
 
         /// <summary>
-        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.Getopt.GetoptLongFlag`1"/> type.
+        /// Gets the prefix used for arguments of the <see cref="T:ArgumentParser.Arguments.POSIX.POSIXLongFlag`1"/> type.
         /// </summary>
         public static String Prefix
         {
-            get { return Parser.PREFIX_GETOPT_LONG; }
+            get { return Parser.PREFIX_POSIX_LONG; }
         }
     }
 }

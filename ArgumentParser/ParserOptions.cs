@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using ArgumentParser.Reflection;
 using ArgumentParser.Reflection.Simple;
-using ArgumentParser.Reflection.Getopt;
+using ArgumentParser.Reflection.POSIX;
 using ArgumentParser.Reflection.Windows;
 
 namespace ArgumentParser
@@ -81,7 +81,7 @@ namespace ArgumentParser
         /// </summary>
         public Func<ParsingException, Boolean> ExceptionHandler { get; set; }
 
-        private static readonly AttributeFilterDelegate getoptAttributeFilter = a => a is IGetoptOptionAttribute;
+        private static readonly AttributeFilterDelegate posixAttributeFilter = a => a is IPOSIXOptionAttribute;
         private static readonly AttributeFilterDelegate simpleAttributeFilter = a => a is ISimpleOptionAttribute;
         private static readonly AttributeFilterDelegate windowsAttributeFilter = a => a is IWindowsOptionAttribute;
 
@@ -92,8 +92,8 @@ namespace ArgumentParser
 
             switch (this.TokenStyle)
             {
-                case ParameterTokenStyle.Getopt:
-                    return getoptAttributeFilter;
+                case ParameterTokenStyle.POSIX:
+                    return posixAttributeFilter;
                 case ParameterTokenStyle.Windows:
                 case ParameterTokenStyle.WindowsColon:
                 case ParameterTokenStyle.WindowsEqual:

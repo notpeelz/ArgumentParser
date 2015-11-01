@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="IGetoptOptionAttribute.cs" company="LouisTakePILLz">
+// <copyright file="IPOSIXOptionAttribute.cs" company="LouisTakePILLz">
 // Copyright © 2015 LouisTakePILLz
 // <author>LouisTakePILLz</author>
 // </copyright>
@@ -17,10 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace ArgumentParser.Reflection.Getopt
+namespace ArgumentParser.Reflection.POSIX
 {
     /// <summary>
-    /// Represents a getopt-flavored argument definition attribute.
+    /// Represents a POSIX-flavored argument definition attribute.
     /// </summary>
-    public interface IGetoptOptionAttribute : ICoupleableOptionAttribute { }
+    public interface IPOSIXOptionAttribute : ICoupleableOptionAttribute { }
 }
