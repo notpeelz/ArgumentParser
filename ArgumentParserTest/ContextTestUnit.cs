@@ -25,68 +25,66 @@ using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Reflection;
 using ArgumentParser.Reflection.POSIX;
-using NUnit.Framework;
+using Xunit;
 
 namespace ArgumentParserTest
 {
-    [TestFixture]
     public class ContextTestUnit
     {
-        [TestFixtureSetUp]
-        public void Init()
+        public ContextTestUnit()
         {
             //Main.Instance.Parse("install global - test-app atom \"test --test --blah \" --test -f -b");
             Main.Instance.Parse("-u Test1,Test2 --test -t -a 'short' --ambiguous \"long\" -vvvv -eeee -hhhh -hhh -hh -h -i 15 -i 1 -i 0 -i");
         }
 
-        [Test]
+        [Fact]
         public void TestPropertyAttribute()
         {
-            Assert.IsTrue(Main.Instance.AmbiguousValue == "short" || Main.Instance.AmbiguousValue == "long");
+            Assert.True(Main.Instance.AmbiguousValue == "short" || Main.Instance.AmbiguousValue == "long");
         }
 
-        [Test]
+        [Fact]
         public void TestListSeparation()
         {
-            Assert.AreEqual(2, Main.Instance.Usernames.Length);
-            Assert.AreEqual("Test1", Main.Instance.Usernames.First());
-            Assert.AreEqual("Test2", Main.Instance.Usernames.Last());
+            Assert.Equal(2, Main.Instance.Usernames.Length);
+            Assert.Equal("Test1", Main.Instance.Usernames.First());
+            Assert.Equal("Test2", Main.Instance.Usernames.Last());
         }
 
-        [Test]
+        [Fact]
         public void TestUnboundFlagDefault()
         {
-            Assert.IsTrue(Main.Instance.UnaffectedDefault);
+            Assert.True(Main.Instance.UnaffectedDefault);
         }
 
-        [Test]
+        [Fact]
         public void TestFlagInversion()
         {
-            Assert.AreEqual(1, Main.Instance.InvertedValue);
+            Assert.Equal(1, Main.Instance.InvertedValue);
         }
 
-        [Test]
+        [Fact]
         public void TestImplicitConversion()
         {
-            Assert.IsTrue(!Main.Instance.ImplicitlyConvertedValue);
+            Assert.True(!Main.Instance.ImplicitlyConvertedValue);
         }
 
-        [Test]
+        [Fact]
         public void TestValuedFlagAggregation()
         {
-            Assert.AreEqual(4, Main.Instance.VerbosityLevel);
+            Assert.Equal(4, Main.Instance.VerbosityLevel);
         }
 
-        [Test]
+        [Fact]
         public void TestFlagAggregation()
         {
-            Assert.AreEqual(4, Main.Instance.SecondVerbosityLevel);
+            Assert.Equal(4, Main.Instance.SecondVerbosityLevel);
         }
 
-        [Test]
+        [Fact]
         public void TestEnumFlag()
         {
-            Assert.AreEqual((VerbosityLevel) (1 << 4) - 1, Main.Instance.ThirdVerbosityLevel);
+            Assert.Equal((VerbosityLevel) (1 << 4) - 1, Main.Instance.ThirdVerbosityLevel);
         }
 
         private class Main : IParserContext

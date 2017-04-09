@@ -19,22 +19,26 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using ArgumentParser.Arguments;
 using ArgumentParser.Helpers;
 using ArgumentParser.Reflection;
+
+#if USE_REFLECTION_PERMISSIONS
+using System.Security.Permissions;
+#endif
 
 namespace ArgumentParser
 {
     /// <summary>
     /// Provides core static functions for parsing.
     /// </summary>
+#if USE_REFLECTION_PERMISSIONS
     [ReflectionPermission(SecurityAction.Assert, MemberAccess = true)]
+#endif
     public static partial class Parser
     {
         internal const String INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE = "The token style is not within the valid range of values.";
@@ -311,8 +315,8 @@ namespace ArgumentParser
             if (options == null)
                 throw new ArgumentNullException("options");
 
-            var properties = context.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            var methods = context.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod);
+            var properties = context.GetType().GetTypeInfo().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var methods = context.GetType().GetTypeInfo().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod);
             var members = methods.Concat<Object>(properties);
             var arguments = GetArgumentMap(options, members);
 
@@ -437,7 +441,7 @@ namespace ArgumentParser
         #region Ancillary methods
         private static KeyValuePair<PropertyInfo, Verb>? GetVerb(Object instance, String name)
         {
-            var entry = instance.GetType().GetProperties()
+            var entry = instance.GetType().GetTypeInfo().GetProperties()
                 .Select(x => new
                 {
                     Attribute = x.GetCustomAttributes()
@@ -447,7 +451,7 @@ namespace ArgumentParser
                 })
                 .SingleOrDefault(x => x.Attribute != null
                     // Verb properties must be of a type implementing 'IVerbContext'
-                    && x.Property.PropertyType.GetInterfaces().Any(i => i == typeof (IVerbContext)));
+                    && x.Property.PropertyType.GetTypeInfo().GetInterface(nameof(IVerbContext)) != null);
 
             if (entry == null)
                 return null;
@@ -470,7 +474,7 @@ namespace ArgumentParser
                 case ParameterTokenStyle.Simple:
                     return SIMPLE_PARAMETER_PATTERN;
                 default:
-                    throw new InvalidEnumArgumentException(INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
+                    throw new InvalidOperationException(INVALID_TOKEN_STYLE_EXCEPTION_MESSAGE);
             }
         }
 

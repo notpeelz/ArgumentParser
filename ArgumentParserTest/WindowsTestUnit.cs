@@ -21,14 +21,13 @@ using System;
 using System.Collections.Generic;
 using ArgumentParser;
 using ArgumentParser.Reflection.Windows;
-using NUnit.Framework;
+using Xunit;
 
 namespace ArgumentParserTest
 {
-    [TestFixture]
     public class WindowsTestUnit
     {
-        [Test]
+        [Fact]
         public void TestFlag()
         {
             Main.Instance.Parse("/test");

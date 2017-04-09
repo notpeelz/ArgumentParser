@@ -46,12 +46,14 @@ namespace ArgumentParser.Reflection
         /// </summary>
         public String Description { get; set; }
 
+#if NETFRAMEWORK
         /// <summary>
-        /// Gets a unique identifier for this <see cref="T:ArgumentParser.Reflection.VerbAttribute"/>.
+        /// Gets the unique identifier for this attribute.
         /// </summary>
         public override Object TypeId
         {
             get { return this.Tag.GetHashCode(); }
         }
+#endif
     }
 }

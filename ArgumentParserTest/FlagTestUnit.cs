@@ -23,21 +23,20 @@ using System.Linq;
 using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Reflection.POSIX;
-using NUnit.Framework;
+using Xunit;
 
 namespace ArgumentParserTest
 {
-    [TestFixture]
     public class FlagTestUnit
     {
-        [Test]
+        [Fact]
         public void TestFlag()
         {
             var a = Parser.GetRawParameters("--test t es t 123 456", ParameterTokenStyle.POSIX);
             //Main.Instance.Parse(@"--foobar 20 --foobar 19 --foobar 20 -bbbb -b -b 2");
             Main.Instance.Parse(@"-ttt -t 39 -tt -t");
             //Assert.AreEqual("blahssetest", Main.Instance.Test);
-            Assert.AreEqual(6, Main.Instance.T);
+            Assert.Equal(6, Main.Instance.T);
             //Assert.AreEqual(7, (int) Main.Instance.B);
         }
 

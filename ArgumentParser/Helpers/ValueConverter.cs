@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace ArgumentParser.Helpers
@@ -99,13 +100,13 @@ namespace ArgumentParser.Helpers
             if (value == null)
                 return null;
 
-            if (value.GetType().IsAssignableFrom(type))
+            if (value.GetType().GetTypeInfo().IsAssignableFrom(type))
                 return value;
 
-            if (type.IsEnum)
+            if (type.GetTypeInfo().IsEnum)
                 return Enum.ToObject(type, value);
 
-            if (value is IConvertible && type.GetInterfaces().Any(x => x == typeof (IConvertible)))
+            if (value is IConvertible && type.GetTypeInfo().GetInterface(nameof(IConvertible)) != null)
                 return Convert.ChangeType(value, type, formatProvider);
 
             return value;
@@ -139,19 +140,19 @@ namespace ArgumentParser.Helpers
                 return false;
             }
 
-            if (value.GetType().IsAssignableFrom(type))
+            if (value.GetType().GetTypeInfo().IsAssignableFrom(type))
             {
                 convertedValue = value;
                 return true;
             }
 
-            if (type.IsEnum)
+            if (type.GetTypeInfo().IsEnum)
             {
                 convertedValue = Enum.ToObject(type, value);
                 return true;
             }
 
-            if (value is IConvertible && type.GetInterfaces().Any(x => x == typeof (IConvertible)))
+            if (value is IConvertible && type.GetTypeInfo().GetInterface(nameof(IConvertible)) != null)
             {
                 convertedValue = Convert.ChangeType(value, type, formatProvider);
                 return true;
@@ -171,7 +172,7 @@ namespace ArgumentParser.Helpers
         public static Object GetDefaultValue(Type type, TypeConverter typeConverter, Object defaultValue)
         {
             Object value = defaultValue;
-            if (value != null && !value.GetType().IsAssignableFrom(type))
+            if (value != null && !value.GetType().GetTypeInfo().IsAssignableFrom(type))
             {
                 value = typeConverter != null && typeConverter.CanConvertFrom(value.GetType())
                     ? typeConverter.ConvertFrom(defaultValue)
@@ -188,7 +189,7 @@ namespace ArgumentParser.Helpers
         /// <returns>A boolean value indicating whether the provided value is implicitly convertible.</returns>
         public static Boolean IsConvertible(Type type)
         {
-            return type.IsEnum || type.GetInterfaces().Any(x => x == typeof (IConvertible));
+            return type.GetTypeInfo().IsEnum || type.GetTypeInfo().GetInterface(nameof(IConvertible)) != null;
         }
 
         /// <summary>

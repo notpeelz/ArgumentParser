@@ -30,7 +30,6 @@ namespace ArgumentParser
     /// <summary>
     /// Represents the configuration to use by the parser.
     /// </summary>
-    [Serializable]
     public sealed class ParserOptions
     {
         /// <summary>

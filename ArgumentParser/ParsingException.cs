@@ -24,7 +24,6 @@ namespace ArgumentParser
     /// <summary>
     /// The exception that is thrown when a parsing operation fails.
     /// </summary>
-    [Serializable]
     public class ParsingException : Exception
     {
         private const String EXCEPTION_MESSAGE = "An issue occured while parsing parameters.";

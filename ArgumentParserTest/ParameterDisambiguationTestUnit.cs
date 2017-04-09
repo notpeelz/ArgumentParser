@@ -20,17 +20,19 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Arguments.POSIX;
 using ArgumentParser.Arguments.Windows;
 using ArgumentParser.Helpers;
-using NUnit.Framework;
+using Xunit;
+
+#if NETFRAMEWORK
+using System.Threading;
+#endif
 
 namespace ArgumentParserTest
 {
-    [TestFixture]
     public class ParameterDisambiguationTestUnit
     {
         private static readonly IArgument interfaceLongVerb = new POSIXLongArgument("interface", description: "The network interface(s) to use.");
@@ -58,51 +60,51 @@ namespace ArgumentParserTest
 
         private static readonly ParserOptions posixOptions = new ParserOptions(ParameterTokenStyle.POSIX)
         {
-            Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE")
+            Culture = new CultureInfo("sv-SE")
         };
 
         private static readonly ParserOptions windowsOptions = new ParserOptions(ParameterTokenStyle.Windows)
         {
-            Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE")
+            Culture = new CultureInfo("sv-SE")
         };
 
-        [Test]
+        [Fact]
         public void TestCollisionDetection()
         {
-            //Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE");
+            //CultureInfo.CurrentCulture = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE");
+#if NETSTANDARD
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+#else
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+#endif
+
             var args = Parser.GetParameters("--CAdir ..\\ca -i eth0,lo -h 127.0.0.1 -p 20327 -p 15 --port 3030 -1111 -vvv 5342642 -vvvvvv 5", posixOptions, arguments).ToArray();
             var matchedParameters = args.OfType<ParameterPair>();
             var unmatchedParameters = args.OfType<RawParameter>();
 
-            try
+            Assert.Throws<ParsingException>(() =>
             {
                 var port = matchedParameters.GetValue<UInt16>(posixPortShortVerb, posixPortLongVerb);
-            }
-            catch (ParsingException)
-            {
-                return;
-            }
-            Assert.Fail();
+            });
         }
 
-        [Test]
+        [Fact]
         public void TestWindowsParameters()
         {
+#if NETSTANDARD
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+#else
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+#endif
+
             var args = Parser.GetParameters(@"/test /h /q /foo bar\ baz\ blah /t ""e\""s\""t\"" /1 234 /p 5 /port 32", windowsOptions, arguments).ToArray();
             var matchedParameters = args.OfType<ParameterPair>();
             var unmatchedParameters = args.OfType<RawParameter>();
 
-            try
+            Assert.Throws<ParsingException>(() =>
             {
                 var port = matchedParameters.GetValue<UInt16>(windowsPortShortVerb, windowsPortLongVerb);
-            }
-            catch (ParsingException)
-            {
-                return;
-            }
-            Assert.Fail();
+            });
         }
     }
 }

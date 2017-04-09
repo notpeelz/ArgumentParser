@@ -89,12 +89,14 @@ namespace ArgumentParser.Reflection.Windows
             return (IArgument) Activator.CreateInstance(type, this.Tag, this.Description, this.ValueOptions, this.TypeConverter, this.Preprocessor, defaultValue);
         }
 
+#if NETFRAMEWORK
         /// <summary>
-        /// Gets the unique identifier for this option attribute.
+        /// Gets the unique identifier for this attribute.
         /// </summary>
         public override Object TypeId
         {
             get { return Guid.NewGuid(); }
         }
+#endif
     }
 }

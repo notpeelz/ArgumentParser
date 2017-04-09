@@ -22,11 +22,10 @@ using ArgumentParser;
 using ArgumentParser.Arguments;
 using ArgumentParser.Arguments.POSIX;
 using ArgumentParser.Helpers;
-using NUnit.Framework;
+using Xunit;
 
 namespace ArgumentParserTest
 {
-    [TestFixture]
     public class CompositeParameterValueTestUnit
     {
         private static readonly IArgument<String[]> pushShortArgument = new POSIXShortArgument<String[]>(
@@ -36,11 +35,11 @@ namespace ArgumentParserTest
 
         private static readonly ParserOptions options = new ParserOptions(ParameterTokenStyle.POSIX);
 
-        [Test]
+        [Fact]
         public void TestCompositeValues()
         {
             var args = Parser.GetParameters("-p origin    master  ", options, pushShortArgument);
-            Assert.AreEqual(args.GetValue<String[]>(pushShortArgument).Length, 2);
+            Assert.Equal(args.GetValue<String[]>(pushShortArgument).Length, 2);
         }
     }
 }

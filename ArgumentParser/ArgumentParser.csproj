@@ -1,132 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{23449844-B055-481B-A085-D09391434DF3}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ArgumentParser</RootNamespace>
-    <AssemblyName>ArgumentParser</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>net462;net461;net46;net452;net451;net45;netstandard1.5;netstandard1.6</TargetFrameworks>
+    <Description>A rich and elegant library for parameter-parsing that supports various syntaxes and flavors.</Description>
+    <Authors>LouisTakePILLz</Authors>
+    <Company>LouisTakePILLz</Company>
+    <Copyright>Copyright © LouisTakePILLz 2017</Copyright>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <AssemblyVersion>0.7.0.0</AssemblyVersion>
+    <FileVersion>0.7.0.0</FileVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup>
+    <IsNETStandard>$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', 'netstandard'))</IsNETStandard>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\ArgumentParser.xml</DocumentationFile>
+
+  <PropertyGroup>
+    <DefineConstants Condition="$(IsNETStandard)">$(DefineConstants);NETSTANDARD</DefineConstants>
+    <DefineConstants Condition="!$(IsNETStandard)">$(DefineConstants);NETFRAMEWORK</DefineConstants>
+    <DefineConstants Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', 'netstandard[^1]|net\d'))">$(DefineConstants);USE_REFLECTION_PERMISSIONS</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+
+  <ItemGroup Condition="$(IsNETStandard)">
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Arguments\FlagArgument.cs" />
-    <Compile Include="Arguments\FlagArgument`1.cs" />
-    <Compile Include="Arguments\IArgument`1.cs" />
-    <Compile Include="Arguments\IFlag.cs" />
-    <Compile Include="Arguments\POSIX\POSIXLongFlag.cs" />
-    <Compile Include="Arguments\POSIX\POSIXLongFlag`1.cs" />
-    <Compile Include="Arguments\Simple\SimpleArgument.cs" />
-    <Compile Include="Arguments\Simple\SimpleArgument`1.cs" />
-    <Compile Include="Arguments\Simple\SimpleFlag.cs" />
-    <Compile Include="Arguments\Simple\SimpleFlag`1.cs" />
-    <Compile Include="Arguments\ValueOptions.cs" />
-    <Compile Include="PreprocessorDelegate.cs" />
-    <Compile Include="Reflection\AttributeFilterDelegate.cs" />
-    <Compile Include="Helpers\ProjectionEqualityComparer.cs" />
-    <Compile Include="Helpers\ProjectionEqualityComparer`1.cs" />
-    <Compile Include="ParserBindingException.cs" />
-    <Compile Include="Reflection\IFlagOptionAttribute.cs" />
-    <Compile Include="Reflection\ICoupleableOptionAttribute.cs" />
-    <Compile Include="Reflection\POSIX\IPOSIXOptionAttribute.cs" />
-    <Compile Include="Reflection\Simple\ISimpleOptionAttribute.cs" />
-    <Compile Include="Reflection\Simple\SimpleCompositeListOptionAttribute.cs" />
-    <Compile Include="Reflection\Simple\SimpleListOptionAttribute.cs" />
-    <Compile Include="Reflection\Simple\SimpleFlagAttribute.cs" />
-    <Compile Include="Reflection\Simple\SimpleOptionAttribute.cs" />
-    <Compile Include="Reflection\Windows\IWindowsOptionAttribute.cs" />
-    <Compile Include="Reflection\Windows\WindowsCompositeListOptionAttribute.cs" />
-    <Compile Include="Reflection\Windows\WindowsListOptionAttribute.cs" />
-    <Compile Include="Helpers\ValueConverter.cs" />
-    <Compile Include="Arguments\Windows\WindowsFlag.cs" />
-    <Compile Include="Arguments\Windows\WindowsFlag`1.cs" />
-    <Compile Include="MemberBinding.cs" />
-    <Compile Include="Reflection\BindingPolicy.cs" />
-    <Compile Include="Reflection\BindingPolicyAttribute.cs" />
-    <Compile Include="Arguments\FlagOptions.cs" />
-    <Compile Include="Arguments\POSIX\POSIXShortFlag`1.cs" />
-    <Compile Include="Reflection\BindingEventArgs.cs" />
-    <Compile Include="Reflection\IOptionAttribute.cs" />
-    <Compile Include="Reflection\POSIX\POSIXCompositeListOptionAttribute.cs" />
-    <Compile Include="Reflection\POSIX\POSIXFlagAttribute.cs" />
-    <Compile Include="Reflection\POSIX\POSIXListOptionAttribute.cs" />
-    <Compile Include="Reflection\Windows\WindowsFlagAttribute.cs" />
-    <Compile Include="Reflection\Windows\WindowsOptionAttribute.cs" />
-    <Compile Include="IParserContext.cs" />
-    <Compile Include="IVerbContext.cs" />
-    <Compile Include="Patterns\POSIXParameterPattern.cs" />
-    <Compile Include="Patterns\SimpleParameterPattern.cs" />
-    <Compile Include="Patterns\ValuePattern.cs" />
-    <Compile Include="Patterns\VerbPattern.cs" />
-    <Compile Include="Patterns\WindowsColonParameterPattern.cs" />
-    <Compile Include="Patterns\WindowsEqualParameterPattern.cs" />
-    <Compile Include="Patterns\WindowsParameterPattern.cs" />
-    <Compile Include="RawParameter.cs" />
-    <Compile Include="FlagPair.cs" />
-    <Compile Include="IPairable.cs" />
-    <Compile Include="Reflection\POSIX\POSIXOptionAttribute.cs" />
-    <Compile Include="Key.cs" />
-    <Compile Include="ParameterPair.cs" />
-    <Compile Include="Helpers\ProjectionEqualityComparer`2.cs" />
-    <Compile Include="Helpers\StringArrayConverter.cs" />
-    <Compile Include="ParserExtension.cs" />
-    <Compile Include="ParsingException.cs" />
-    <Compile Include="Arguments\IArgument.cs" />
-    <Compile Include="ParameterTokenStyle.cs" />
-    <Compile Include="Parser.cs" />
-    <Compile Include="ParserOptions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Arguments\POSIX\POSIXShortFlag.cs" />
-    <Compile Include="Arguments\POSIX\POSIXLongArgument.cs" />
-    <Compile Include="Arguments\POSIX\POSIXLongArgument`1.cs" />
-    <Compile Include="Arguments\POSIX\POSIXShortArgument.cs" />
-    <Compile Include="Arguments\POSIX\POSIXShortArgument`1.cs" />
-    <Compile Include="Arguments\Argument.cs" />
-    <Compile Include="Arguments\Argument`1.cs" />
-    <Compile Include="Arguments\Windows\WindowsArgument`1.cs" />
-    <Compile Include="Arguments\Windows\WindowsArgument.cs" />
-    <Compile Include="Reflection\VerbAttribute.cs" />
-    <Compile Include="UnboundValue.cs" />
-    <Compile Include="ValueParsingException.cs" />
-    <Compile Include="Verb.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

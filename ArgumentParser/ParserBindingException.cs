@@ -24,7 +24,6 @@ namespace ArgumentParser
     /// <summary>
     /// The exception that is thrown when a binding operation fails.
     /// </summary>
-    [Serializable]
     public class ParserBindingException : ParsingException
     {
         private const String EXCEPTION_MESSAGE = "An issue occured while binding parsing results.";
