@@ -4,11 +4,10 @@ This library was made in an attempt to simplify the handling and parsing of para
 
 Please see our [contributing guidelines](./CONTRIBUTING.md) before reporting an issue.
 
-[![License](https://img.shields.io/badge/license-GPLv2-blue.svg)](./LICENSE)
-[![Release](https://img.shields.io/github/release/louistakepillz/argumentparser.svg)](../../releases)
+[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg?style=flat-square)](./LICENSE)
+[![Release](https://img.shields.io/github/release/louistakepillz/argumentparser.svg?style=flat-square)](../../releases)
 
-[![Issues](https://img.shields.io/github/issues/louistakepillz/argumentparser.svg)](../../issues)
-[![Downloads](https://img.shields.io/nuget/dt/ArgumentParser.svg)](https://www.nuget.org/packages/ArgumentParser)
+[![Issues](https://img.shields.io/github/issues/louistakepillz/argumentparser.svg?style=flat-square)](../../issues)
 
 ## Operative modes
 
@@ -30,7 +29,5 @@ Please see our [contributing guidelines](./CONTRIBUTING.md) before reporting an 
 See the [wiki pages](../../wiki).
 
 ## Contributing
-
-Watch our [Waffle Kanban Board](https://waffle.io/LouisTakePILLz/ArgumentParser) if you're looking for anything to work on: [![Stories in Ready](https://badge.waffle.io/LouisTakePILLz/ArgumentParser.png?label=ready&title=Ready)](https://waffle.io/LouisTakePILLz/ArgumentParser)
 
 Any contribution is welcome, just make sure to adhere to the guidelines; see [Contributing](./CONTRIBUTING.md).
