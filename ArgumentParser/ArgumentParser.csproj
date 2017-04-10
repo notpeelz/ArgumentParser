@@ -21,6 +21,18 @@
     <DefineConstants Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', 'netstandard[^1]|net\d'))">$(DefineConstants);USE_REFLECTION_PERMISSIONS</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.html</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/LouisTakePILLz/ArgumentParser/master/img/icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/LouisTakePILLz/ArgumentParser</RepositoryUrl>
+    <Version>0.7.0</Version>
+    <PackageTags>argumentparser argument parameter parser parsing library cmd commandline command line option POSIX shell syntax</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup Condition="$(IsNETStandard)">
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
